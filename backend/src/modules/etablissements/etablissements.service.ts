@@ -1,18 +1,20 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AuditService } from '../../common/services/audit.service';
 import { CreateEtablissementDto } from './dto/create-etablissement.dto';
 import { UpdateEtablissementDto } from './dto/update-etablissement.dto';
 import { EtablissementQueryDto } from './dto/etablissement-query.dto';
 
 @Injectable()
 export class EtablissementsService {
-  private readonly logger = new Logger(EtablissementsService.name);
-
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditService: AuditService,
+  ) {}
 
   async create(dto: CreateEtablissementDto) {
     const etablissement = await this.prisma.etablissement.create({ data: dto });
-    await this.logAction('CREATE', 'ETABLISSEMENT', etablissement.id, `Création de l'établissement ${etablissement.nomEtab}`);
+    await this.auditService.creation('ETABLISSEMENT', etablissement.id, etablissement.nomEtab);
     return etablissement;
   }
 
@@ -34,21 +36,14 @@ export class EtablissementsService {
 
     const [data, total] = await Promise.all([
       this.prisma.etablissement.findMany({
-        where,
-        skip,
-        take: limit,
-        include: {
-          _count: { select: { batiments: true, designations: true, structures: true } },
-        },
+        where, skip, take: limit,
+        include: { _count: { select: { batiments: true, designations: true, structures: true } } },
         orderBy: { nomEtab: 'asc' },
       }),
       this.prisma.etablissement.count({ where }),
     ]);
 
-    return {
-      data,
-      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
-    };
+    return { data, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } };
   }
 
   async findOne(id: number) {
@@ -58,50 +53,24 @@ export class EtablissementsService {
         directeur: true,
         designations: true,
         structures: true,
-        batiments: {
-          include: {
-            salles: {
-              include: {
-                _count: { select: { equipements: true, ouvertures: true } },
-              },
-            },
-            toilettes: true,
-          },
-        },
+        batiments: { include: { salles: { include: { _count: { select: { equipements: true, ouvertures: true } } } }, toilettes: true } },
         _count: { select: { batiments: true, designations: true, structures: true } },
       },
     });
-
-    if (!etablissement) {
-      throw new NotFoundException(`Établissement #${id} non trouvé`);
-    }
-
+    if (!etablissement) throw new NotFoundException(`Établissement #${id} non trouvé`);
     return etablissement;
   }
 
   async update(id: number, dto: UpdateEtablissementDto) {
     await this.findOne(id);
-
-    const etablissement = await this.prisma.etablissement.update({
-      where: { id },
-      data: dto,
-    });
-
-    await this.logAction('UPDATE', 'ETABLISSEMENT', id, `Mise à jour de l'établissement ${etablissement.nomEtab}`);
+    const etablissement = await this.prisma.etablissement.update({ where: { id }, data: dto });
+    await this.auditService.modification('ETABLISSEMENT', id, etablissement.nomEtab);
     return etablissement;
   }
 
   async remove(id: number) {
     await this.findOne(id);
     await this.prisma.etablissement.delete({ where: { id } });
-    await this.logAction('DELETE', 'ETABLISSEMENT', id, `Suppression de l'établissement #${id}`);
-  }
-
-  private async logAction(action: string, entity: string, entityId: number, details: string) {
-    try {
-      await this.prisma.log.create({ data: { action, entity, entityId, details } });
-    } catch (error) {
-      this.logger.warn(`Erreur journalisation: ${error}`);
-    }
+    await this.auditService.suppression('ETABLISSEMENT', id);
   }
 }

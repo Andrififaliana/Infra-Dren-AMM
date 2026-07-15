@@ -5,6 +5,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AuditService } from '../../common/services/audit.service';
 import { SupabaseService } from './supabase.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -16,6 +17,7 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly supabaseService: SupabaseService,
+    private readonly auditService: AuditService,
   ) {}
 
   async login(loginDto: LoginDto) {
@@ -47,7 +49,7 @@ export class AuthService {
       throw new UnauthorizedException('Compte désactivé');
     }
 
-    await this.logLogin(dbUser.id);
+    await this.auditService.connexion(dbUser.id);
 
     return {
       accessToken: data.session.access_token,
@@ -154,17 +156,5 @@ export class AuthService {
     };
   }
 
-  private async logLogin(userId: number): Promise<void> {
-    try {
-      await this.prisma.log.create({
-        data: {
-          action: 'LOGIN',
-          entity: 'AUTH',
-          userId,
-        },
-      });
-    } catch (error) {
-      this.logger.warn('Impossible de journaliser la connexion');
-    }
-  }
+
 }
