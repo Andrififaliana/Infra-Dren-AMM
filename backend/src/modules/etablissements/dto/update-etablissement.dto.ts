@@ -3,7 +3,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
 export class UpdateEtablissementDto {
-  @ApiPropertyOptional({ example: 'École Primaire d\'Ambohimanarina' })
+  @ApiPropertyOptional({ example: "École Primaire d'Ambohimanarina" })
   @IsOptional()
   @IsString()
   nomEtab?: string;

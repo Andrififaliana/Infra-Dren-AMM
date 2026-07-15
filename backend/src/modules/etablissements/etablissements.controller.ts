@@ -1,8 +1,9 @@
 import {
   Controller, Get, Post, Body, Patch, Param, Delete, Query,
-  UseGuards, ParseIntPipe,
+  UseGuards, ParseIntPipe, UseInterceptors, UploadedFile, UploadedFiles,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { EtablissementsService } from './etablissements.service';
 import { CreateEtablissementDto } from './dto/create-etablissement.dto';
 import { UpdateEtablissementDto } from './dto/update-etablissement.dto';
@@ -38,7 +39,7 @@ export class EtablissementsController {
 
   @Get(':id')
   @Public()
-  @ApiOperation({ summary: 'Détail d\'un établissement avec toutes ses relations' })
+  @ApiOperation({ summary: "Détail d'un établissement avec toutes ses relations" })
   @ApiResponse({ status: 200, description: 'Établissement trouvé' })
   @ApiResponse({ status: 404, description: 'Non trouvé' })
   findOne(@Param('id', ParseIntPipe) id: number) {
@@ -62,5 +63,75 @@ export class EtablissementsController {
   @ApiResponse({ status: 200, description: 'Supprimé' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.etablissementsService.remove(id);
+  }
+
+  @Post(':id/photos')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Uploader une photo pour un établissement' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary', description: 'Photo (jpg, png, webp)' },
+        estPrincipale: { type: 'string', description: 'true si cette photo doit être la photo principale' },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadPhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('estPrincipale') estPrincipale?: string,
+  ) {
+    return this.etablissementsService.uploadPhoto(id, file, estPrincipale === 'true');
+  }
+
+  @Post(':id/photos/multiple')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Uploader plusieurs photos pour un établissement (max 10)' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          items: { type: 'string', format: 'binary' },
+          description: 'Photos (jpg, png, webp, gif) - jusqu\'à 10 fichiers',
+        },
+        estPrincipale: {
+          type: 'string',
+          description: 'Index de la photo à définir comme principale (ex: "0" pour la première)',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FilesInterceptor('files', 10, { limits: { fileSize: 10 * 1024 * 1024 } }))
+  async uploadMultiplePhotos(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body('estPrincipale') estPrincipale?: string,
+  ) {
+    const principaleIndex = estPrincipale !== undefined
+      ? (isNaN(parseInt(estPrincipale, 10)) ? 0 : parseInt(estPrincipale, 10))
+      : 0;
+    return this.etablissementsService.uploadMultiplePhotos(id, files, principaleIndex);
+  }
+
+  @Delete(':id/photos/:photoId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Supprimer une photo d'un établissement" })
+  deletePhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('photoId', ParseIntPipe) photoId: number,
+  ) {
+    return this.etablissementsService.deletePhoto(id, photoId);
   }
 }

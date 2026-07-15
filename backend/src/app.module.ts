@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
+import { R2Module } from './r2/r2.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { EtablissementsModule } from './modules/etablissements/etablissements.module';
@@ -21,6 +22,7 @@ import config from './config';
       load: [config],
     }),
     PrismaModule,
+    R2Module,
     AuthModule,
     UsersModule,
     EtablissementsModule,

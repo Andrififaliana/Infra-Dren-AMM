@@ -25,8 +25,26 @@ model Etablissement {
   designations Designation[]
   structures   Structure[]
   batiments    Batiment[]
+  photos       Photo[]
 
   @@map("etablissement")
+}
+
+model Photo {
+  id              Int      @id @default(autoincrement())
+  key             String   @map("key")
+  url             String   @map("url")
+  originalName    String?  @map("original_name")
+  mimeType        String?  @map("mime_type")
+  fileSize        Int?     @map("file_size")
+  estPrincipale   Boolean  @default(false) @map("est_principale")
+
+  etablissement   Etablissement @relation(fields: [etablissementId], references: [id])
+  etablissementId Int           @map("etablissement_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("photo")
 }
 
 model Directeur {
