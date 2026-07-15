@@ -1,0 +1,262 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Etablissement {
+  id               Int     @id @default(autoincrement()) @map("id_etab")
+  nomEtab          String  @map("nom_etab")
+  dren             String? @map("dren")
+  cisco            String? @map("cisco")
+  commune          String? @map("commune")
+  fokontany        String? @map("fokontany")
+  quartier         String? @map("quartier")
+  couvTelephonique Boolean @default(false) @map("couv_telephonique")
+  couvInternet     Boolean @default(false) @map("couv_internet")
+  nbEnseignantG    Int     @default(0) @map("nb_enseignant_g")
+  nbEnseignantF    Int     @default(0) @map("nb_enseignant_f")
+  nbSectionG       Int     @default(0) @map("nb_section_g")
+  nbSectionF       Int     @default(0) @map("nb_section_f")
+
+  directeur    Directeur?
+  designations Designation[]
+  structures   Structure[]
+  batiments    Batiment[]
+
+  @@map("etablissement")
+}
+
+model Directeur {
+  idDirecteur  Int     @id @default(autoincrement()) @map("id_directeur")
+  nomDirecteur String  @map("nom_directeur")
+  prenomDr     String? @map("prenom_dr")
+  emailDr      String? @map("email_dr")
+  telDr        String? @map("tel_dr")
+
+  etablissement   Etablissement? @relation(fields: [etablissementId], references: [id])
+  etablissementId Int?           @unique @map("etablissement_id")
+
+  @@map("directeur")
+}
+
+model Designation {
+  idDesign         Int     @id @default(autoincrement()) @map("id_design")
+  nomDesign        String  @map("nom_design")
+  estEnceinteEtab  Boolean @default(false) @map("est_enceinte_etab")
+  estTitre         Boolean @default(false) @map("est_titre")
+  typeDesignation  String? @map("type_designation")
+  numCadastre      String? @map("num_cadastre")
+  superficieDesign Float?  @map("superficie_design")
+  estLitigieux     Boolean @default(false) @map("est_litigieux")
+
+  etablissement   Etablissement @relation(fields: [etablissementId], references: [id])
+  etablissementId Int           @map("etablissement_id")
+
+  @@map("designation")
+}
+
+model Structure {
+  idStruc        Int     @id @default(autoincrement()) @map("id_struc")
+  typeStruc      String? @map("type_struc")
+  existenceStruc Boolean @default(false) @map("existence_struc")
+  materiauxStruc String? @map("materiaux_struc")
+  etatStruc      String? @map("etat_struc")
+
+  etablissement   Etablissement @relation(fields: [etablissementId], references: [id])
+  etablissementId Int           @map("etablissement_id")
+
+  @@map("structure")
+}
+
+model Batiment {
+  idBat         Int       @id @default(autoincrement()) @map("id_bat")
+  sigleBat      String?   @map("sigle_bat")
+  nbNiveau      Int       @default(0) @map("nb_niveau")
+  anneeRecProvC DateTime? @map("annee_rec_prov_c")
+  anneeDefC     DateTime? @map("annee_def_c")
+  srcFic        String?   @map("src_fic")
+  agenceC       String?   @map("agence_c")
+  anneeR        DateTime? @map("annee_r")
+  srcFir        String?   @map("src_fir")
+  agenceR       String?   @map("agence_r")
+  dispositifAc  String?   @map("dispositif_ac")
+
+  etablissement   Etablissement @relation(fields: [etablissementId], references: [id])
+  etablissementId Int           @map("etablissement_id")
+
+  salles    Salle[]
+  toilettes Toilette[]
+
+  @@map("batiment")
+}
+
+model Salle {
+  idSalle          Int     @id @default(autoincrement()) @map("id_salle")
+  sigleSalle       String? @map("sigle_salle")
+  niveauSalle      Int     @map("niveau_salle")
+  affectationSalle String? @map("affectation_salle")
+  etatSalle        String? @map("etat_salle")
+  estOperationnel  Boolean @default(true) @map("est_operationnel")
+  estElectrifiee   Boolean @default(false) @map("est_electrifiee")
+  longueurInt      Float?  @map("longueur_int")
+  hauteurSP        Float?  @map("hauteur_sp")
+  nbEleveF         Int     @default(0) @map("nb_eleve_f")
+  nbEleveG         Int     @default(0) @map("nb_eleve_g")
+
+  batiment   Batiment @relation(fields: [batimentId], references: [idBat]) // CORRIGÉ ici
+  batimentId Int      @map("batiment_id")
+
+  equipements Equipement[]
+  ouvertures Ouverture[]
+
+  @@map("salle")
+}
+
+model Ouverture {
+  idOuvert      Int     @id @default(autoincrement()) @map("id_ouvert")
+  typeOuvert    String? @map("type_ouvert")
+  nbOuvert      Int     @default(0) @map("nb_ouvert")
+  largeurOuvert Float?  @map("largeur_ouvert")
+  hauteurOuvert Float?  @map("hauteur_ouvert")
+  surfaceOuvert Float?  @map("surface_ouvert")
+
+  salle   Salle @relation(fields: [salleId], references: [idSalle]) // CORRIGÉ ici
+  salleId Int   @map("salle_id")
+
+  @@map("ouverture")
+}
+
+model Toilette {
+  idToilette       Int     @id @default(autoincrement()) @map("id_toilette")
+  nbCompartiment   Int     @default(0) @map("nb_compartiment")
+  fonctionToilette String? @map("fonction_toilette")
+  pointEau         Boolean @default(false) @map("point_eau")
+
+  batiment   Batiment @relation(fields: [batimentId], references: [idBat]) // CORRIGÉ ici
+  batimentId Int      @map("batiment_id")
+
+  @@map("toilette")
+}
+
+model Trajet {
+  idTrajet    Int       @id @default(autoincrement()) @map("id_trajet")
+  debutTrajet DateTime? @map("debut_trajet")
+  finTrajet   DateTime? @map("fin_trajet")
+  nomTrajet   String?   @map("nom_trajet")
+
+  moyens   Moyens @relation(fields: [moyensId], references: [idMoyen]) // CORRIGÉ ici
+  moyensId Int    @map("moyens_id")
+
+  periode   PeriodeDifficile? @relation(fields: [periodeId], references: [idPeriode]) // CORRIGÉ ici
+  periodeId Int?              @map("periode_id")
+
+  effets EffetAleat[]
+
+  @@map("trajet")
+}
+
+model Moyens {
+  idMoyen       Int     @id @default(autoincrement()) @map("id_moyen")
+  typeMoyen     String? @map("type_moyen")
+  dureeMoyen    Float?  @map("duree_moyen")
+  distanceMoyen Float?  @map("distance_moyen")
+
+  trajets Trajet[]
+
+  @@map("moyens")
+}
+
+model PeriodeDifficile {
+  idPeriode    Int      @id @default(autoincrement()) @map("id_periode")
+  debutPeriode DateTime @map("debut_periode")
+  finPeriode   DateTime @map("fin_periode")
+
+  trajets Trajet[]
+
+  @@map("periode_difficile")
+}
+
+model Alea {
+  idAleat     Int       @id @default(autoincrement()) @map("id_aleat")
+  typeAleat   String?   @map("type_aleat")
+  nomAleat    String?   @map("nom_aleat")
+  dateAleat   DateTime? @map("date_aleat")
+  explication String?   @map("explication")
+
+  effets EffetAleat[]
+
+  @@map("alea")
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  nom             String
+  role            Role     @default(RESPONSABLE_INFRASTRUCTURE)
+  supabaseUserId  String?  @unique @map("supabase_user_id")
+  actif           Boolean  @default(true)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  logs Log[]
+
+  @@map("utilisateur")
+}
+
+model Equipement {
+  id        Int      @id @default(autoincrement())
+  nomEquip  String   @map("nom_equip")
+  typeEquip String?  @map("type_equip")
+  etat      String?  @map("etat")
+  quantite  Int      @default(1) @map("quantite")
+
+  salle   Salle @relation(fields: [salleId], references: [idSalle])
+  salleId Int   @map("salle_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("equipement")
+}
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  action    String   @map("action")
+  entity    String   @map("entite")
+  entityId  Int?     @map("entite_id")
+  details   String?  @map("details")
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @map("utilisateur_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("log")
+}
+
+enum Role {
+  ADMIN
+  RESPONSABLE_INFRASTRUCTURE
+
+  @@map("role")
+}
+
+// Table d'association
+model EffetAleat {
+  alea   Alea @relation(fields: [aleaId], references: [idAleat]) // CORRIGÉ ici
+  aleaId Int  @map("alea_id")
+
+  trajet   Trajet @relation(fields: [trajetId], references: [idTrajet]) // CORRIGÉ ici
+  trajetId Int    @map("trajet_id")
+
+  nbElevesG  Int @default(0) @map("nb_eleves_g")
+  nbElevesF  Int @default(0) @map("nb_eleves_f")
+  nbEnseignG Int @default(0) @map("nb_enseign_g")
+  nbEnseignF Int @default(0) @map("nb_enseign_f")
+
+  @@id([aleaId, trajetId])
+  @@map("effet_aleat")
+}
