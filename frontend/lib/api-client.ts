@@ -23,22 +23,9 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: unwrap API envelope { success, data, timestamp }, handle 401
+// Response interceptor: handle 401 (no auto-unwrapping — hooks access envelope explicitly)
 apiClient.interceptors.response.use(
-  (response) => {
-    // Skip unwrapping for blob/arraybuffer responses to avoid corrupting binary data
-    if (
-      response.config.responseType !== 'blob' &&
-      response.config.responseType !== 'arraybuffer' &&
-      response.data &&
-      typeof response.data === 'object' &&
-      'success' in response.data &&
-      'data' in response.data
-    ) {
-      response.data = response.data.data;
-    }
-    return response;
-  },
+  (response) => response,
   (error) => {
     if (error.response?.status === 401 && typeof window !== 'undefined') {
       localStorage.removeItem('auth-token');

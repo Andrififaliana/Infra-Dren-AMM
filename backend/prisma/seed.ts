@@ -40,7 +40,7 @@ async function main() {
   // Établissement 1: École Primaire d'Ambohimanarina
   const ecole1 = await prisma.etablissement.create({
     data: {
-      nomEtab: 'École Primaire Publique d\'Ambohimanarina',
+      nomEtab: "École Primaire Publique d'Ambohimanarina",
       dren: 'DREN Analamanga',
       cisco: 'CISCO Antananarivo-Renivohitra',
       commune: 'Ambohimanarina',
@@ -78,9 +78,24 @@ async function main() {
 
       structures: {
         create: [
-          { typeStruc: 'MUR_CLOTURE', existenceStruc: true, materiauxStruc: 'PARPAING', etatStruc: 'BON' },
-          { typeStruc: 'PORTAL', existenceStruc: true, materiauxStruc: 'METAL', etatStruc: 'MOYEN' },
-          { typeStruc: 'TERRAIN_SPORT', existenceStruc: true, materiauxStruc: 'TERRE_BATTUE', etatStruc: 'MAUVAIS' },
+          {
+            typeStruc: 'MUR_CLOTURE',
+            existenceStruc: true,
+            materiauxStruc: 'PARPAING',
+            etatStruc: 'BON',
+          },
+          {
+            typeStruc: 'PORTAL',
+            existenceStruc: true,
+            materiauxStruc: 'METAL',
+            etatStruc: 'MOYEN',
+          },
+          {
+            typeStruc: 'TERRAIN_SPORT',
+            existenceStruc: true,
+            materiauxStruc: 'TERRE_BATTUE',
+            etatStruc: 'MAUVAIS',
+          },
         ],
       },
 
@@ -110,15 +125,42 @@ async function main() {
                   nbEleveG: 17,
                   equipements: {
                     create: [
-                      { nomEquip: 'Table-banc', typeEquip: 'MOBILIER', etat: 'BON', quantite: 20 },
-                      { nomEquip: 'Tableau noir', typeEquip: 'MATERIEL_DIDACTIQUE', etat: 'MOYEN', quantite: 1 },
-                      { nomEquip: 'Bibliothèque', typeEquip: 'MOBILIER', etat: 'BON', quantite: 1 },
+                      {
+                        nomEquip: 'Table-banc',
+                        typeEquip: 'MOBILIER',
+                        etat: 'BON',
+                        quantite: 20,
+                      },
+                      {
+                        nomEquip: 'Tableau noir',
+                        typeEquip: 'MATERIEL_DIDACTIQUE',
+                        etat: 'MOYEN',
+                        quantite: 1,
+                      },
+                      {
+                        nomEquip: 'Bibliothèque',
+                        typeEquip: 'MOBILIER',
+                        etat: 'BON',
+                        quantite: 1,
+                      },
                     ],
                   },
                   ouvertures: {
                     create: [
-                      { typeOuvert: 'FENETRE', nbOuvert: 4, largeurOuvert: 1.2, hauteurOuvert: 1.5, surfaceOuvert: 1.8 },
-                      { typeOuvert: 'PORTE', nbOuvert: 1, largeurOuvert: 0.9, hauteurOuvert: 2.1, surfaceOuvert: 1.89 },
+                      {
+                        typeOuvert: 'FENETRE',
+                        nbOuvert: 4,
+                        largeurOuvert: 1.2,
+                        hauteurOuvert: 1.5,
+                        surfaceOuvert: 1.8,
+                      },
+                      {
+                        typeOuvert: 'PORTE',
+                        nbOuvert: 1,
+                        largeurOuvert: 0.9,
+                        hauteurOuvert: 2.1,
+                        surfaceOuvert: 1.89,
+                      },
                     ],
                   },
                 },
@@ -135,8 +177,18 @@ async function main() {
                   nbEleveG: 16,
                   equipements: {
                     create: [
-                      { nomEquip: 'Table-banc', typeEquip: 'MOBILIER', etat: 'MOYEN', quantite: 18 },
-                      { nomEquip: 'Tableau noir', typeEquip: 'MATERIEL_DIDACTIQUE', etat: 'MAUVAIS', quantite: 1 },
+                      {
+                        nomEquip: 'Table-banc',
+                        typeEquip: 'MOBILIER',
+                        etat: 'MOYEN',
+                        quantite: 18,
+                      },
+                      {
+                        nomEquip: 'Tableau noir',
+                        typeEquip: 'MATERIEL_DIDACTIQUE',
+                        etat: 'MAUVAIS',
+                        quantite: 1,
+                      },
                     ],
                   },
                 },
@@ -153,9 +205,24 @@ async function main() {
                   nbEleveG: 0,
                   equipements: {
                     create: [
-                      { nomEquip: 'Bureau', typeEquip: 'MOBILIER', etat: 'BON', quantite: 1 },
-                      { nomEquip: 'Chaise', typeEquip: 'MOBILIER', etat: 'BON', quantite: 3 },
-                      { nomEquip: 'Armoire', typeEquip: 'MOBILIER', etat: 'MOYEN', quantite: 2 },
+                      {
+                        nomEquip: 'Bureau',
+                        typeEquip: 'MOBILIER',
+                        etat: 'BON',
+                        quantite: 1,
+                      },
+                      {
+                        nomEquip: 'Chaise',
+                        typeEquip: 'MOBILIER',
+                        etat: 'BON',
+                        quantite: 3,
+                      },
+                      {
+                        nomEquip: 'Armoire',
+                        typeEquip: 'MOBILIER',
+                        etat: 'MOYEN',
+                        quantite: 2,
+                      },
                     ],
                   },
                 },
@@ -163,9 +230,21 @@ async function main() {
             },
             toilettes: {
               create: [
-                { nbCompartiment: 4, fonctionToilette: 'FILLES', pointEau: true },
-                { nbCompartiment: 3, fonctionToilette: 'GARCONS', pointEau: true },
-                { nbCompartiment: 1, fonctionToilette: 'ENSEIGNANTS', pointEau: true },
+                {
+                  nbCompartiment: 4,
+                  fonctionToilette: 'FILLES',
+                  pointEau: true,
+                },
+                {
+                  nbCompartiment: 3,
+                  fonctionToilette: 'GARCONS',
+                  pointEau: true,
+                },
+                {
+                  nbCompartiment: 1,
+                  fonctionToilette: 'ENSEIGNANTS',
+                  pointEau: true,
+                },
               ],
             },
           },
@@ -193,7 +272,11 @@ async function main() {
             },
             toilettes: {
               create: [
-                { nbCompartiment: 2, fonctionToilette: 'LATRINES', pointEau: false },
+                {
+                  nbCompartiment: 2,
+                  fonctionToilette: 'LATRINES',
+                  pointEau: false,
+                },
               ],
             },
           },
@@ -242,8 +325,18 @@ async function main() {
 
       structures: {
         create: [
-          { typeStruc: 'MUR_CLOTURE', existenceStruc: true, materiauxStruc: 'BRIQUE', etatStruc: 'MAUVAIS' },
-          { typeStruc: 'PORTAL', existenceStruc: true, materiauxStruc: 'BOIS', etatStruc: 'MAUVAIS' },
+          {
+            typeStruc: 'MUR_CLOTURE',
+            existenceStruc: true,
+            materiauxStruc: 'BRIQUE',
+            etatStruc: 'MAUVAIS',
+          },
+          {
+            typeStruc: 'PORTAL',
+            existenceStruc: true,
+            materiauxStruc: 'BOIS',
+            etatStruc: 'MAUVAIS',
+          },
         ],
       },
 
@@ -270,8 +363,18 @@ async function main() {
                   nbEleveG: 22,
                   equipements: {
                     create: [
-                      { nomEquip: 'Table-banc', typeEquip: 'MOBILIER', etat: 'BON', quantite: 25 },
-                      { nomEquip: 'Tableau blanc', typeEquip: 'MATERIEL_DIDACTIQUE', etat: 'BON', quantite: 1 },
+                      {
+                        nomEquip: 'Table-banc',
+                        typeEquip: 'MOBILIER',
+                        etat: 'BON',
+                        quantite: 25,
+                      },
+                      {
+                        nomEquip: 'Tableau blanc',
+                        typeEquip: 'MATERIEL_DIDACTIQUE',
+                        etat: 'BON',
+                        quantite: 1,
+                      },
                     ],
                   },
                 },
@@ -298,9 +401,24 @@ async function main() {
                   hauteurSP: 4.0,
                   equipements: {
                     create: [
-                      { nomEquip: 'Paillasse', typeEquip: 'MOBILIER', etat: 'MOYEN', quantite: 8 },
-                      { nomEquip: 'Microscope', typeEquip: 'MATERIEL_SCIENTIFIQUE', etat: 'BON', quantite: 5 },
-                      { nomEquip: 'Balance', typeEquip: 'MATERIEL_SCIENTIFIQUE', etat: 'MOYEN', quantite: 3 },
+                      {
+                        nomEquip: 'Paillasse',
+                        typeEquip: 'MOBILIER',
+                        etat: 'MOYEN',
+                        quantite: 8,
+                      },
+                      {
+                        nomEquip: 'Microscope',
+                        typeEquip: 'MATERIEL_SCIENTIFIQUE',
+                        etat: 'BON',
+                        quantite: 5,
+                      },
+                      {
+                        nomEquip: 'Balance',
+                        typeEquip: 'MATERIEL_SCIENTIFIQUE',
+                        etat: 'MOYEN',
+                        quantite: 3,
+                      },
                     ],
                   },
                 },
@@ -315,7 +433,7 @@ async function main() {
   // Établissement 3: École Primaire d'Ambohibary - DREN Itasy
   const ecole3 = await prisma.etablissement.create({
     data: {
-      nomEtab: 'École Primaire Publique d\'Ambohibary',
+      nomEtab: "École Primaire Publique d'Ambohibary",
       dren: 'DREN Itasy',
       cisco: 'CISCO Arivonimamo',
       commune: 'Ambohibary',
@@ -370,8 +488,18 @@ async function main() {
                   nbEleveG: 10,
                   equipements: {
                     create: [
-                      { nomEquip: 'Table-banc', typeEquip: 'MOBILIER', etat: 'MOYEN', quantite: 12 },
-                      { nomEquip: 'Tableau noir', typeEquip: 'MATERIEL_DIDACTIQUE', etat: 'MAUVAIS', quantite: 1 },
+                      {
+                        nomEquip: 'Table-banc',
+                        typeEquip: 'MOBILIER',
+                        etat: 'MOYEN',
+                        quantite: 12,
+                      },
+                      {
+                        nomEquip: 'Tableau noir',
+                        typeEquip: 'MATERIEL_DIDACTIQUE',
+                        etat: 'MAUVAIS',
+                        quantite: 1,
+                      },
                     ],
                   },
                 },
@@ -389,7 +517,11 @@ async function main() {
             },
             toilettes: {
               create: [
-                { nbCompartiment: 2, fonctionToilette: 'LATRINES', pointEau: false },
+                {
+                  nbCompartiment: 2,
+                  fonctionToilette: 'LATRINES',
+                  pointEau: false,
+                },
               ],
             },
           },
@@ -407,7 +539,11 @@ async function main() {
       debutTrajet: new Date('2024-01-01'),
       finTrajet: new Date('2024-12-31'),
       moyens: {
-        create: { typeMoyen: 'TAXI-BROUSSE', dureeMoyen: 45, distanceMoyen: 12.5 },
+        create: {
+          typeMoyen: 'TAXI-BROUSSE',
+          dureeMoyen: 45,
+          distanceMoyen: 12.5,
+        },
       },
     },
   });
@@ -432,7 +568,10 @@ async function main() {
         create: { typeMoyen: 'PIED', dureeMoyen: 90, distanceMoyen: 6.0 },
       },
       periode: {
-        create: { debutPeriode: new Date('2024-01-15'), finPeriode: new Date('2024-03-15') },
+        create: {
+          debutPeriode: new Date('2024-01-15'),
+          finPeriode: new Date('2024-03-15'),
+        },
       },
     },
   });
@@ -445,10 +584,17 @@ async function main() {
       typeAleat: 'INONDATION',
       nomAleat: 'Inondation Ambohimanarina',
       dateAleat: new Date('2024-02-15'),
-      explication: 'Fortes pluies ayant provoqué l\'inondation de l\'école pendant 3 jours',
+      explication:
+        "Fortes pluies ayant provoqué l'inondation de l'école pendant 3 jours",
       effets: {
         create: [
-          { trajetId: trajet1.idTrajet, nbElevesG: 17, nbElevesF: 15, nbEnseignG: 2, nbEnseignF: 1 },
+          {
+            trajetId: trajet1.idTrajet,
+            nbElevesG: 17,
+            nbElevesF: 15,
+            nbEnseignG: 2,
+            nbEnseignF: 1,
+          },
         ],
       },
     },
@@ -462,7 +608,13 @@ async function main() {
       explication: 'Toiture partiellement endommagée par le cyclone',
       effets: {
         create: [
-          { trajetId: trajet3.idTrajet, nbElevesG: 10, nbElevesF: 8, nbEnseignG: 2, nbEnseignF: 1 },
+          {
+            trajetId: trajet3.idTrajet,
+            nbElevesG: 10,
+            nbElevesF: 8,
+            nbEnseignG: 2,
+            nbEnseignF: 1,
+          },
         ],
       },
     },
@@ -476,7 +628,13 @@ async function main() {
       explication: 'Glissement de terrain ayant endommagé le mur de clôture',
       effets: {
         create: [
-          { trajetId: trajet2.idTrajet, nbElevesG: 20, nbElevesF: 18, nbEnseignG: 3, nbEnseignF: 2 },
+          {
+            trajetId: trajet2.idTrajet,
+            nbElevesG: 20,
+            nbElevesF: 18,
+            nbEnseignG: 3,
+            nbEnseignF: 2,
+          },
         ],
       },
     },
@@ -487,7 +645,9 @@ async function main() {
 
   await prisma.log.create({
     data: {
-      action: 'CREATE', entity: 'SEED', details: 'Initialisation de la base de données via seed',
+      action: 'CREATE',
+      entity: 'SEED',
+      details: 'Initialisation de la base de données via seed',
     },
   });
 

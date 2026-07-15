@@ -33,9 +33,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-600 text-white font-bold text-sm shadow-sm">
-              IA
-            </div>
+            <img src="/logo_infra.png" alt="InfraDren AMM" className="h-9 w-auto" />
             <span className="text-lg font-bold text-gray-900">InfraDren</span>
             <span className="hidden text-sm text-gray-400 sm:inline">AMM</span>
           </Link>
@@ -142,9 +140,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <div className="grid gap-8 md:grid-cols-3">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-600 text-white font-bold text-xs">
-                  IA
-                </div>
+                <img src="/logo_infra.png" alt="InfraDren AMM" className="h-8 w-auto" />
                 <span className="font-bold text-gray-900">InfraDren</span>
               </div>
               <p className="text-sm text-gray-500">

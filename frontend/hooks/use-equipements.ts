@@ -8,8 +8,8 @@ export function useEquipements(salleId?: number) {
     queryKey: ['equipements', salleId],
     queryFn: async () => {
       const params = salleId ? { salleId } : {};
-      const { data } = await apiClient.get<Equipement[]>('/equipements', { params });
-      return data;
+      const { data } = await apiClient.get<ApiResponse<Equipement[]>>('/equipements', { params });
+      return data.data;
     },
   });
 }

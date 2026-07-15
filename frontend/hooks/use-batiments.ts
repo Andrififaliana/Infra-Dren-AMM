@@ -8,8 +8,8 @@ export function useBatiments(etablissementId?: number) {
     queryKey: ['batiments', etablissementId],
     queryFn: async () => {
       const params = etablissementId ? { etablissementId } : {};
-      const { data } = await apiClient.get<Batiment[]>('/batiments', { params });
-      return data;
+      const { data } = await apiClient.get<ApiResponse<Batiment[]>>('/batiments', { params });
+      return data.data;
     },
   });
 }

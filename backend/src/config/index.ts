@@ -2,8 +2,12 @@ export default () => ({
   port: parseInt(process.env.PORT ?? '3000', 10),
   supabase: {
     url: process.env.SUPABASE_URL ?? '',
-    anonKey: process.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY ?? '',
-    serviceKey: process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_SECRET_KEY ?? '',
+    anonKey:
+      process.env.SUPABASE_ANON_KEY ??
+      process.env.SUPABASE_PUBLISHABLE_KEY ??
+      '',
+    serviceKey:
+      process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_SECRET_KEY ?? '',
   },
   r2: {
     accountId: process.env.R2_ACCOUNT_ID ?? '',

@@ -7,8 +7,8 @@ export function useAleas() {
   return useQuery({
     queryKey: ['aleas'],
     queryFn: async () => {
-      const { data } = await apiClient.get<Alea[]>('/aleas');
-      return data;
+      const { data } = await apiClient.get<ApiResponse<Alea[]>>('/aleas');
+      return data.data;
     },
   });
 }

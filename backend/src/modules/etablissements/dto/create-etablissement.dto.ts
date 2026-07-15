@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsOptional, IsString, IsBoolean, IsInt, Min } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsBoolean,
+  IsInt,
+  Min,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -6,7 +13,7 @@ export class CreateEtablissementDto {
   @ApiProperty({ example: "École Primaire d'Ambohimanarina" })
   @IsNotEmpty({ message: "Le nom de l'établissement est requis" })
   @IsString()
-  nomEtab: string;
+  nomEtab!: string;
 
   @ApiPropertyOptional({ example: 'DREN Analamanga' })
   @IsOptional()

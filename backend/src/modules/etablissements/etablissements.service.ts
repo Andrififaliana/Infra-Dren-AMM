@@ -1,7 +1,13 @@
-import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  Logger,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AuditService } from '../../common/services/audit.service';
 import { R2Service } from '../../r2/r2.service';
+import { Prisma } from '@prisma/client';
 import { CreateEtablissementDto } from './dto/create-etablissement.dto';
 import { UpdateEtablissementDto } from './dto/update-etablissement.dto';
 import { EtablissementQueryDto } from './dto/etablissement-query.dto';
@@ -21,39 +27,64 @@ export class EtablissementsService {
       data: dto,
       include: { photos: true },
     });
-    await this.auditService.creation('ETABLISSEMENT', etablissement.id, etablissement.nomEtab);
+    await this.auditService.creation(
+      'ETABLISSEMENT',
+      etablissement.id,
+      etablissement.nomEtab,
+    );
     return etablissement;
   }
 
   async findAll(query: EtablissementQueryDto) {
-    const { page = 1, limit = 10, search, dren, cisco, commune } = query;
+    const pageNumber = Number(query.page ?? 1);
+    const limitNumber = Number(query.limit ?? 10);
+    const page = Number.isFinite(pageNumber) && pageNumber > 0 ? pageNumber : 1;
+    const limit =
+      Number.isFinite(limitNumber) && limitNumber > 0 ? limitNumber : 10;
     const skip = (page - 1) * limit;
 
-    const where: any = {};
-    if (search) {
-      where.OR = [
-        { nomEtab: { contains: search, mode: 'insensitive' } },
-        { dren: { contains: search, mode: 'insensitive' } },
-        { commune: { contains: search, mode: 'insensitive' } },
-      ];
-    }
-    if (dren) where.dren = { contains: dren, mode: 'insensitive' };
-    if (cisco) where.cisco = { contains: cisco, mode: 'insensitive' };
-    if (commune) where.commune = { contains: commune, mode: 'insensitive' };
+    const where: Prisma.EtablissementWhereInput = {};
 
-    const [data, total] = await Promise.all([
-      this.prisma.etablissement.findMany({
-        where, skip, take: limit,
-        include: {
-          _count: { select: { batiments: true, designations: true, structures: true, photos: true } },
-          photos: { where: { estPrincipale: true }, take: 1 },
+    try {
+      const data = await this.prisma.etablissement.findMany({
+        where,
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          nomEtab: true,
+          dren: true,
+          cisco: true,
+          commune: true,
+          fokontany: true,
+          quartier: true,
+          couvTelephonique: true,
+          couvInternet: true,
+          nbEnseignantG: true,
+          nbEnseignantF: true,
+          nbSectionG: true,
+          nbSectionF: true,
         },
         orderBy: { nomEtab: 'asc' },
-      }),
-      this.prisma.etablissement.count({ where }),
-    ]);
+      });
+      const total = await this.prisma.etablissement.count({ where });
 
-    return { data, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } };
+      return {
+        data,
+        meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+      };
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Erreur inconnue lors du chargement des établissements';
+      this.logger.error(
+        `Erreur lors du chargement des établissements: ${message}`,
+      );
+      throw new BadRequestException(
+        'Impossible de charger les établissements. Vérifiez la configuration de la base de données.',
+      );
+    }
   }
 
   async findOne(id: number) {
@@ -66,14 +97,26 @@ export class EtablissementsService {
         photos: { orderBy: { estPrincipale: 'desc' } },
         batiments: {
           include: {
-            salles: { include: { _count: { select: { equipements: true, ouvertures: true } } } },
+            salles: {
+              include: {
+                _count: { select: { equipements: true, ouvertures: true } },
+              },
+            },
             toilettes: true,
           },
         },
-        _count: { select: { batiments: true, designations: true, structures: true, photos: true } },
+        _count: {
+          select: {
+            batiments: true,
+            designations: true,
+            structures: true,
+            photos: true,
+          },
+        },
       },
     });
-    if (!etablissement) throw new NotFoundException(`Établissement #${id} non trouvé`);
+    if (!etablissement)
+      throw new NotFoundException(`Établissement #${id} non trouvé`);
     return etablissement;
   }
 
@@ -83,7 +126,11 @@ export class EtablissementsService {
       where: { id },
       data: dto,
     });
-    await this.auditService.modification('ETABLISSEMENT', id, etablissement.nomEtab);
+    await this.auditService.modification(
+      'ETABLISSEMENT',
+      id,
+      etablissement.nomEtab,
+    );
     return etablissement;
   }
 
@@ -95,7 +142,10 @@ export class EtablissementsService {
       try {
         await this.r2Service.deleteFile(photo.key);
       } catch (error) {
-        this.logger.warn(`Impossible de supprimer la photo R2: ${photo.key}`, error);
+        this.logger.warn(
+          `Impossible de supprimer la photo R2: ${photo.key}`,
+          error,
+        );
       }
     }
 
@@ -104,14 +154,30 @@ export class EtablissementsService {
   }
 
   /** Uploader une photo pour un établissement */
-  async uploadPhoto(etablissementId: number, file: Express.Multer.File, estPrincipale: boolean) {
-    const etablissement = await this.prisma.etablissement.findUnique({ where: { id: etablissementId } });
-    if (!etablissement) throw new NotFoundException(`Établissement #${etablissementId} non trouvé`);
+  async uploadPhoto(
+    etablissementId: number,
+    file: Express.Multer.File,
+    estPrincipale: boolean,
+  ) {
+    const etablissement = await this.prisma.etablissement.findUnique({
+      where: { id: etablissementId },
+    });
+    if (!etablissement)
+      throw new NotFoundException(
+        `Établissement #${etablissementId} non trouvé`,
+      );
 
     // Valider le type de fichier
-    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const allowedMimeTypes = [
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/gif',
+    ];
     if (!allowedMimeTypes.includes(file.mimetype)) {
-      throw new BadRequestException('Format de fichier non supporté. Utilisez jpg, png, webp ou gif.');
+      throw new BadRequestException(
+        'Format de fichier non supporté. Utilisez jpg, png, webp ou gif.',
+      );
     }
 
     // Limiter la taille à 10 Mo
@@ -123,7 +189,11 @@ export class EtablissementsService {
     const key = R2Service.generatePhotoKey(etablissementId, file.originalname);
 
     // Upload vers R2
-    const { url } = await this.r2Service.uploadFile(key, file.buffer, file.mimetype);
+    const { url } = await this.r2Service.uploadFile(
+      key,
+      file.buffer,
+      file.mimetype,
+    );
 
     // Si c'est la photo principale, retirer le flag des autres photos
     if (estPrincipale) {
@@ -146,7 +216,11 @@ export class EtablissementsService {
       },
     });
 
-    await this.auditService.modification('ETABLISSEMENT', etablissementId, `Photo ajoutée: ${file.originalname}`);
+    await this.auditService.modification(
+      'ETABLISSEMENT',
+      etablissementId,
+      `Photo ajoutée: ${file.originalname}`,
+    );
     return photo;
   }
 
@@ -156,8 +230,13 @@ export class EtablissementsService {
     files: Express.Multer.File[],
     principaleIndex: number,
   ) {
-    const etablissement = await this.prisma.etablissement.findUnique({ where: { id: etablissementId } });
-    if (!etablissement) throw new NotFoundException(`Établissement #${etablissementId} non trouvé`);
+    const etablissement = await this.prisma.etablissement.findUnique({
+      where: { id: etablissementId },
+    });
+    if (!etablissement)
+      throw new NotFoundException(
+        `Établissement #${etablissementId} non trouvé`,
+      );
 
     if (!files || files.length === 0) {
       throw new BadRequestException('Aucun fichier fourni.');
@@ -168,7 +247,8 @@ export class EtablissementsService {
     }
 
     // Valider et uploader chaque fichier
-    const results: Array<{ success: boolean; photo?: any; error?: string }> = [];
+    const results: Array<{ success: boolean; photo?: any; error?: string }> =
+      [];
     let successCount = 0;
 
     for (let i = 0; i < files.length; i++) {
@@ -177,20 +257,38 @@ export class EtablissementsService {
 
       try {
         // Valider le type MIME
-        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        const allowedMimeTypes = [
+          'image/jpeg',
+          'image/png',
+          'image/webp',
+          'image/gif',
+        ];
         if (!allowedMimeTypes.includes(file.mimetype)) {
-          results.push({ success: false, error: `${file.originalname}: Format non supporté` });
+          results.push({
+            success: false,
+            error: `${file.originalname}: Format non supporté`,
+          });
           continue;
         }
 
         // Limiter la taille à 10 Mo
         if (file.size > 10 * 1024 * 1024) {
-          results.push({ success: false, error: `${file.originalname}: Fichier trop volumineux (max 10 Mo)` });
+          results.push({
+            success: false,
+            error: `${file.originalname}: Fichier trop volumineux (max 10 Mo)`,
+          });
           continue;
         }
 
-        const key = R2Service.generatePhotoKey(etablissementId, file.originalname);
-        const { url } = await this.r2Service.uploadFile(key, file.buffer, file.mimetype);
+        const key = R2Service.generatePhotoKey(
+          etablissementId,
+          file.originalname,
+        );
+        const { url } = await this.r2Service.uploadFile(
+          key,
+          file.buffer,
+          file.mimetype,
+        );
 
         // Si c'est la photo principale, retirer le flag des autres
         if (estPrincipale) {
@@ -216,12 +314,16 @@ export class EtablissementsService {
         successCount++;
       } catch (error) {
         this.logger.error(`Erreur upload ${file.originalname}: ${error}`);
-        results.push({ success: false, error: `${file.originalname}: Erreur lors de l'upload` });
+        results.push({
+          success: false,
+          error: `${file.originalname}: Erreur lors de l'upload`,
+        });
       }
     }
 
     await this.auditService.modification(
-      'ETABLISSEMENT', etablissementId,
+      'ETABLISSEMENT',
+      etablissementId,
       `${successCount}/${files.length} photos ajoutées`,
     );
 
@@ -243,6 +345,10 @@ export class EtablissementsService {
     }
 
     await this.prisma.photo.delete({ where: { id: photoId } });
-    await this.auditService.modification('ETABLISSEMENT', etablissementId, 'Photo supprimée');
+    await this.auditService.modification(
+      'ETABLISSEMENT',
+      etablissementId,
+      'Photo supprimée',
+    );
   }
 }

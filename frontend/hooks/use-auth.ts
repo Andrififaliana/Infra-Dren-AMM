@@ -19,8 +19,8 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: async (dto: LoginDto) => {
-      const { data } = await apiClient.post<AuthResponse>('/auth/login', dto);
-      return data;
+      const { data } = await apiClient.post<ApiResponse<AuthResponse>>('/auth/login', dto);
+      return data.data;
     },
     onSuccess: (data) => {
       setAuth(data.user, data.access_token);
@@ -43,8 +43,8 @@ export function useVerifyToken() {
   return useQuery({
     queryKey: ['auth', 'verify'],
     queryFn: async () => {
-      const { data } = await apiClient.get('/auth/verify');
-      return data;
+      const { data } = await apiClient.get<ApiResponse<unknown>>('/auth/verify');
+      return data.data;
     },
     retry: false,
   });

@@ -8,8 +8,8 @@ export function useSalles(batimentId?: number) {
     queryKey: ['salles', batimentId],
     queryFn: async () => {
       const params = batimentId ? { batimentId } : {};
-      const { data } = await apiClient.get<Salle[]>('/salles', { params });
-      return data;
+      const { data } = await apiClient.get<ApiResponse<Salle[]>>('/salles', { params });
+      return data.data;
     },
   });
 }

@@ -7,8 +7,8 @@ export function useTrajets() {
   return useQuery({
     queryKey: ['trajets'],
     queryFn: async () => {
-      const { data } = await apiClient.get<Trajet[]>('/trajets');
-      return data;
+      const { data } = await apiClient.get<ApiResponse<Trajet[]>>('/trajets');
+      return data.data;
     },
   });
 }
