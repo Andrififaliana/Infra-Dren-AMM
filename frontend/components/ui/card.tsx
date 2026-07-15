@@ -4,16 +4,18 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   padding?: boolean;
+  hover?: boolean;
   onClick?: () => void;
 }
 
-export function Card({ children, className, padding = true, onClick }: CardProps) {
+export function Card({ children, className, padding = true, hover = false, onClick }: CardProps) {
   return (
     <div
       onClick={onClick}
       className={cn(
-        'rounded-xl border border-gray-200 bg-white shadow-sm',
-        onClick && 'cursor-pointer transition-all hover:shadow-md hover:border-blue-200',
+        'rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-200',
+        hover && 'cursor-pointer hover:border-orange-200/60 hover:shadow-md',
+        onClick && 'cursor-pointer',
         padding && 'p-6',
         className
       )}

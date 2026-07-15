@@ -35,6 +35,19 @@ export interface BatimentSummary {
   _count?: { salles: number; toilettes: number };
 }
 
+/** Photo d'établissement uploadée via R2 */
+export interface Photo {
+  id: number;
+  key: string;
+  url: string;
+  originalName?: string;
+  mimeType?: string;
+  fileSize?: number;
+  estPrincipale: boolean;
+  etablissementId: number;
+  createdAt: string;
+}
+
 export interface Etablissement {
   id: number;
   nomEtab: string;
@@ -53,18 +66,23 @@ export interface Etablissement {
   designations?: Designation[];
   structures?: Structure[];
   batiments?: BatimentSummary[];
+  photos?: Photo[];
   _count?: {
     batiments: number;
     designations: number;
     structures: number;
+    photos?: number;
   };
 }
 
+/** Version simplifiée pour la liste (inclut la photo principale) */
 export interface EtablissementListe extends Omit<Etablissement, 'directeur' | 'designations' | 'structures' | 'batiments'> {
+  photos?: Photo[];
   _count: {
     batiments: number;
     designations: number;
     structures: number;
+    photos?: number;
   };
 }
 

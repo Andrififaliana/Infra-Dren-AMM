@@ -1,142 +1,157 @@
 'use client';
 
+import { useState } from 'react';
+import { motion } from 'motion/react';
 import {
-  useStatsGlobales,
-  useStatsParDren,
-  useCouvertureReseau,
-  useRepartitionSalles,
+  BarChart3, PieChart, Wifi, Droplets, School,
+  Building2, DoorOpen, TrendingUp, AlertTriangle, Brain,
+} from 'lucide-react';
+import {
+  useStatsGlobales, useStatsParDren, useCouvertureReseau, useRepartitionSalles,
 } from '@/hooks/use-statistiques';
-import { StatCard } from '@/components/shared/stat-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CardSkeleton } from '@/components/shared/loading-skeleton';
 import { Badge } from '@/components/ui/badge';
+import { CardSkeleton } from '@/components/shared/loading-skeleton';
+import { formatNumber } from '@/lib/utils';
 
 export default function StatistiquesPage() {
-  const { data: globales, isLoading: loadingGlobales } = useStatsGlobales();
-  const { data: parDren, isLoading: loadingDren } = useStatsParDren();
+  const [filtreDren, setFiltreDren] = useState('');
+  const { data: globales, isLoading: loadingG } = useStatsGlobales();
+  const { data: parDren } = useStatsParDren();
   const { data: couverture } = useCouvertureReseau();
   const { data: repartition } = useRepartitionSalles();
 
+  const drens = parDren?.map(d => d.dren) ?? [];
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-8">
+      {/* Header */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-bold text-gray-900">Statistiques</h1>
-        <p className="mt-2 text-gray-600">
-          Aperçu global des infrastructures scolaires de la DREN AMM
-        </p>
+        <p className="mt-2 text-gray-600">Aperçu global des infrastructures scolaires de la région AMM</p>
+      </motion.div>
+
+      {/* Filter */}
+      <div className="mt-6 mb-8">
+        <select
+          value={filtreDren}
+          onChange={(e) => setFiltreDren(e.target.value)}
+          className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+        >
+          <option value="">Tous les districts</option>
+          {drens.map(d => <option key={d} value={d}>{d}</option>)}
+        </select>
       </div>
 
-      {/* Global Stats */}
-      <h2 className="mb-4 text-xl font-semibold text-gray-900">Indicateurs globaux</h2>
-      {loadingGlobales ? (
-        <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {/* KPIs */}
+      {loadingG ? (
+        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : globales ? (
-        <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard title="Établissements" value={globales.totalEtablissements} icon="🏫" />
-          <StatCard title="Bâtiments" value={globales.totalBatiments} icon="🏗️" />
-          <StatCard title="Salles" value={globales.totalSalles} icon="🚪" />
-          <StatCard title="Équipements" value={globales.totalEquipements} icon="📦" />
-          <StatCard
-            title="Couverture téléphonique"
-            value={`${globales.tauxCouvertureTelephonique}%`}
-            icon="📞"
-          />
-          <StatCard
-            title="Couverture Internet"
-            value={`${globales.tauxCouvertureInternet}%`}
-            icon="🌐"
-          />
-        </div>
-      ) : null}
-
-      {/* Stats by DREN */}
-      <h2 className="mb-4 text-xl font-semibold text-gray-900">Par DREN</h2>
-      {loadingDren ? (
-        <CardSkeleton />
-      ) : parDren && parDren.length > 0 ? (
-        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {parDren.map((d) => (
-            <Card key={d.dren}>
-              <CardHeader>
-                <CardTitle className="text-sm">{d.dren}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Établissements</span>
-                    <span className="font-medium">{d.nbEtablissements}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Bâtiments</span>
-                    <span className="font-medium">{d.nbBatiments}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Salles</span>
-                    <span className="font-medium">{d.nbSalles}</span>
-                  </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          {[
+            { icon: School, label: 'Établissements', value: globales.totalEtablissements, color: 'text-blue-600 bg-blue-50' },
+            { icon: Building2, label: 'Bâtiments', value: globales.totalBatiments, color: 'text-amber-600 bg-amber-50' },
+            { icon: DoorOpen, label: 'Salles de classe', value: globales.totalSalles, color: 'text-green-600 bg-green-50' },
+            { icon: TrendingUp, label: 'Équipements', value: globales.totalEquipements, color: 'text-purple-600 bg-purple-50' },
+          ].map((kpi) => (
+            <Card key={kpi.label}>
+              <CardContent className="flex items-center gap-4">
+                <div className={`rounded-xl p-3 ${kpi.color}`}>
+                  <kpi.icon className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">{kpi.label}</p>
+                  <p className="text-2xl font-bold text-gray-900">{formatNumber(kpi.value)}</p>
                 </div>
               </CardContent>
             </Card>
           ))}
-        </div>
+        </motion.div>
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Couverture réseau */}
         <Card>
-          <CardHeader>
-            <CardTitle>Couverture réseau</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {couverture && couverture.length > 0 ? (
-              <div className="space-y-4">
-                {couverture.map((c) => (
-                  <div key={c.type}>
-                    <div className="mb-1 flex justify-between text-sm">
-                      <span className="font-medium capitalize">{c.type === 'telephone' ? 'Téléphonique' : 'Internet'}</span>
-                      <span className="text-gray-500">
-                        {c.couvert}% couvert
-                      </span>
-                    </div>
-                    <div className="h-2 rounded-full bg-gray-200">
-                      <div
-                        className="h-2 rounded-full bg-blue-500 transition-all"
-                        style={{ width: `${c.couvert}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
+          <CardHeader><CardTitle>Couverture réseau</CardTitle></CardHeader>
+          <CardContent className="space-y-6">
+            {couverture && couverture.length > 0 ? couverture.map((c) => (
+              <div key={c.type}>
+                <div className="mb-2 flex items-center justify-between text-sm">
+                  <span className="flex items-center gap-2 font-medium">
+                    {c.type === 'telephone' ? <Droplets className="h-4 w-4 text-orange-500" /> : <Wifi className="h-4 w-4 text-orange-500" />}
+                    {c.type === 'telephone' ? 'Couverture téléphonique' : 'Couverture Internet'}
+                  </span>
+                  <span className="font-semibold text-gray-900">{c.couvert}%</span>
+                </div>
+                <div className="h-2.5 rounded-full bg-gray-100">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${c.couvert}%` }}
+                    viewport={{ once: true }}
+                    className="h-2.5 rounded-full bg-gradient-to-r from-orange-400 to-orange-600"
+                  />
+                </div>
               </div>
-            ) : (
-              <p className="text-sm text-gray-500">Aucune donnée</p>
-            )}
+            )) : <p className="text-sm text-gray-400">Aucune donnée</p>}
           </CardContent>
         </Card>
 
-        {/* Répartition des salles */}
+        {/* État des salles */}
         <Card>
-          <CardHeader>
-            <CardTitle>État des salles</CardTitle>
-          </CardHeader>
+          <CardHeader><CardTitle>État des salles</CardTitle></CardHeader>
           <CardContent>
             {repartition && repartition.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {repartition.map((r) => (
-                  <div key={r.etat} className="flex items-center justify-between">
+                  <div key={r.etat} className="flex items-center justify-between rounded-xl bg-gray-50 p-4">
                     <Badge variant={r.etat === 'Bon' ? 'success' : r.etat === 'Moyen' ? 'warning' : 'danger'}>
                       {r.etat}
                     </Badge>
-                    <span className="text-sm font-medium">{r.count} salle{r.count > 1 ? 's' : ''}</span>
+                    <span className="font-semibold text-gray-900">{r.count} salle{r.count > 1 ? 's' : ''}</span>
                   </div>
                 ))}
               </div>
-            ) : (
-              <p className="text-sm text-gray-500">Aucune donnée</p>
-            )}
+            ) : <p className="text-sm text-gray-400">Aucune donnée</p>}
           </CardContent>
         </Card>
+
+        {/* Répartition par DREN */}
+        {parDren && parDren.length > 0 && (
+          <Card className="lg:col-span-2">
+            <CardHeader><CardTitle>Répartition par district</CardTitle></CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-200">
+                      <th className="px-4 py-3 text-left font-medium text-gray-500">District</th>
+                      <th className="px-4 py-3 text-right font-medium text-gray-500">Établissements</th>
+                      <th className="px-4 py-3 text-right font-medium text-gray-500">Bâtiments</th>
+                      <th className="px-4 py-3 text-right font-medium text-gray-500">Salles</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {parDren.map((d) => (
+                      <tr key={d.dren} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-4 py-3 font-medium">{d.dren}</td>
+                        <td className="px-4 py-3 text-right">{d.nbEtablissements}</td>
+                        <td className="px-4 py-3 text-right">{d.nbBatiments}</td>
+                        <td className="px-4 py-3 text-right">{d.nbSalles}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
