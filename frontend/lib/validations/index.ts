@@ -23,18 +23,18 @@ export const equipementSchema = z.object({
   typeEquip: z.string().optional(),
   etat: z.string().optional(),
   quantite: z.coerce.number().min(0, 'La quantité doit être positive').optional(),
-  salleId: z.coerce.number({ message: 'La salle est requise' }),
+  salleId: z.coerce.number({ message: 'La salle est requise' }).refine((n) => n > 0, 'Veuillez sélectionner une salle'),
 });
 
 export const trajetSchema = z.object({
-  nomTrajet: z.string().optional(),
-  debutTrajet: z.string().optional(),
-  finTrajet: z.string().optional(),
+  nomTrajet: z.string().min(1, 'Le nom du trajet est requis'),
+  debutTrajet: z.string().min(1, 'La date de début est requise'),
+  finTrajet: z.string().min(1, 'La date de fin est requise'),
   moyensData: z.object({
-    typeMoyen: z.string().optional(),
-    dureeMoyen: z.coerce.number().min(0).optional(),
-    distanceMoyen: z.coerce.number().min(0).optional(),
-  }).optional(),
+    typeMoyen: z.string().min(1, 'Le type de moyen est requis'),
+    dureeMoyen: z.coerce.number().min(0, 'La durée doit être positive').optional(),
+    distanceMoyen: z.coerce.number().min(0, 'La distance doit être positive').optional(),
+  }),
   periodeData: z.object({
     debutPeriode: z.string().optional(),
     finPeriode: z.string().optional(),
@@ -42,9 +42,9 @@ export const trajetSchema = z.object({
 });
 
 export const aleaSchema = z.object({
-  typeAleat: z.string().optional(),
-  nomAleat: z.string().optional(),
-  dateAleat: z.string().optional(),
+  nomAleat: z.string().min(1, "Le nom de l'aléa est requis"),
+  typeAleat: z.string().min(1, 'Le type est requis'),
+  dateAleat: z.string().min(1, 'La date est requise'),
   explication: z.string().optional(),
 });
 

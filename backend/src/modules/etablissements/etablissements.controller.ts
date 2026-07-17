@@ -183,4 +183,105 @@ export class EtablissementsController {
   ) {
     return this.etablissementsService.deletePhoto(id, photoId);
   }
+
+  // ─── Directeur ───────────────────────────────────────
+
+  @Post(':id/directeur')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Créer ou mettre à jour le directeur d'un établissement" })
+  upsertDirecteur(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: any,
+  ) {
+    return this.etablissementsService.upsertDirecteur(id, dto);
+  }
+
+  @Delete(':id/directeur')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Supprimer le directeur d'un établissement" })
+  deleteDirecteur(@Param('id', ParseIntPipe) id: number) {
+    return this.etablissementsService.deleteDirecteur(id);
+  }
+
+  // ─── Designations ────────────────────────────────────
+
+  @Post(':id/designations')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Ajouter une désignation à un établissement" })
+  createDesignation(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: any,
+  ) {
+    return this.etablissementsService.createDesignation(id, dto);
+  }
+
+  @Patch(':id/designations/:designationId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Modifier une désignation" })
+  updateDesignation(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('designationId', ParseIntPipe) designationId: number,
+    @Body() dto: any,
+  ) {
+    return this.etablissementsService.updateDesignation(designationId, id, dto);
+  }
+
+  @Delete(':id/designations/:designationId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Supprimer une désignation" })
+  deleteDesignation(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('designationId', ParseIntPipe) designationId: number,
+  ) {
+    return this.etablissementsService.deleteDesignation(designationId, id);
+  }
+
+  // ─── Structures ──────────────────────────────────────
+
+  @Post(':id/structures')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Ajouter une structure à un établissement" })
+  createStructure(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: any,
+  ) {
+    return this.etablissementsService.createStructure(id, dto);
+  }
+
+  @Patch(':id/structures/:structureId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Modifier une structure" })
+  updateStructure(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('structureId', ParseIntPipe) structureId: number,
+    @Body() dto: any,
+  ) {
+    return this.etablissementsService.updateStructure(structureId, id, dto);
+  }
+
+  @Delete(':id/structures/:structureId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Supprimer une structure" })
+  deleteStructure(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('structureId', ParseIntPipe) structureId: number,
+  ) {
+    return this.etablissementsService.deleteStructure(structureId, id);
+  }
 }

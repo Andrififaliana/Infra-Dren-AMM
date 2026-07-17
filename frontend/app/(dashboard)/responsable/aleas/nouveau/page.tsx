@@ -47,11 +47,14 @@ export default function NouvelAleaPage() {
         <CardHeader><CardTitle>Nouvel aléa</CardTitle></CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input id="nomAleat" name="nomAleat" label="Nom de l'aléa" placeholder="Ex: Inondation Ambohimanarina" />
+            <Input id="nomAleat" name="nomAleat" label="Nom de l'aléa *" placeholder="Ex: Inondation Ambohimanarina" required />
+            {errors.nomAleat && <p className="text-xs text-red-500">{errors.nomAleat}</p>}
             <div className="grid grid-cols-2 gap-4">
-              <Input id="typeAleat" name="typeAleat" label="Type d'aléa" placeholder="Ex: INONDATION" />
-              <Input id="dateAleat" name="dateAleat" label="Date" type="date" />
+              <Input id="typeAleat" name="typeAleat" label="Type d'aléa *" placeholder="Ex: INONDATION" required />
+              <Input id="dateAleat" name="dateAleat" label="Date *" type="date" required />
             </div>
+            {errors.typeAleat && <p className="text-xs text-red-500">{errors.typeAleat}</p>}
+            {errors.dateAleat && <p className="text-xs text-red-500">{errors.dateAleat}</p>}
             <div>
               <label htmlFor="explication" className="mb-1.5 block text-sm font-medium text-gray-700">Explication</label>
               <textarea id="explication" name="explication" rows={3}

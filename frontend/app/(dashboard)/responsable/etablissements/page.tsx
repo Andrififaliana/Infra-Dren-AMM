@@ -89,7 +89,7 @@ export default function GestionEtablissementsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Établissements</h1>
           <p className="mt-1 text-sm text-gray-500">Gérer les établissements scolaires</p>
         </div>
-        <Button onClick={() => router.push('/dashboard/responsable/etablissements/nouveau')}>
+        <Button onClick={() => router.push('/responsable/etablissements/nouveau')}>
           + Nouvel établissement
         </Button>
       </div>

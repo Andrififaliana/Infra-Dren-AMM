@@ -4,22 +4,39 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSalles, useDeleteSalle } from '@/hooks/use-salles';
 import { DataTable, BooleanBadge } from '@/components/shared/data-table';
+import { SearchBar } from '@/components/shared/search-bar';
+import { Pagination } from '@/components/shared/pagination';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
+import { Breadcrumb } from '@/components/shared/breadcrumb';
+import { toast } from 'sonner';
 import type { Salle } from '@/types/salle';
 
 export default function SallesPage() {
   const router = useRouter();
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedSalle, setSelectedSalle] = useState<Salle | null>(null);
+  const perPage = 10;
 
   const { data: salles, isLoading } = useSalles();
   const { mutate: deleteSalle, isPending: isDeleting } = useDeleteSalle();
 
+  const filtered = (salles ?? []).filter((s) =>
+    !search || s.sigleSalle?.toLowerCase().includes(search.toLowerCase()) || s.affectationSalle?.toLowerCase().includes(search.toLowerCase())
+  );
+  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+  const paginated = filtered.slice((page - 1) * perPage, page * perPage);
+
   const handleDelete = () => {
     if (selectedSalle) {
       deleteSalle(selectedSalle.idSalle, {
-        onSuccess: () => { setDeleteModalOpen(false); setSelectedSalle(null); },
+        onSuccess: () => {
+          toast.success('Salle supprimée');
+          setDeleteModalOpen(false); setSelectedSalle(null);
+        },
+        onError: () => toast.error('Erreur lors de la suppression'),
       });
     }
   };
@@ -49,23 +66,33 @@ export default function SallesPage() {
 
   return (
     <div>
+      <Breadcrumb items={[{ label: 'Salles' }]} />
+
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Salles</h1>
-          <p className="mt-1 text-sm text-gray-500">Gestion des salles de classe</p>
+          <p className="mt-1 text-sm text-gray-500">Gestion des salles de classe ({filtered.length})</p>
         </div>
         <Button onClick={() => router.push('/responsable/salles/nouveau')}>
           + Nouvelle salle
         </Button>
       </div>
 
+      <div className="mb-4">
+        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher une salle..." />
+      </div>
+
       <DataTable
         columns={columns}
-        data={salles ?? []}
+        data={paginated}
         keyExtractor={(item) => item.idSalle}
         loading={isLoading}
         emptyMessage="Aucune salle"
       />
+
+      <div className="mt-4">
+        <Pagination page={page} totalPages={totalPages} total={filtered.length} onPageChange={setPage} />
+      </div>
 
       <Modal open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Confirmer la suppression">
         <p className="text-sm text-gray-600">

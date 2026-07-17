@@ -1,17 +1,61 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { useState } from 'react';
 import { useEtablissement, useUpdateEtablissement } from '@/hooks/use-etablissements';
+import {
+  useUpsertDirecteur, useDeleteDirecteur,
+  useCreateDesignation, useUpdateDesignation, useDeleteDesignation,
+  useCreateStructure, useUpdateStructure, useDeleteStructure,
+} from '@/hooks/use-gestion-etablissement';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Modal } from '@/components/ui/modal';
+import { Select } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Breadcrumb } from '@/components/shared/breadcrumb';
+import { PhotoUpload } from '@/components/etablissements/PhotoUpload';
+import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2 } from 'lucide-react';
+import type { Directeur, Designation, Structure } from '@/types/etablissement';
 
 export default function EditEtablissementPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const { data: etablissement, isLoading } = useEtablissement(Number(id));
-  const { mutate: updateEtab, isPending, error } = useUpdateEtablissement(Number(id));
+  const etablissementId = Number(id);
+
+  const { data: etablissement, isLoading } = useEtablissement(etablissementId);
+  const { mutate: updateEtab, isPending, error } = useUpdateEtablissement(etablissementId);
+
+  // Directeur state
+  const [dirModalOpen, setDirModalOpen] = useState(false);
+  const [dirDelModalOpen, setDirDelModalOpen] = useState(false);
+  const [dirForm, setDirForm] = useState({ nomDirecteur: '', prenomDr: '', emailDr: '', telDr: '' });
+  const { mutate: upsertDirecteur, isPending: dirLoading } = useUpsertDirecteur(etablissementId);
+  const { mutate: deleteDirecteur, isPending: dirDelLoading } = useDeleteDirecteur(etablissementId);
+
+  // Designation state
+  const [desModalOpen, setDesModalOpen] = useState(false);
+  const [desDelTarget, setDesDelTarget] = useState<Designation | null>(null);
+  const [editingDes, setEditingDes] = useState<Designation | null>(null);
+  const [desForm, setDesForm] = useState({
+    nomDesign: '', typeDesignation: '', numCadastre: '', superficieDesign: '',
+    estEnceinteEtab: false, estTitre: false, estLitigieux: false,
+  });
+  const { mutate: createDesignation, isPending: desCreateLoading } = useCreateDesignation(etablissementId);
+  const { mutate: updateDesignation, isPending: desUpdateLoading } = useUpdateDesignation();
+  const { mutate: deleteDesignation, isPending: desDelLoading } = useDeleteDesignation(etablissementId);
+
+  // Structure state
+  const [strModalOpen, setStrModalOpen] = useState(false);
+  const [strDelTarget, setStrDelTarget] = useState<Structure | null>(null);
+  const [editingStr, setEditingStr] = useState<Structure | null>(null);
+  const [strForm, setStrForm] = useState({ typeStruc: '', existenceStruc: true, materiauxStruc: '', etatStruc: '' });
+  const { mutate: createStructure, isPending: strCreateLoading } = useCreateStructure(etablissementId);
+  const { mutate: updateStructure, isPending: strUpdateLoading } = useUpdateStructure();
+  const { mutate: deleteStructure, isPending: strDelLoading } = useDeleteStructure(etablissementId);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,6 +79,139 @@ export default function EditEtablissementPage() {
     });
   };
 
+  // ─── Directeur handlers ──────────────────────────
+
+  const openDirModal = () => {
+    if (etablissement?.directeur) {
+      setDirForm({
+        nomDirecteur: etablissement.directeur.nomDirecteur,
+        prenomDr: etablissement.directeur.prenomDr || '',
+        emailDr: etablissement.directeur.emailDr || '',
+        telDr: etablissement.directeur.telDr || '',
+      });
+    } else {
+      setDirForm({ nomDirecteur: '', prenomDr: '', emailDr: '', telDr: '' });
+    }
+    setDirModalOpen(true);
+  };
+
+  const saveDirecteur = (e: React.FormEvent) => {
+    e.preventDefault();
+    upsertDirecteur(dirForm, {
+      onSuccess: () => { toast.success('Directeur enregistré'); setDirModalOpen(false); },
+      onError: () => toast.error("Erreur lors de l'enregistrement"),
+    });
+  };
+
+  const handleDeleteDirecteur = () => {
+    deleteDirecteur(undefined, {
+      onSuccess: () => { toast.success('Directeur supprimé'); setDirDelModalOpen(false); },
+      onError: () => toast.error('Erreur lors de la suppression'),
+    });
+  };
+
+  // ─── Designation handlers ────────────────────────
+
+  const openDesModal = (des?: Designation) => {
+    if (des) {
+      setEditingDes(des);
+      setDesForm({
+        nomDesign: des.nomDesign,
+        typeDesignation: des.typeDesignation || '',
+        numCadastre: des.numCadastre || '',
+        superficieDesign: des.superficieDesign ? String(des.superficieDesign) : '',
+        estEnceinteEtab: des.estEnceinteEtab,
+        estTitre: des.estTitre,
+        estLitigieux: des.estLitigieux,
+      });
+    } else {
+      setEditingDes(null);
+      setDesForm({ nomDesign: '', typeDesignation: '', numCadastre: '', superficieDesign: '', estEnceinteEtab: false, estTitre: false, estLitigieux: false });
+    }
+    setDesModalOpen(true);
+  };
+
+  const saveDesignation = (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload = {
+      nomDesign: desForm.nomDesign,
+      typeDesignation: desForm.typeDesignation || undefined,
+      numCadastre: desForm.numCadastre || undefined,
+      superficieDesign: desForm.superficieDesign ? Number(desForm.superficieDesign) : undefined,
+      estEnceinteEtab: desForm.estEnceinteEtab,
+      estTitre: desForm.estTitre,
+      estLitigieux: desForm.estLitigieux,
+    };
+    if (editingDes) {
+      updateDesignation({ id: editingDes.idDesign, etablissementId, ...payload }, {
+        onSuccess: () => { toast.success('Désignation modifiée'); setDesModalOpen(false); },
+        onError: () => toast.error('Erreur lors de la modification'),
+      });
+    } else {
+      createDesignation(payload, {
+        onSuccess: () => { toast.success('Désignation ajoutée'); setDesModalOpen(false); },
+        onError: () => toast.error("Erreur lors de l'ajout"),
+      });
+    }
+  };
+
+  const handleDeleteDesignation = () => {
+    if (!desDelTarget) return;
+    deleteDesignation(desDelTarget.idDesign, {
+      onSuccess: () => { toast.success('Désignation supprimée'); setDesDelTarget(null); },
+      onError: () => toast.error('Erreur lors de la suppression'),
+    });
+  };
+
+  // ─── Structure handlers ──────────────────────────
+
+  const openStrModal = (str?: Structure) => {
+    if (str) {
+      setEditingStr(str);
+      setStrForm({
+        typeStruc: str.typeStruc || '',
+        existenceStruc: str.existenceStruc,
+        materiauxStruc: str.materiauxStruc || '',
+        etatStruc: str.etatStruc || '',
+      });
+    } else {
+      setEditingStr(null);
+      setStrForm({ typeStruc: '', existenceStruc: true, materiauxStruc: '', etatStruc: '' });
+    }
+    setStrModalOpen(true);
+  };
+
+  const saveStructure = (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload = {
+      typeStruc: strForm.typeStruc || undefined,
+      existenceStruc: strForm.existenceStruc,
+      materiauxStruc: strForm.materiauxStruc || undefined,
+      etatStruc: strForm.etatStruc || undefined,
+    };
+    if (editingStr) {
+      updateStructure({ id: editingStr.idStruc, etablissementId, ...payload }, {
+        onSuccess: () => { toast.success('Structure modifiée'); setStrModalOpen(false); },
+        onError: () => toast.error('Erreur lors de la modification'),
+      });
+    } else {
+      createStructure(payload, {
+        onSuccess: () => { toast.success('Structure ajoutée'); setStrModalOpen(false); },
+        onError: () => toast.error("Erreur lors de l'ajout"),
+      });
+    }
+  };
+
+  const handleDeleteStructure = () => {
+    if (!strDelTarget) return;
+    deleteStructure(strDelTarget.idStruc, {
+      onSuccess: () => { toast.success('Structure supprimée'); setStrDelTarget(null); },
+      onError: () => toast.error('Erreur lors de la suppression'),
+    });
+  };
+
+  // ─── Render ──────────────────────────────────────
+
   if (isLoading) {
     return (
       <div className="mx-auto max-w-2xl">
@@ -48,29 +225,25 @@ export default function EditEtablissementPage() {
     return (
       <div className="py-16 text-center">
         <p className="text-gray-500">Établissement non trouvé</p>
-        <Button onClick={() => router.push('/responsable/etablissements')} className="mt-4">
-          Retour
-        </Button>
+        <Button onClick={() => router.push('/responsable/etablissements')} className="mt-4">Retour</Button>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-2xl">
-      <Button variant="ghost" onClick={() => router.back()} className="mb-4">
-        ← Retour
-      </Button>
+    <div className="mx-auto max-w-3xl">
+      <Breadcrumb items={[
+        { label: 'Établissements', href: '/responsable/etablissements' },
+        { label: etablissement.nomEtab },
+      ]} />
 
+      {/* ─── Formulaire principal ─────────────────── */}
       <Card>
-        <CardHeader>
-          <CardTitle>Modifier : {etablissement.nomEtab}</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle>Modifier : {etablissement.nomEtab}</CardTitle></CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4" key={etablissement.id}>
-            <Input
-              id="nomEtab" name="nomEtab" label="Nom de l'établissement *"
-              defaultValue={etablissement.nomEtab} required
-            />
+            {/* ... (form fields unchanged) ... */}
+            <Input id="nomEtab" name="nomEtab" label="Nom de l'établissement *" defaultValue={etablissement.nomEtab} required />
             <div className="grid grid-cols-2 gap-4">
               <Input id="dren" name="dren" label="DREN" defaultValue={etablissement.dren ?? ''} />
               <Input id="cisco" name="cisco" label="CISCO" defaultValue={etablissement.cisco ?? ''} />
@@ -98,24 +271,303 @@ export default function EditEtablissementPage() {
               <Input id="nbSectionG" name="nbSectionG" label="Sections (H)" type="number" defaultValue={etablissement.nbSectionG} />
               <Input id="nbSectionF" name="nbSectionF" label="Sections (F)" type="number" defaultValue={etablissement.nbSectionF} />
             </div>
-
-            {error && (
-              <p className="text-sm text-red-600">
-                {error instanceof Error ? error.message : 'Erreur lors de la modification'}
-              </p>
-            )}
-
+            {error && <p className="text-sm text-red-600">{error instanceof Error ? error.message : 'Erreur'}</p>}
             <div className="flex justify-end gap-3">
-              <Button variant="outline" type="button" onClick={() => router.back()}>
-                Annuler
-              </Button>
-              <Button type="submit" loading={isPending}>
-                Enregistrer
-              </Button>
+              <Button variant="outline" type="button" onClick={() => router.back()}>Annuler</Button>
+              <Button type="submit" loading={isPending}>Enregistrer</Button>
             </div>
           </form>
         </CardContent>
       </Card>
+
+      {/* ─── Photos ────────────────────────────────── */}
+      <Card className="mt-6">
+        <CardHeader><CardTitle>Photos</CardTitle></CardHeader>
+        <CardContent>
+          <PhotoUpload etablissementId={etablissement.id} photos={etablissement.photos} />
+        </CardContent>
+      </Card>
+
+      {/* ─── Directeur ─────────────────────────────── */}
+      <Card className="mt-6">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <User className="h-5 w-5 text-orange-500" /> Directeur
+            </CardTitle>
+            <div className="flex gap-2">
+              <Button variant="ghost" size="sm" onClick={openDirModal}>
+                <Pencil className="mr-1 h-4 w-4" /> {etablissement.directeur ? 'Modifier' : 'Ajouter'}
+              </Button>
+              {etablissement.directeur && (
+                <Button variant="danger" size="sm" onClick={() => setDirDelModalOpen(true)}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {etablissement.directeur ? (
+            <div className="rounded-xl bg-gray-50 p-4">
+              <p className="font-medium text-gray-900">
+                {etablissement.directeur.nomDirecteur} {etablissement.directeur.prenomDr || ''}
+              </p>
+              <div className="mt-1 flex flex-wrap gap-3 text-sm text-gray-500">
+                {etablissement.directeur.emailDr && (
+                  <span className="flex items-center gap-1"><Mail className="h-3.5 w-3.5" /> {etablissement.directeur.emailDr}</span>
+                )}
+                {etablissement.directeur.telDr && (
+                  <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5" /> {etablissement.directeur.telDr}</span>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-400">Aucun directeur renseigné</p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* ─── Designations ──────────────────────────── */}
+      <Card className="mt-6">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-orange-500" /> Désignations ({etablissement.designations?.length ?? 0})
+            </CardTitle>
+            <Button variant="ghost" size="sm" onClick={() => openDesModal()}>
+              <Plus className="mr-1 h-4 w-4" /> Ajouter
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {etablissement.designations && etablissement.designations.length > 0 ? (
+            <div className="space-y-3">
+              {etablissement.designations.map((d) => (
+                <div key={d.idDesign} className="group rounded-xl border border-gray-100 bg-gray-50 p-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-medium text-gray-900">{d.nomDesign}</p>
+                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-gray-500">
+                        {d.typeDesignation && <span>Type: {d.typeDesignation}</span>}
+                        {d.numCadastre && (
+                          <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {d.numCadastre}</span>
+                        )}
+                        {d.superficieDesign && <span>Surface: {d.superficieDesign} m²</span>}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex gap-1.5">
+                        {d.estTitre && <Badge variant="success">Titre</Badge>}
+                        {d.estEnceinteEtab && <Badge variant="info">Enceinte</Badge>}
+                        {d.estLitigieux && <Badge variant="danger">Litigieux</Badge>}
+                      </div>
+                      <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                        <Button variant="ghost" size="sm" onClick={() => openDesModal(d)}><Pencil className="h-3.5 w-3.5" /></Button>
+                        <Button variant="danger" size="sm" onClick={() => setDesDelTarget(d)}>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center">
+              <p className="text-sm text-gray-400">Aucune désignation</p>
+              <Button variant="ghost" size="sm" onClick={() => openDesModal()} className="mt-2">
+                <Plus className="mr-1 h-4 w-4" /> Ajouter une désignation
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* ─── Structures ────────────────────────────── */}
+      <Card className="mt-6">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-orange-500" /> Structures ({etablissement.structures?.length ?? 0})
+            </CardTitle>
+            <Button variant="ghost" size="sm" onClick={() => openStrModal()}>
+              <Plus className="mr-1 h-4 w-4" /> Ajouter
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {etablissement.structures && etablissement.structures.length > 0 ? (
+            <div className="space-y-3">
+              {etablissement.structures.map((s) => (
+                <div key={s.idStruc} className="group rounded-xl border border-gray-100 bg-gray-50 p-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-medium text-gray-900">{s.typeStruc || 'Structure'}</p>
+                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-gray-500">
+                        {s.materiauxStruc && <span>Matériaux: {s.materiauxStruc}</span>}
+                        {s.etatStruc && <span>État: {s.etatStruc}</span>}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={s.existenceStruc ? 'success' : 'danger'}>
+                        {s.existenceStruc ? 'Existant' : 'Inexistant'}
+                      </Badge>
+                      <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                        <Button variant="ghost" size="sm" onClick={() => openStrModal(s)}><Pencil className="h-3.5 w-3.5" /></Button>
+                        <Button variant="danger" size="sm" onClick={() => setStrDelTarget(s)}>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center">
+              <p className="text-sm text-gray-400">Aucune structure</p>
+              <Button variant="ghost" size="sm" onClick={() => openStrModal()} className="mt-2">
+                <Plus className="mr-1 h-4 w-4" /> Ajouter une structure
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* ═══════════════════════════════════════════════ */}
+      {/* MODALS                                       */}
+      {/* ═══════════════════════════════════════════════ */}
+
+      {/* Modal Directeur */}
+      <Modal open={dirModalOpen} onClose={() => setDirModalOpen(false)} title="Directeur de l'établissement">
+        <form onSubmit={saveDirecteur} className="space-y-4">
+          <Input id="dir_nom" label="Nom *" value={dirForm.nomDirecteur}
+            onChange={(e) => setDirForm({ ...dirForm, nomDirecteur: e.target.value })} required />
+          <Input id="dir_prenom" label="Prénom" value={dirForm.prenomDr}
+            onChange={(e) => setDirForm({ ...dirForm, prenomDr: e.target.value })} />
+          <Input id="dir_email" label="Email" type="email" value={dirForm.emailDr}
+            onChange={(e) => setDirForm({ ...dirForm, emailDr: e.target.value })} />
+          <Input id="dir_tel" label="Téléphone" type="tel" value={dirForm.telDr}
+            onChange={(e) => setDirForm({ ...dirForm, telDr: e.target.value })} />
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" type="button" onClick={() => setDirModalOpen(false)}>Annuler</Button>
+            <Button type="submit" loading={dirLoading}>Enregistrer</Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Modal Designation */}
+      <Modal open={desModalOpen} onClose={() => setDesModalOpen(false)}
+        title={editingDes ? 'Modifier la désignation' : 'Nouvelle désignation'}>
+        <form onSubmit={saveDesignation} className="space-y-4">
+          <Input id="des_nom" label="Nom *" value={desForm.nomDesign}
+            onChange={(e) => setDesForm({ ...desForm, nomDesign: e.target.value })} required />
+          <div className="grid grid-cols-2 gap-4">
+            <Input id="des_type" label="Type" value={desForm.typeDesignation}
+              onChange={(e) => setDesForm({ ...desForm, typeDesignation: e.target.value })} />
+            <Input id="des_cadastre" label="N° Cadastre" value={desForm.numCadastre}
+              onChange={(e) => setDesForm({ ...desForm, numCadastre: e.target.value })} />
+          </div>
+          <Input id="des_superficie" label="Superficie (m²)" type="number" min="0" step="0.01" value={desForm.superficieDesign}
+            onChange={(e) => setDesForm({ ...desForm, superficieDesign: e.target.value })} />
+          <div className="flex flex-wrap gap-4">
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={desForm.estTitre}
+                onChange={(e) => setDesForm({ ...desForm, estTitre: e.target.checked })} className="rounded" /> Titre foncier
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={desForm.estEnceinteEtab}
+                onChange={(e) => setDesForm({ ...desForm, estEnceinteEtab: e.target.checked })} className="rounded" /> Enceinte établissement
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={desForm.estLitigieux}
+                onChange={(e) => setDesForm({ ...desForm, estLitigieux: e.target.checked })} className="rounded" /> Litigieux
+            </label>
+          </div>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" type="button" onClick={() => setDesModalOpen(false)}>Annuler</Button>
+            <Button type="submit" loading={desCreateLoading || desUpdateLoading}>
+              {editingDes ? 'Modifier' : 'Créer'}
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Modal Structure */}
+      <Modal open={strModalOpen} onClose={() => setStrModalOpen(false)}
+        title={editingStr ? 'Modifier la structure' : 'Nouvelle structure'}>
+        <form onSubmit={saveStructure} className="space-y-4">
+          <Input id="str_type" label="Type de structure" value={strForm.typeStruc}
+            onChange={(e) => setStrForm({ ...strForm, typeStruc: e.target.value })} placeholder="Ex: Bibliothèque, Laboratoire..." />
+          <Select id="str_materiaux" label="Matériaux"
+            value={strForm.materiauxStruc}
+            onChange={(e) => setStrForm({ ...strForm, materiauxStruc: e.target.value })}
+            options={[
+              { value: '', label: 'Sélectionner' },
+              { value: 'DUR', label: 'Dur' },
+              { value: 'SEMI-DUR', label: 'Semi-dur' },
+              { value: 'BANCHE', label: 'Banché' },
+              { value: 'BOIS', label: 'Bois' },
+              { value: 'AUTRE', label: 'Autre' },
+            ]}
+          />
+          <Select id="str_etat" label="État"
+            value={strForm.etatStruc}
+            onChange={(e) => setStrForm({ ...strForm, etatStruc: e.target.value })}
+            options={[
+              { value: '', label: 'Sélectionner' },
+              { value: 'BON', label: 'Bon' },
+              { value: 'MOYEN', label: 'Moyen' },
+              { value: 'MAUVAIS', label: 'Mauvais' },
+            ]}
+          />
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={strForm.existenceStruc}
+              onChange={(e) => setStrForm({ ...strForm, existenceStruc: e.target.checked })} className="rounded" />
+            Structure existante
+          </label>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" type="button" onClick={() => setStrModalOpen(false)}>Annuler</Button>
+            <Button type="submit" loading={strCreateLoading || strUpdateLoading}>
+              {editingStr ? 'Modifier' : 'Créer'}
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Confirmation suppression Directeur */}
+      <Modal open={dirDelModalOpen} onClose={() => setDirDelModalOpen(false)} title="Confirmer la suppression">
+        <p className="text-sm text-gray-600">
+          Supprimer le directeur <strong>{etablissement.directeur?.nomDirecteur}</strong> de cet établissement ?
+        </p>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setDirDelModalOpen(false)}>Annuler</Button>
+          <Button variant="danger" onClick={handleDeleteDirecteur} loading={dirDelLoading}>Supprimer</Button>
+        </div>
+      </Modal>
+
+      {/* Confirmation suppression Désignation */}
+      <Modal open={!!desDelTarget} onClose={() => setDesDelTarget(null)} title="Confirmer la suppression">
+        <p className="text-sm text-gray-600">
+          Supprimer la désignation <strong>{desDelTarget?.nomDesign}</strong> ?
+        </p>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setDesDelTarget(null)}>Annuler</Button>
+          <Button variant="danger" onClick={handleDeleteDesignation} loading={desDelLoading}>Supprimer</Button>
+        </div>
+      </Modal>
+
+      {/* Confirmation suppression Structure */}
+      <Modal open={!!strDelTarget} onClose={() => setStrDelTarget(null)} title="Confirmer la suppression">
+        <p className="text-sm text-gray-600">
+          Supprimer cette structure{strDelTarget?.typeStruc ? <> (<strong>{strDelTarget.typeStruc}</strong>)</> : ''} ?
+        </p>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setStrDelTarget(null)}>Annuler</Button>
+          <Button variant="danger" onClick={handleDeleteStructure} loading={strDelLoading}>Supprimer</Button>
+        </div>
+      </Modal>
     </div>
   );
 }

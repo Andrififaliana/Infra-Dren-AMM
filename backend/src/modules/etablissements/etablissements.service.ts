@@ -349,6 +349,88 @@ export class EtablissementsService {
     return { results, total: files.length, successCount };
   }
 
+  // ─── Directeur ─────────────────────────────────────
+
+  async upsertDirecteur(etablissementId: number, dto: { nomDirecteur: string; prenomDr?: string; emailDr?: string; telDr?: string }) {
+    await this.findOne(etablissementId);
+    const directeur = await this.prisma.directeur.upsert({
+      where: { etablissementId },
+      update: dto,
+      create: { ...dto, etablissementId },
+    });
+    await this.auditService.modification('ETABLISSEMENT', etablissementId, 'Directeur mis à jour');
+    return directeur;
+  }
+
+  async deleteDirecteur(etablissementId: number) {
+    const etab = await this.findOne(etablissementId);
+    if (!etab.directeur) throw new NotFoundException('Aucun directeur pour cet établissement');
+    await this.prisma.directeur.delete({ where: { etablissementId } });
+    await this.auditService.modification('ETABLISSEMENT', etablissementId, 'Directeur supprimé');
+  }
+
+  // ─── Designations ───────────────────────────────────
+
+  async createDesignation(etablissementId: number, dto: {
+    nomDesign: string; estEnceinteEtab?: boolean; estTitre?: boolean;
+    typeDesignation?: string; numCadastre?: string; superficieDesign?: number; estLitigieux?: boolean;
+  }) {
+    await this.findOne(etablissementId);
+    const designation = await this.prisma.designation.create({
+      data: { ...dto, etablissementId },
+    });
+    await this.auditService.modification('ETABLISSEMENT', etablissementId, `Désignation ajoutée: ${dto.nomDesign}`);
+    return designation;
+  }
+
+  async updateDesignation(id: number, etablissementId: number, dto: {
+    nomDesign?: string; estEnceinteEtab?: boolean; estTitre?: boolean;
+    typeDesignation?: string; numCadastre?: string; superficieDesign?: number; estLitigieux?: boolean;
+  }) {
+    const existing = await this.prisma.designation.findFirst({ where: { idDesign: id, etablissementId } });
+    if (!existing) throw new NotFoundException(`Désignation #${id} non trouvée`);
+    const designation = await this.prisma.designation.update({ where: { idDesign: id }, data: dto });
+    await this.auditService.modification('ETABLISSEMENT', etablissementId, 'Désignation modifiée');
+    return designation;
+  }
+
+  async deleteDesignation(id: number, etablissementId: number) {
+    const existing = await this.prisma.designation.findFirst({ where: { idDesign: id, etablissementId } });
+    if (!existing) throw new NotFoundException(`Désignation #${id} non trouvée`);
+    await this.prisma.designation.delete({ where: { idDesign: id } });
+    await this.auditService.modification('ETABLISSEMENT', etablissementId, 'Désignation supprimée');
+  }
+
+  // ─── Structures ─────────────────────────────────────
+
+  async createStructure(etablissementId: number, dto: {
+    typeStruc?: string; existenceStruc?: boolean; materiauxStruc?: string; etatStruc?: string;
+  }) {
+    await this.findOne(etablissementId);
+    const structure = await this.prisma.structure.create({
+      data: { ...dto, etablissementId },
+    });
+    await this.auditService.modification('ETABLISSEMENT', etablissementId, 'Structure ajoutée');
+    return structure;
+  }
+
+  async updateStructure(id: number, etablissementId: number, dto: {
+    typeStruc?: string; existenceStruc?: boolean; materiauxStruc?: string; etatStruc?: string;
+  }) {
+    const existing = await this.prisma.structure.findFirst({ where: { idStruc: id, etablissementId } });
+    if (!existing) throw new NotFoundException(`Structure #${id} non trouvée`);
+    const structure = await this.prisma.structure.update({ where: { idStruc: id }, data: dto });
+    await this.auditService.modification('ETABLISSEMENT', etablissementId, 'Structure modifiée');
+    return structure;
+  }
+
+  async deleteStructure(id: number, etablissementId: number) {
+    const existing = await this.prisma.structure.findFirst({ where: { idStruc: id, etablissementId } });
+    if (!existing) throw new NotFoundException(`Structure #${id} non trouvée`);
+    await this.prisma.structure.delete({ where: { idStruc: id } });
+    await this.auditService.modification('ETABLISSEMENT', etablissementId, 'Structure supprimée');
+  }
+
   /** Supprimer une photo */
   async deletePhoto(etablissementId: number, photoId: number) {
     const photo = await this.prisma.photo.findFirst({
