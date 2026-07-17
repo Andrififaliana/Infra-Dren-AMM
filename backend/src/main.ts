@@ -51,7 +51,6 @@ async function bootstrap() {
         bearerFormat: 'JWT',
         description: 'Entrez votre token JWT Supabase',
       },
-      'access-token',
     )
     .build();
 
