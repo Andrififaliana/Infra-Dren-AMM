@@ -1,5 +1,6 @@
 import {
   Injectable,
+  CanActivate,
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -9,7 +10,7 @@ import { SupabaseService } from '../../modules/auth/supabase.service';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
-export class JwtAuthGuard {
+export class JwtAuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly supabaseService: SupabaseService,
