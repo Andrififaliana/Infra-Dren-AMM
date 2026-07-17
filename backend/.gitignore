@@ -42,6 +42,9 @@ lerna-debug.log*
 .env.production.local
 .env.local
 
+# OpenCode skills
+.opencode/
+
 # temp directory
 .temp
 .tmp
