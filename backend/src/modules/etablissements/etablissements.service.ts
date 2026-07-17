@@ -45,6 +45,25 @@ export class EtablissementsService {
 
     const where: Prisma.EtablissementWhereInput = {};
 
+    if (query.search) {
+      where.OR = [
+        { nomEtab: { contains: query.search, mode: 'insensitive' } },
+        { dren: { contains: query.search, mode: 'insensitive' } },
+        { cisco: { contains: query.search, mode: 'insensitive' } },
+        { commune: { contains: query.search, mode: 'insensitive' } },
+        { fokontany: { contains: query.search, mode: 'insensitive' } },
+      ];
+    }
+    if (query.dren) {
+      where.dren = { contains: query.dren, mode: 'insensitive' };
+    }
+    if (query.cisco) {
+      where.cisco = { contains: query.cisco, mode: 'insensitive' };
+    }
+    if (query.commune) {
+      where.commune = { contains: query.commune, mode: 'insensitive' };
+    }
+
     try {
       const data = await this.prisma.etablissement.findMany({
         where,

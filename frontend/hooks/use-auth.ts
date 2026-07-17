@@ -11,7 +11,7 @@ interface LoginDto {
 
 interface AuthResponse {
   user: User;
-  access_token: string;
+  accessToken: string;
 }
 
 export function useLogin() {
@@ -23,7 +23,7 @@ export function useLogin() {
       return data.data;
     },
     onSuccess: (data) => {
-      setAuth(data.user, data.access_token);
+      setAuth(data.user, data.accessToken);
     },
   });
 }
