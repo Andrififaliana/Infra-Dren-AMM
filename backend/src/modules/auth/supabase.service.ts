@@ -18,7 +18,7 @@ export class SupabaseService implements OnModuleInit {
 
     if (!url || !anonKey) {
       this.logger.warn(
-        '⚠️  Supabase non configuré. Ajoutez SUPABASE_URL et SUPABASE_ANON_KEY dans .env pour activer l\'authentification.',
+        "⚠️  Supabase non configuré. Ajoutez SUPABASE_URL et SUPABASE_ANON_KEY dans .env pour activer l'authentification.",
       );
       return;
     }
@@ -39,14 +39,18 @@ export class SupabaseService implements OnModuleInit {
 
   getClient(): SupabaseClient {
     if (!this.isConfigured || !this.supabaseClient) {
-      throw new Error('Supabase n\'est pas configuré. Vérifiez SUPABASE_URL et SUPABASE_ANON_KEY dans .env');
+      throw new Error(
+        "Supabase n'est pas configuré. Vérifiez SUPABASE_URL et SUPABASE_ANON_KEY dans .env",
+      );
     }
     return this.supabaseClient;
   }
 
   getAdminClient(): SupabaseClient {
     if (!this.isConfigured || !this.supabaseAdminClient) {
-      throw new Error('Supabase n\'est pas configuré. Vérifiez SUPABASE_URL et SUPABASE_ANON_KEY dans .env');
+      throw new Error(
+        "Supabase n'est pas configuré. Vérifiez SUPABASE_URL et SUPABASE_ANON_KEY dans .env",
+      );
     }
     return this.supabaseAdminClient;
   }

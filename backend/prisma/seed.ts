@@ -12,7 +12,7 @@ async function main() {
 
   // 1. Création des utilisateurs
   console.log('👤 Création des utilisateurs...');
-  const admin = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'admin@dren.mg' },
     update: {},
     create: {
@@ -23,7 +23,7 @@ async function main() {
     },
   });
 
-  const resp1 = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'responsable@dren.mg' },
     update: {},
     create: {
@@ -38,7 +38,7 @@ async function main() {
   console.log('🏫 Création des établissements...');
 
   // Établissement 1: École Primaire d'Ambohimanarina
-  const ecole1 = await prisma.etablissement.create({
+  await prisma.etablissement.create({
     data: {
       nomEtab: "École Primaire Publique d'Ambohimanarina",
       dren: 'DREN Analamanga',
@@ -286,7 +286,7 @@ async function main() {
   });
 
   // Établissement 2: Collège d'Enseignement Général (CEG) d'Anosizato
-  const ecole2 = await prisma.etablissement.create({
+  await prisma.etablissement.create({
     data: {
       nomEtab: 'CEG Anosizato',
       dren: 'DREN Analamanga',
@@ -431,7 +431,7 @@ async function main() {
   });
 
   // Établissement 3: École Primaire d'Ambohibary - DREN Itasy
-  const ecole3 = await prisma.etablissement.create({
+  await prisma.etablissement.create({
     data: {
       nomEtab: "École Primaire Publique d'Ambohibary",
       dren: 'DREN Itasy',
@@ -579,7 +579,7 @@ async function main() {
   // 4. Création des aléas
   console.log('🌧️ Création des aléas...');
 
-  const alea1 = await prisma.alea.create({
+  await prisma.alea.create({
     data: {
       typeAleat: 'INONDATION',
       nomAleat: 'Inondation Ambohimanarina',
@@ -600,7 +600,7 @@ async function main() {
     },
   });
 
-  const alea2 = await prisma.alea.create({
+  await prisma.alea.create({
     data: {
       typeAleat: 'VENT',
       nomAleat: 'Cyclone Ambohibary',
@@ -620,7 +620,7 @@ async function main() {
     },
   });
 
-  const alea3 = await prisma.alea.create({
+  await prisma.alea.create({
     data: {
       typeAleat: 'GLOISSEMENT_TERRAIN',
       nomAleat: 'Glissement terrain Anosizato',
