@@ -28,7 +28,7 @@ export default function NouvelEtablissementPage() {
       nbSectionF: Number(form.get('nbSectionF')) || 0,
     };
     createEtab(data, {
-      onSuccess: () => router.push('/dashboard/responsable/etablissements'),
+      onSuccess: () => router.push('/responsable/etablissements'),
     });
   };
 

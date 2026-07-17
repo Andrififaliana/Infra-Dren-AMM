@@ -31,7 +31,7 @@ export default function EditEtablissementPage() {
       nbSectionF: Number(form.get('nbSectionF')) || 0,
     };
     updateEtab(data, {
-      onSuccess: () => router.push('/dashboard/responsable/etablissements'),
+      onSuccess: () => router.push('/responsable/etablissements'),
     });
   };
 
@@ -48,7 +48,7 @@ export default function EditEtablissementPage() {
     return (
       <div className="py-16 text-center">
         <p className="text-gray-500">Établissement non trouvé</p>
-        <Button onClick={() => router.push('/dashboard/responsable/etablissements')} className="mt-4">
+        <Button onClick={() => router.push('/responsable/etablissements')} className="mt-4">
           Retour
         </Button>
       </div>

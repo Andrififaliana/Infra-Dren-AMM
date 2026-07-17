@@ -66,7 +66,7 @@ export default function GestionEtablissementsPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => router.push(`/dashboard/responsable/etablissements/${item.id}`)}
+            onClick={() => router.push(`/responsable/etablissements/${item.id}`)}
           >
             Modifier
           </Button>
@@ -102,7 +102,7 @@ export default function GestionEtablissementsPage() {
         columns={columns}
         data={etablissements}
         keyExtractor={(item) => item.id}
-        onRowClick={(item) => router.push(`/dashboard/responsable/etablissements/${item.id}`)}
+        onRowClick={(item) => router.push(`/responsable/etablissements/${item.id}`)}
         loading={isLoading}
         emptyMessage="Aucun établissement trouvé"
       />

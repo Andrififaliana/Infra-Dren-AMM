@@ -18,7 +18,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   if (isAuthenticated) {
-    router.push('/dashboard/responsable/tableau-de-bord');
+    router.push('/responsable/tableau-de-bord');
     return null;
   }
 
@@ -29,9 +29,9 @@ export default function LoginPage() {
       {
         onSuccess: (data) => {
           if (data.user.role === 'ADMIN') {
-            router.push('/dashboard/admin/utilisateurs');
+            router.push('/admin/utilisateurs');
           } else {
-            router.push('/dashboard/responsable/tableau-de-bord');
+            router.push('/responsable/tableau-de-bord');
           }
         },
       }
