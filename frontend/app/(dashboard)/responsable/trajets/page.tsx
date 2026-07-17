@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTrajets, useDeleteTrajet } from '@/hooks/use-trajets';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { Modal } from '@/components/ui/modal';
 import type { Trajet } from '@/types/trajet';
 
 export default function TrajetsPage() {
+  const router = useRouter();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTrajet, setSelectedTrajet] = useState<Trajet | null>(null);
 
@@ -35,18 +37,28 @@ export default function TrajetsPage() {
       key: 'actions',
       header: 'Actions',
       render: (item: Trajet) => (
-        <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedTrajet(item); setDeleteModalOpen(true); }}>
-          Supprimer
-        </Button>
+        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+          <Button variant="ghost" size="sm" onClick={() => router.push(`/responsable/trajets/${item.idTrajet}`)}>
+            Modifier
+          </Button>
+          <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedTrajet(item); setDeleteModalOpen(true); }}>
+            Supprimer
+          </Button>
+        </div>
       ),
     },
   ];
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Trajets</h1>
-        <p className="mt-1 text-sm text-gray-500">Gestion des trajets d&apos;accès</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Trajets</h1>
+          <p className="mt-1 text-sm text-gray-500">Gestion des trajets d&apos;accès</p>
+        </div>
+        <Button onClick={() => router.push('/responsable/trajets/nouveau')}>
+          + Nouveau trajet
+        </Button>
       </div>
 
       <DataTable

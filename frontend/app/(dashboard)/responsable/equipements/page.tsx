@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useEquipements, useDeleteEquipement } from '@/hooks/use-equipements';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { Modal } from '@/components/ui/modal';
 import type { Equipement } from '@/types/equipement';
 
 export default function EquipementsPage() {
+  const router = useRouter();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedEquip, setSelectedEquip] = useState<Equipement | null>(null);
 
@@ -31,18 +33,28 @@ export default function EquipementsPage() {
       key: 'actions',
       header: 'Actions',
       render: (item: Equipement) => (
-        <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedEquip(item); setDeleteModalOpen(true); }}>
-          Supprimer
-        </Button>
+        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+          <Button variant="ghost" size="sm" onClick={() => router.push(`/responsable/equipements/${item.id}`)}>
+            Modifier
+          </Button>
+          <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedEquip(item); setDeleteModalOpen(true); }}>
+            Supprimer
+          </Button>
+        </div>
       ),
     },
   ];
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Équipements</h1>
-        <p className="mt-1 text-sm text-gray-500">Gestion des équipements</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Équipements</h1>
+          <p className="mt-1 text-sm text-gray-500">Gestion des équipements</p>
+        </div>
+        <Button onClick={() => router.push('/responsable/equipements/nouveau')}>
+          + Nouvel équipement
+        </Button>
       </div>
 
       <DataTable

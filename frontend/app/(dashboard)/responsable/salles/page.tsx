@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSalles, useDeleteSalle } from '@/hooks/use-salles';
 import { DataTable, BooleanBadge } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { Modal } from '@/components/ui/modal';
 import type { Salle } from '@/types/salle';
 
 export default function SallesPage() {
+  const router = useRouter();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedSalle, setSelectedSalle] = useState<Salle | null>(null);
 
@@ -33,18 +35,28 @@ export default function SallesPage() {
       key: 'actions',
       header: 'Actions',
       render: (item: Salle) => (
-        <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedSalle(item); setDeleteModalOpen(true); }}>
-          Supprimer
-        </Button>
+        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+          <Button variant="ghost" size="sm" onClick={() => router.push(`/responsable/salles/${item.idSalle}`)}>
+            Modifier
+          </Button>
+          <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedSalle(item); setDeleteModalOpen(true); }}>
+            Supprimer
+          </Button>
+        </div>
       ),
     },
   ];
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Salles</h1>
-        <p className="mt-1 text-sm text-gray-500">Gestion des salles de classe</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Salles</h1>
+          <p className="mt-1 text-sm text-gray-500">Gestion des salles de classe</p>
+        </div>
+        <Button onClick={() => router.push('/responsable/salles/nouveau')}>
+          + Nouvelle salle
+        </Button>
       </div>
 
       <DataTable

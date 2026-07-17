@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAleas, useDeleteAlea } from '@/hooks/use-aleas';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import type { Alea } from '@/types/alea';
 
 export default function AleasPage() {
+  const router = useRouter();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedAlea, setSelectedAlea] = useState<Alea | null>(null);
 
@@ -40,18 +42,28 @@ export default function AleasPage() {
       key: 'actions',
       header: 'Actions',
       render: (item: Alea) => (
-        <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedAlea(item); setDeleteModalOpen(true); }}>
-          Supprimer
-        </Button>
+        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+          <Button variant="ghost" size="sm" onClick={() => router.push(`/responsable/aleas/${item.idAleat}`)}>
+            Modifier
+          </Button>
+          <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedAlea(item); setDeleteModalOpen(true); }}>
+            Supprimer
+          </Button>
+        </div>
       ),
     },
   ];
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Aléas</h1>
-        <p className="mt-1 text-sm text-gray-500">Gestion des aléas naturels</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Aléas</h1>
+          <p className="mt-1 text-sm text-gray-500">Gestion des aléas naturels</p>
+        </div>
+        <Button onClick={() => router.push('/responsable/aleas/nouveau')}>
+          + Nouvel aléa
+        </Button>
       </div>
 
       <DataTable

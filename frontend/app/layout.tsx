@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { QueryProvider } from '@/providers/query-provider';
 import { AuthProvider } from '@/providers/auth-provider';
+import { ToastProvider } from '@/providers/toast-provider';
 
 export const metadata: Metadata = {
   title: 'InfraDren AMM - Gestion des Infrastructures Scolaires',
@@ -19,6 +20,7 @@ export default function RootLayout({
         <QueryProvider>
           <AuthProvider>
             {children}
+            <ToastProvider />
           </AuthProvider>
         </QueryProvider>
       </body>

@@ -7,9 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { formatNumber } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 import type { Batiment } from '@/types/batiment';
 
 export default function BatimentsPage() {
+  const router = useRouter();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedBat, setSelectedBat] = useState<Batiment | null>(null);
 
@@ -41,18 +43,28 @@ export default function BatimentsPage() {
       key: 'actions',
       header: 'Actions',
       render: (item: Batiment) => (
-        <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedBat(item); setDeleteModalOpen(true); }}>
-          Supprimer
-        </Button>
+        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+          <Button variant="ghost" size="sm" onClick={() => router.push(`/responsable/batiments/${item.idBat}`)}>
+            Modifier
+          </Button>
+          <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedBat(item); setDeleteModalOpen(true); }}>
+            Supprimer
+          </Button>
+        </div>
       ),
     },
   ];
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Bâtiments</h1>
-        <p className="mt-1 text-sm text-gray-500">Gestion des bâtiments</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Bâtiments</h1>
+          <p className="mt-1 text-sm text-gray-500">Gestion des bâtiments</p>
+        </div>
+        <Button onClick={() => router.push('/responsable/batiments/nouveau')}>
+          + Nouveau bâtiment
+        </Button>
       </div>
 
       <DataTable
