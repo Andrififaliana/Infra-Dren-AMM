@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
-import { LayoutDashboard, School } from 'lucide-react';
+import { LayoutDashboard, School, Building2, DoorOpen, Package } from 'lucide-react';
 
 interface NavItem {
   label: string;
@@ -29,19 +29,19 @@ const navItems: NavItem[] = [
   {
     label: 'Bâtiments',
     href: '/responsable/batiments',
-    icon: '🏗️',
+    icon: <Building2 className="h-5 w-5" />,
     roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
   },
   {
     label: 'Salles',
     href: '/responsable/salles',
-    icon: '🚪',
+    icon: <DoorOpen className="h-5 w-5" />,
     roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
   },
   {
     label: 'Équipements',
     href: '/responsable/equipements',
-    icon: '📦',
+    icon: <Package className="h-5 w-5" />,
     roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
   },
   {
