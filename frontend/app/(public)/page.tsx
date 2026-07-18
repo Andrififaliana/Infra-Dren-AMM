@@ -54,9 +54,6 @@ export default function HomePage() {
       <section className="relative overflow-hidden">
         <div className="relative mx-auto max-w-4xl px-4 py-24 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center">
-            <span className="mb-4 inline-flex items-center rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
-              DREN AMM
-            </span>
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
               Gestion des{' '}
               <span className="text-green-700">
