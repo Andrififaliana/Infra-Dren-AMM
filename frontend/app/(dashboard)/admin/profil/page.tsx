@@ -50,13 +50,13 @@ export default function AdminProfilPage() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5 text-orange-500" />
+            <User className="h-5 w-5 text-green-500" />
             Informations personnelles
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-gray-50/50 p-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-orange-100 text-xl font-bold text-orange-700">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-xl font-bold text-green-700">
               {user.nom.charAt(0).toUpperCase()}
             </div>
             <div>
@@ -77,7 +77,7 @@ export default function AdminProfilPage() {
                 <Shield className="h-3.5 w-3.5" /> Rôle
               </div>
               <p className="text-sm font-medium text-gray-900">
-                <span className="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-700">
+                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
                   {ROLE_LABELS[user.role] || user.role}
                 </span>
               </p>
@@ -111,7 +111,7 @@ export default function AdminProfilPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <KeyRound className="h-5 w-5 text-orange-500" />
+            <KeyRound className="h-5 w-5 text-green-500" />
             Sécurité
           </CardTitle>
         </CardHeader>
