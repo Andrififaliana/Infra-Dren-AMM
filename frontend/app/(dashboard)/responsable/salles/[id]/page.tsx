@@ -132,9 +132,9 @@ export default function EditSallePage() {
           ) : (
             <div className="space-y-2">
               {salle.ouvertures.map((ouv) => (
-                <div key={ouv.idOuvert} className="group flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 hover:border-orange-200 hover:bg-orange-50/50 transition-all">
+                <div key={ouv.idOuvert} className="group flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 hover:border-green-200 hover:bg-green-50/50 transition-all">
                   <div className="flex items-center gap-4">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-sm font-medium text-orange-700">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-sm font-medium text-green-700">
                       {ouv.nbOuvert}
                     </span>
                     <div>
@@ -147,7 +147,7 @@ export default function EditSallePage() {
                     </div>
                   </div>
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => openOuvModal(ouv)} className="rounded-lg p-2 text-gray-400 hover:bg-orange-100 hover:text-orange-600 transition-colors">
+                    <button onClick={() => openOuvModal(ouv)} className="rounded-lg p-2 text-gray-400 hover:bg-green-100 hover:text-green-600 transition-colors">
                       <Pencil className="h-4 w-4" />
                     </button>
                     <button onClick={() => { setDelOuvTarget(ouv); setDelOuvModalOpen(true); }} className="rounded-lg p-2 text-gray-400 hover:bg-red-100 hover:text-red-600 transition-colors">
