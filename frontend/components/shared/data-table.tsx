@@ -117,37 +117,31 @@ export function DataTable<T>({
           </thead>
           <tbody className="divide-y divide-gray-200">
             {data.map((item) => {
-              const id = keyExtractor(item);
-              const isSelected = selectedIds.has(id);
-              return (
-                <tr
-                  key={id}
-                  onClick={() => {
-                    if (selectable) {
-                      toggleOne(id);
-                    } else {
-                      onRowClick?.(item);
-                    }
-                  }}
-                  className={cn(
-                    'transition-colors',
-                    (onRowClick || selectable) ? 'cursor-pointer' : '',
-                    isSelected ? 'bg-green-50/60' : 'hover:bg-gray-50'
-                  )}
-                >
-                  {selectable && (
-                    <td className="w-10 px-2 py-3">
-                      <label className="flex cursor-pointer items-center justify-center">
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => toggleOne(id)}
-                          onClick={(e) => e.stopPropagation()}
-                          className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-500/40"
-                        />
-                      </label>
-                    </td>
-                  )}
+            const id = keyExtractor(item);
+            const isSelected = selectedIds.has(id);
+            return (
+              <tr
+                key={id}
+                onClick={() => onRowClick?.(item)}
+                className={cn(
+                  'transition-colors',
+                  (onRowClick || selectable) ? 'cursor-pointer' : '',
+                  isSelected ? 'bg-green-50/60' : 'hover:bg-gray-50'
+                )}
+              >
+                {selectable && (
+                  <td className="w-10 px-2 py-3">
+                    <label className="flex cursor-pointer items-center justify-center">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleOne(id)}
+                        onClick={(e) => e.stopPropagation()}
+                        className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-500/40"
+                      />
+                    </label>
+                  </td>
+                )}
                   {columns.map((col) => {
                     const value = col.render ? col.render(item) : String((item as Record<string, unknown>)[col.key] ?? '');
                     return (
