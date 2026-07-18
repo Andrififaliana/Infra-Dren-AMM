@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CardSkeleton } from '@/components/shared/loading-skeleton';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { formatNumber } from '@/lib/utils';
+import { School, Building2, DoorOpen, Package } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -38,10 +39,10 @@ export default function TableauDeBordPage() {
       ) : globales ? (
         <>
           <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <StatCard title="Établissements" value={globales.totalEtablissements} icon="🏫" />
-            <StatCard title="Bâtiments" value={globales.totalBatiments} icon="🏗️" />
-            <StatCard title="Salles" value={globales.totalSalles} icon="🚪" />
-            <StatCard title="Équipements" value={globales.totalEquipements} icon="📦" />
+            <StatCard title="Établissements" value={globales.totalEtablissements} icon={<School className="h-5 w-5" />} />
+            <StatCard title="Bâtiments" value={globales.totalBatiments} icon={<Building2 className="h-5 w-5" />} />
+            <StatCard title="Salles" value={globales.totalSalles} icon={<DoorOpen className="h-5 w-5" />} />
+            <StatCard title="Équipements" value={globales.totalEquipements} icon={<Package className="h-5 w-5" />} />
           </div>
 
           {/* Graphiques */}
