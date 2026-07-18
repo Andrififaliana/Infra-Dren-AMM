@@ -11,6 +11,8 @@ import { cn } from '@/lib/utils';
 import apiClient from '@/lib/api-client';
 import type { Photo } from '@/types/etablissement';
 
+const MAX_PHOTOS = 10;
+
 interface PhotoUploadProps {
   etablissementId: number;
   photos?: Photo[];
@@ -31,16 +33,30 @@ export function PhotoUpload({ etablissementId, photos = [] }: PhotoUploadProps) 
   };
 
   const handleUpload = useCallback(async (files: FileList | File[]) => {
+    const fileArray = Array.from(files);
+    const currentCount = photos.length;
+    const remaining = MAX_PHOTOS - currentCount;
+
+    if (remaining <= 0) {
+      toast.error(`Limite atteinte — ${MAX_PHOTOS} photos maximum`);
+      return;
+    }
+
+    if (fileArray.length > remaining) {
+      toast.error(`Vous ne pouvez ajouter que ${remaining} photo${remaining > 1 ? 's' : ''} supplémentaire${remaining > 1 ? 's' : ''} (max ${MAX_PHOTOS})`);
+      return;
+    }
+
     setUploading(true);
     try {
       const formData = new FormData();
       let isFirst = true;
-      for (const file of Array.from(files)) {
-        formData.append(isFirst && files.length === 1 ? 'file' : 'files', file);
+      for (const file of fileArray) {
+        formData.append(isFirst && fileArray.length === 1 ? 'file' : 'files', file);
         isFirst = false;
       }
 
-      const endpoint = files.length === 1
+      const endpoint = fileArray.length === 1
         ? `/etablissements/${etablissementId}/photos`
         : `/etablissements/${etablissementId}/photos/multiple`;
 
@@ -48,14 +64,14 @@ export function PhotoUpload({ etablissementId, photos = [] }: PhotoUploadProps) 
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      toast.success(`${files.length} photo${files.length > 1 ? 's' : ''} uploadée${files.length > 1 ? 's' : ''}`);
+      toast.success(`${fileArray.length} photo${fileArray.length > 1 ? 's' : ''} uploadée${fileArray.length > 1 ? 's' : ''}`);
       refreshPhotos();
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Erreur lors de l'upload");
     } finally {
       setUploading(false);
     }
-  }, [etablissementId, refreshPhotos]);
+  }, [etablissementId, photos.length, refreshPhotos]);
 
   const handleSetMain = async (photoId: number) => {
     setSettingMain(photoId);
@@ -198,48 +214,69 @@ export function PhotoUpload({ etablissementId, photos = [] }: PhotoUploadProps) 
       )}
 
       {/* Zone d'upload */}
-      <div
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-        onDragLeave={() => setDragOver(false)}
-        onDrop={handleDrop}
-        onClick={() => document.getElementById('photo-input')?.click()}
-        className={cn(
-          'flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-8 transition-all',
-          dragOver
-            ? 'scale-[1.02] border-orange-400 bg-orange-50 shadow-lg'
-            : 'border-gray-200 bg-gray-50 hover:border-orange-300 hover:bg-orange-50/50',
-        )}
-      >
-        {uploading ? (
-          <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
-        ) : (
-          <>
-            <div className={cn(
-              'mb-3 rounded-xl p-3 transition-all',
-              dragOver ? 'bg-orange-100' : 'bg-gray-100 group-hover:bg-orange-100',
-            )}>
-              <ImagePlus className={cn(
-                'h-6 w-6 transition-colors',
-                dragOver ? 'text-orange-500' : 'text-gray-400',
-              )} />
-            </div>
-            <p className="text-sm font-medium text-gray-600">
-              {dragOver ? 'Déposez vos fichiers ici' : 'Cliquez ou déposez des photos ici'}
-            </p>
-            <p className="mt-1 text-xs text-gray-400">
-              JPG, PNG, WebP ou GIF — max 10 Mo par fichier
-            </p>
-          </>
-        )}
-        <input
-          id="photo-input"
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          multiple
-          className="hidden"
-          onChange={(e) => e.target.files && handleUpload(e.target.files)}
-        />
-      </div>
+      {(() => {
+        const atLimit = sortedPhotos.length >= MAX_PHOTOS;
+        return (
+          <div
+            onDragOver={(e) => { e.preventDefault(); if (!atLimit) setDragOver(true); }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={atLimit ? (e) => { e.preventDefault(); setDragOver(false); toast.error(`Limite atteinte — ${MAX_PHOTOS} photos maximum`); } : handleDrop}
+            onClick={() => { if (!atLimit) document.getElementById('photo-input')?.click(); }}
+            className={cn(
+              'flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-8 transition-all',
+              atLimit
+                ? 'border-gray-200 bg-gray-100 cursor-not-allowed'
+                : 'cursor-pointer',
+              dragOver && !atLimit
+                ? 'scale-[1.02] border-orange-400 bg-orange-50 shadow-lg'
+                : !atLimit && 'border-gray-200 bg-gray-50 hover:border-orange-300 hover:bg-orange-50/50',
+            )}
+          >
+            {uploading ? (
+              <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+            ) : atLimit ? (
+              <>
+                <div className="mb-3 rounded-xl bg-gray-200 p-3">
+                  <ImagePlus className="h-6 w-6 text-gray-400" />
+                </div>
+                <p className="text-sm font-medium text-gray-500">
+                  Limite atteinte — {MAX_PHOTOS} photos maximum
+                </p>
+                <p className="mt-1 text-xs text-gray-400">
+                  Supprimez une photo pour en ajouter une nouvelle
+                </p>
+              </>
+            ) : (
+              <>
+                <div className={cn(
+                  'mb-3 rounded-xl p-3 transition-all',
+                  dragOver ? 'bg-orange-100' : 'bg-gray-100',
+                )}>
+                  <ImagePlus className={cn(
+                    'h-6 w-6 transition-colors',
+                    dragOver ? 'text-orange-500' : 'text-gray-400',
+                  )} />
+                </div>
+                <p className="text-sm font-medium text-gray-600">
+                  {dragOver ? 'Déposez vos fichiers ici' : 'Cliquez ou déposez des photos ici'}
+                </p>
+                <p className="mt-1 text-xs text-gray-400">
+                  JPG, PNG, WebP ou GIF — max 10 Mo par fichier — {MAX_PHOTOS} max
+                </p>
+              </>
+            )}
+            <input
+              id="photo-input"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              multiple
+              className="hidden"
+              disabled={atLimit}
+              onChange={(e) => e.target.files && handleUpload(e.target.files)}
+            />
+          </div>
+        );
+      })()}
 
       {/* État vide */}
       {sortedPhotos.length === 0 && !uploading && (
