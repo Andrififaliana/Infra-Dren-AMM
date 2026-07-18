@@ -250,11 +250,11 @@ export function PhotoUpload({ etablissementId, photos = [] }: PhotoUploadProps) 
               <>
                 <div className={cn(
                   'mb-3 rounded-xl p-3 transition-all',
-                  dragOver ? 'bg-orange-100' : 'bg-gray-100',
+                  dragOver ? 'bg-green-100' : 'bg-gray-100',
                 )}>
                   <ImagePlus className={cn(
                     'h-6 w-6 transition-colors',
-                    dragOver ? 'text-orange-500' : 'text-gray-400',
+                    dragOver ? 'text-green-500' : 'text-gray-400',
                   )} />
                 </div>
                 <p className="text-sm font-medium text-gray-600">
