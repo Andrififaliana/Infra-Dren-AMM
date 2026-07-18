@@ -1,5 +1,6 @@
 'use client';
 
+import { Save } from 'lucide-react';
 import apiClient from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,7 +39,7 @@ export default function BackupPage() {
               Téléchargez toutes les données de l&apos;application au format JSON.
             </p>
             <Button onClick={handleExportAll}>
-              💾 Télécharger l&apos;export complet
+              <Save className="mr-2 h-4 w-4" /> Télécharger l&apos;export complet
             </Button>
           </CardContent>
         </Card>
