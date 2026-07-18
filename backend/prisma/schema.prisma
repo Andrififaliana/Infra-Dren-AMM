@@ -15,6 +15,8 @@ model Etablissement {
   commune          String? @map("commune")
   fokontany        String? @map("fokontany")
   quartier         String? @map("quartier")
+  latitude         Float?  @map("latitude")
+  longitude        Float?  @map("longitude")
   couvTelephonique Boolean @default(false) @map("couv_telephonique")
   couvInternet     Boolean @default(false) @map("couv_internet")
   nbEnseignantG    Int     @default(0) @map("nb_enseignant_g")

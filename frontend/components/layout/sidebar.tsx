@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
-import { LayoutDashboard, School, Building2, DoorOpen, Package, Bus, Waves, Users, ClipboardList, Save, User } from 'lucide-react';
+import { LayoutDashboard, School, Building2, DoorOpen, Package, Bus, Waves, Users, ClipboardList, Save, User, Map as MapIcon } from 'lucide-react';
 
 interface NavItem {
   label: string;
@@ -18,6 +18,12 @@ const navItems: NavItem[] = [
     label: 'Tableau de bord',
     href: '/responsable/tableau-de-bord',
     icon: <LayoutDashboard className="h-5 w-5" />,
+    roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
+  },
+  {
+    label: 'Carte',
+    href: '/responsable/carte',
+    icon: <MapIcon className="h-5 w-5" />,
     roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
   },
   {

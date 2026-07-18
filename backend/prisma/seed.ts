@@ -74,6 +74,44 @@ function getZap(cis: string, commune: string): string | undefined {
   return zaps.find(z => z.cis === cis && z.communs.includes(commune))?.zap;
 }
 
+const communeCoords: Record<string, { lat: number; lng: number }> = {
+  'Ambositra': { lat: -20.52, lng: 47.25 },
+  'Sahatsiho Ambohimanjaka': { lat: -20.47, lng: 47.30 },
+  'Ambohibary': { lat: -20.50, lng: 47.20 },
+  'Ilaka Centre': { lat: -20.35, lng: 47.38 },
+  'Ivato': { lat: -20.55, lng: 47.28 },
+  'Antoetra': { lat: -20.78, lng: 47.48 },
+  'Imerina Imady': { lat: -20.43, lng: 47.27 },
+  'Andina': { lat: -20.48, lng: 47.18 },
+  'Tsarazaza': { lat: -20.58, lng: 47.33 },
+  'Sandrandahy': { lat: -20.59, lng: 47.37 },
+  'Isaha': { lat: -20.56, lng: 47.25 },
+  'Fandriana': { lat: -20.23, lng: 47.38 },
+  'Sahamadio': { lat: -20.28, lng: 47.42 },
+  'Mahazoarivo': { lat: -20.20, lng: 47.33 },
+  'Miarinavaratra': { lat: -20.25, lng: 47.36 },
+  'Imito': { lat: -20.18, lng: 47.40 },
+  'Fiadanana': { lat: -20.30, lng: 47.35 },
+  'Ambovombe': { lat: -20.57, lng: 47.07 },
+  'Anjomakely': { lat: -20.55, lng: 47.05 },
+  'Ankarimbary': { lat: -20.60, lng: 47.10 },
+  'Ambatomarina': { lat: -20.62, lng: 47.00 },
+  'Andoharano': { lat: -20.52, lng: 47.02 },
+  'Ambatofinandrahana': { lat: -20.55, lng: 46.80 },
+  'Ambondromisotra': { lat: -20.50, lng: 46.77 },
+  'Amborompotsy': { lat: -20.60, lng: 46.85 },
+  'Ambatomifanongoa': { lat: -20.53, lng: 46.82 },
+  'Ranotsara': { lat: -20.48, lng: 46.90 },
+};
+
+function getCommuneCoords(commune: string): { latitude?: number; longitude?: number } {
+  const base = communeCoords[commune];
+  if (!base) return {};
+  // Spread schools within the same commune by a small random offset (~100m)
+  const offset = () => (Math.random() - 0.5) * 0.002;
+  return { latitude: base.lat + offset(), longitude: base.lng + offset() };
+}
+
 function makeEtablissement(
   nom: string,
   ciscoNom: string,
@@ -179,12 +217,14 @@ function makeEtablissement(
       }))
     : [];
 
+  const coords = getCommuneCoords(commune);
   return {
     nomEtab: nom,
     dren: "DREN Amoron'i Mania",
     cisco: ciscoNom,
     zap: getZap(ciscoNom, commune) || undefined,
     commune,
+    ...coords,
     fokontany,
     quartier,
     couvTelephonique: Math.random() > 0.25,

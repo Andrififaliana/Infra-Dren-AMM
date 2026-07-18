@@ -55,6 +55,8 @@ export interface Etablissement {
   cisco?: string;
   zap?: string;
   commune?: string;
+  latitude?: number;
+  longitude?: number;
   fokontany?: string;
   quartier?: string;
   couvTelephonique: boolean;
@@ -92,6 +94,8 @@ export interface CreateEtablissementDto {
   dren?: string;
   cisco?: string;
   zap?: string;
+  latitude?: number;
+  longitude?: number;
   commune?: string;
   fokontany?: string;
   quartier?: string;
@@ -104,6 +108,11 @@ export interface CreateEtablissementDto {
 }
 
 export interface UpdateEtablissementDto extends Partial<CreateEtablissementDto> {}
+
+export interface EtablissementWithCoords extends EtablissementListe {
+  latitude?: number;
+  longitude?: number;
+}
 
 export interface EtablissementQueryDto {
   page?: number;

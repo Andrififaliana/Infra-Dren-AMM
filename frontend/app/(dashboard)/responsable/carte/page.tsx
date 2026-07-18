@@ -1,0 +1,121 @@
+'use client';
+
+import { useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+import { useEtablissements } from '@/hooks/use-etablissements';
+import { useAleas } from '@/hooks/use-aleas';
+import { useTrajets } from '@/hooks/use-trajets';
+import { Breadcrumb } from '@/components/shared/breadcrumb';
+import { Select } from '@/components/ui/select';
+import type { EtablissementListe } from '@/types/etablissement';
+
+const EtablissementsMap = dynamic(
+  () => import('@/components/map/etablissements-map'),
+  { ssr: false, loading: () => <div className="flex h-[600px] items-center justify-center rounded-lg border bg-gray-50 text-sm text-gray-500">Chargement de la carte…</div> }
+);
+
+export default function CartePage() {
+  const router = useRouter();
+  const [ciscoFilter, setCiscoFilter] = useState('');
+  const [couvertureFilter, setCouvertureFilter] = useState('toutes');
+  const [etatFilter, setEtatFilter] = useState('tous');
+  const [showAleas, setShowAleas] = useState(true);
+  const [showTrajets, setShowTrajets] = useState(true);
+
+  const { data } = useEtablissements({ page: 1, limit: 999 });
+  const { data: aleas } = useAleas();
+  const { data: trajets } = useTrajets();
+
+  const etablissements = (data?.data ?? []) as EtablissementListe[];
+
+  const ciscoOptions = useMemo(() => {
+    const unique = [...new Set(etablissements.map(e => e.cisco).filter(Boolean) as string[])];
+    return unique.sort().map(v => ({ value: v, label: v }));
+  }, [etablissements]);
+
+  const filtered = useMemo(() => {
+    return etablissements.filter(e => {
+      if (ciscoFilter && e.cisco !== ciscoFilter) return false;
+      if (couvertureFilter === 'telephonique' && !e.couvTelephonique) return false;
+      if (couvertureFilter === 'internet' && !e.couvInternet) return false;
+      if (couvertureFilter === 'aucune' && (e.couvTelephonique || e.couvInternet)) return false;
+      if (etatFilter === 'problemes') {
+        return !!e.latitude && !!e.longitude;
+      }
+      return true;
+    });
+  }, [etablissements, ciscoFilter, couvertureFilter, etatFilter]);
+
+  const couvOptions = [
+    { value: 'toutes', label: 'Toutes les couvertures' },
+    { value: 'telephonique', label: 'Couverture téléphonique' },
+    { value: 'internet', label: 'Couverture Internet' },
+    { value: 'aucune', label: 'Aucune couverture' },
+  ];
+
+  const etatOptions = [
+    { value: 'tous', label: 'Tous les états' },
+    { value: 'problemes', label: 'Établissements avec problèmes' },
+  ];
+
+  return (
+    <div>
+      <Breadcrumb items={[{ label: 'Carte interactive' }]} />
+
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Carte interactive</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            {filtered.length} établissement{filtered.length > 1 ? 's' : ''} affiché{filtered.length > 1 ? 's' : ''}
+          </p>
+        </div>
+      </div>
+
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <Select
+          value={ciscoFilter}
+          onChange={(e) => setCiscoFilter(e.target.value)}
+          options={ciscoOptions}
+          placeholder="Tous les CISCO"
+          className="w-48"
+        />
+        <Select
+          value={couvertureFilter}
+          onChange={(e) => setCouvertureFilter(e.target.value)}
+          options={couvOptions}
+          className="w-52"
+        />
+        <div className="flex items-center gap-4 text-sm">
+          <label className="flex items-center gap-1.5">
+            <input
+              type="checkbox"
+              checked={showAleas}
+              onChange={(e) => setShowAleas(e.target.checked)}
+              className="rounded border-gray-300"
+            />
+            Aléas
+          </label>
+          <label className="flex items-center gap-1.5">
+            <input
+              type="checkbox"
+              checked={showTrajets}
+              onChange={(e) => setShowTrajets(e.target.checked)}
+              className="rounded border-gray-300"
+            />
+            Trajets
+          </label>
+        </div>
+      </div>
+
+      <EtablissementsMap
+        schools={filtered}
+        aleas={aleas}
+        trajets={trajets}
+        showAleas={showAleas}
+        showTrajets={showTrajets}
+        onSchoolClick={(id) => router.push(`/responsable/etablissements/${id}`)}
+      />
+    </div>
+  );
+}

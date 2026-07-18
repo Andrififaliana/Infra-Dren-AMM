@@ -25,6 +25,16 @@ export class UpdateEtablissementDto {
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Type(() => Number)
+  latitude?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  longitude?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
   commune?: string;
 

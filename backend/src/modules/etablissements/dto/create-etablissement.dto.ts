@@ -30,6 +30,16 @@ export class CreateEtablissementDto {
   @IsString()
   zap?: string;
 
+  @ApiPropertyOptional({ example: -20.52 })
+  @IsOptional()
+  @Type(() => Number)
+  latitude?: number;
+
+  @ApiPropertyOptional({ example: 47.25 })
+  @IsOptional()
+  @Type(() => Number)
+  longitude?: number;
+
   @ApiPropertyOptional({ example: 'Ambohimanarina' })
   @IsOptional()
   @IsString()
