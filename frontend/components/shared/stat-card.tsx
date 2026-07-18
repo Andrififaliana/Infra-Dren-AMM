@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 interface StatCardProps {
   title: string;
   value: string | number;
-  icon?: string;
+  icon?: React.ReactNode;
   description?: string;
   trend?: { value: number; isPositive: boolean };
   className?: string;
@@ -25,7 +25,11 @@ export function StatCard({ title, value, icon, description, trend, className }: 
             </p>
           )}
         </div>
-        {icon && <span className="text-2xl">{icon}</span>}
+        {icon && (
+          <div className="text-orange-500">
+            {typeof icon === 'string' ? <span className="text-2xl">{icon}</span> : icon}
+          </div>
+        )}
       </div>
     </div>
   );
