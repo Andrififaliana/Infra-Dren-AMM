@@ -58,7 +58,7 @@ export default function NouvelAleaPage() {
             <div>
               <label htmlFor="explication" className="mb-1.5 block text-sm font-medium text-gray-700">Explication</label>
               <textarea id="explication" name="explication" rows={3}
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                 placeholder="Description des impacts..."
               />
             </div>
