@@ -52,18 +52,18 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-white to-orange-50/30">
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-orange-200/30 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-orange-100/20 blur-3xl" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-white to-green-50/30">
+        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-green-200/30 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-green-100/20 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <span className="mb-4 inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-700">
+              <span className="mb-4 inline-flex items-center rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
                 DREN AMM
               </span>
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                 Gestion des{' '}
-                <span className="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
                   infrastructures scolaires
                 </span>
               </h1>
@@ -82,15 +82,15 @@ export default function HomePage() {
               <div className="mt-8 flex flex-wrap gap-6">
                 {['Données sécurisées', 'Suivi en temps réel', 'Transparence'].map((item) => (
                   <span key={item} className="inline-flex items-center gap-1.5 text-sm text-gray-500">
-                    <CheckCircle className="h-4 w-4 text-orange-500" />{item}
+                    <CheckCircle className="h-4 w-4 text-green-500" />{item}
                   </span>
                 ))}
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="hidden lg:block">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-gradient-to-br from-orange-100 to-orange-50 shadow-xl">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-gradient-to-br from-green-100 to-green-50 shadow-xl">
                 <div className="flex h-full items-center justify-center">
-                  <School className="h-32 w-32 text-orange-300" />
+                  <School className="h-32 w-32 text-green-300" />
                 </div>
               </div>
             </motion.div>
@@ -131,12 +131,12 @@ export default function HomePage() {
                 key={feature.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: idx * 0.1 }}
                 onClick={() => router.push(feature.href)}
-                className="group cursor-pointer rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:border-orange-200/60 hover:shadow-md"
+                className="group cursor-pointer rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:border-green-200/60 hover:shadow-md"
               >
                 <div className={`mb-4 inline-flex rounded-xl p-3 ${feature.color}`}><Icon className="h-6 w-6" /></div>
                 <h3 className="mb-2 font-semibold text-gray-900">{feature.title}</h3>
                 <p className="text-sm text-gray-500">{feature.desc}</p>
-                <div className="mt-4 flex items-center gap-1 text-sm font-medium text-orange-600 opacity-0 transition-opacity group-hover:opacity-100">
+                <div className="mt-4 flex items-center gap-1 text-sm font-medium text-green-600 opacity-0 transition-opacity group-hover:opacity-100">
                   Accéder à la section <ArrowRight className="h-3.5 w-3.5" />
                 </div>
               </motion.div>
@@ -156,7 +156,7 @@ export default function HomePage() {
             {steps.map((step, idx) => (
               <motion.div key={step.num} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="text-center">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-lg font-bold text-orange-700">{step.num}</div>
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 text-lg font-bold text-green-700">{step.num}</div>
                 <h3 className="font-semibold text-gray-900">{step.title}</h3>
                 <p className="mt-1 text-sm text-gray-500">{step.desc}</p>
               </motion.div>
