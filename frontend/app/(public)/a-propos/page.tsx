@@ -11,11 +11,9 @@ import {
   Building2,
   Users,
   Quote,
-  Sparkles,
   ChevronRight,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 
 const stats = [
   {
@@ -51,12 +49,7 @@ export default function AProposPage() {
         transition={{ duration: 0.5 }}
         className="relative text-center"
       >
-        <div className="absolute inset-x-0 -top-8 flex justify-center">
-          <Sparkles className="h-6 w-6 text-green-300" />
-        </div>
-        <Badge variant="success" className="mb-4 px-4 py-1.5 text-sm">
-          InfraDren AMM
-        </Badge>
+
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
           À propos de notre plateforme
         </h1>
