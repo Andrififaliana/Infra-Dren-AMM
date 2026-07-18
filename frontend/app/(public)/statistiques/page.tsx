@@ -36,7 +36,7 @@ export default function StatistiquesPage() {
         <select
           value={filtreDren}
           onChange={(e) => setFiltreDren(e.target.value)}
-          className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+          className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20"
         >
           <option value="">Tous les districts</option>
           {drens.map(d => <option key={d} value={d}>{d}</option>)}
@@ -85,7 +85,7 @@ export default function StatistiquesPage() {
               <div key={c.type}>
                 <div className="mb-2 flex items-center justify-between text-sm">
                   <span className="flex items-center gap-2 font-medium">
-                    {c.type === 'telephone' ? <Droplets className="h-4 w-4 text-orange-500" /> : <Wifi className="h-4 w-4 text-orange-500" />}
+                    {c.type === 'telephone' ? <Droplets className="h-4 w-4 text-green-500" /> : <Wifi className="h-4 w-4 text-green-500" />}
                     {c.type === 'telephone' ? 'Couverture téléphonique' : 'Couverture Internet'}
                   </span>
                   <span className="font-semibold text-gray-900">{c.couvert}%</span>
@@ -95,7 +95,7 @@ export default function StatistiquesPage() {
                     initial={{ width: 0 }}
                     whileInView={{ width: `${c.couvert}%` }}
                     viewport={{ once: true }}
-                    className="h-2.5 rounded-full bg-gradient-to-r from-orange-400 to-orange-600"
+                    className="h-2.5 rounded-full bg-gradient-to-r from-green-400 to-green-600"
                   />
                 </div>
               </div>
