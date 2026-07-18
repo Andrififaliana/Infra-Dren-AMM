@@ -1,22 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSalles, useDeleteSalle } from '@/hooks/use-salles';
+import { useBatiments } from '@/hooks/use-batiments';
 import { DataTable, BooleanBadge } from '@/components/shared/data-table';
 import { SearchBar } from '@/components/shared/search-bar';
 import { Pagination } from '@/components/shared/pagination';
 import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 import { Modal } from '@/components/ui/modal';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { toast } from 'sonner';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Filter } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
 import type { Salle } from '@/types/salle';
 
 export default function SallesPage() {
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const [batimentFilter, setBatimentFilter] = useState('');
   const [page, setPage] = useState(1);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedSalle, setSelectedSalle] = useState<Salle | null>(null);
@@ -24,8 +27,14 @@ export default function SallesPage() {
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
   const perPage = 10;
 
-  const { data: salles, isLoading } = useSalles();
+  const { data: batiments } = useBatiments();
+  const { data: salles, isLoading } = useSalles(batimentFilter ? parseInt(batimentFilter) : undefined);
   const { mutate: deleteSalle, isPending: isDeleting } = useDeleteSalle();
+
+  const batimentOptions = useMemo(() => {
+    const list = batiments ?? [];
+    return list.map(b => ({ value: String(b.idBat), label: b.sigleBat || `#${b.idBat}` }));
+  }, [batiments]);
 
   const filtered = (salles ?? []).filter((s) =>
     !search || s.sigleSalle?.toLowerCase().includes(search.toLowerCase()) || s.affectationSalle?.toLowerCase().includes(search.toLowerCase())
@@ -66,6 +75,11 @@ export default function SallesPage() {
   const columns = [
     { key: 'sigleSalle', header: 'Sigle', render: (item: Salle) => item.sigleSalle || `#${item.idSalle}` },
     { key: 'niveauSalle', header: 'Niveau' },
+    {
+      key: 'batiment',
+      header: 'Bâtiment',
+      render: (item: Salle) => item.batiment?.sigleBat ?? `#${item.batimentId}`,
+    },
     { key: 'affectationSalle', header: 'Affectation' },
     { key: 'etatSalle', header: 'État' },
     { key: 'estOperationnel', header: 'Opérationnel', render: (item: Salle) => <BooleanBadge value={item.estOperationnel} /> },
@@ -100,8 +114,16 @@ export default function SallesPage() {
         </Button>
       </div>
 
-      <div className="mb-4">
-        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher une salle..." />
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher une salle..." className="flex-1" />
+        <Filter className="h-4 w-4 text-gray-400" />
+        <Select
+          value={batimentFilter}
+          onChange={(e) => { setBatimentFilter(e.target.value); setPage(1); }}
+          options={batimentOptions}
+          placeholder="Tous les bâtiments"
+          className="w-56"
+        />
       </div>
 
       <DataTable

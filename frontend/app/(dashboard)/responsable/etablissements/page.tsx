@@ -1,33 +1,53 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useEtablissements, useDeleteEtablissement } from '@/hooks/use-etablissements';
 import { DataTable, BooleanBadge } from '@/components/shared/data-table';
 import { SearchBar } from '@/components/shared/search-bar';
 import { Pagination } from '@/components/shared/pagination';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Select } from '@/components/ui/select';
 import { Modal } from '@/components/ui/modal';
 import { formatNumber } from '@/lib/utils';
-import { School, ImageIcon, Phone, Globe, Camera, Pencil, Trash2 } from 'lucide-react';
+import { School, ImageIcon, Phone, Globe, Camera, Pencil, Trash2, Filter } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
 import type { EtablissementListe } from '@/types/etablissement';
 
 export default function GestionEtablissementsPage() {
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const [ciscoFilter, setCiscoFilter] = useState('');
+  const [zapFilter, setZapFilter] = useState('');
   const [page, setPage] = useState(1);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedEtab, setSelectedEtab] = useState<EtablissementListe | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
 
-  const { data, isLoading } = useEtablissements({ page, limit: 10, search: search || undefined });
+  const { data, isLoading } = useEtablissements({
+    page, limit: 10,
+    search: search || undefined,
+    cisco: ciscoFilter || undefined,
+    zap: zapFilter || undefined,
+  });
   const { mutate: deleteEtab, isPending: isDeleting } = useDeleteEtablissement();
 
   const etablissements = data?.data ?? [];
   const meta = data?.meta;
+
+  const ciscoOptions = useMemo(() => {
+    const unique = [...new Set(etablissements.map(e => e.cisco).filter(Boolean) as string[])];
+    return unique.sort().map(v => ({ value: v, label: v }));
+  }, [etablissements]);
+
+  const zapOptions = useMemo(() => {
+    const filtered = ciscoFilter
+      ? etablissements.filter(e => e.cisco === ciscoFilter)
+      : etablissements;
+    const unique = [...new Set(filtered.map(e => e.zap).filter(Boolean) as string[])];
+    return unique.sort().map(v => ({ value: v, label: v }));
+  }, [etablissements, ciscoFilter]);
 
   const handleDelete = () => {
     if (selectedEtab) {
@@ -89,6 +109,7 @@ export default function GestionEtablissementsPage() {
     { key: 'nomEtab', header: 'Nom', className: 'min-w-[180px]' },
     { key: 'dren', header: 'DREN' },
     { key: 'cisco', header: 'CISCO' },
+    { key: 'zap', header: 'ZAP' },
     { key: 'commune', header: 'Commune' },
     {
       key: 'couvTelephonique',
@@ -149,8 +170,23 @@ export default function GestionEtablissementsPage() {
         </Button>
       </div>
 
-      <div className="mb-4">
-        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} />
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} className="flex-1" />
+        <Filter className="h-4 w-4 text-gray-400" />
+        <Select
+          value={ciscoFilter}
+          onChange={(e) => { setCiscoFilter(e.target.value); setZapFilter(''); setPage(1); }}
+          options={ciscoOptions}
+          placeholder="Tous les CISCO"
+          className="w-56"
+        />
+        <Select
+          value={zapFilter}
+          onChange={(e) => { setZapFilter(e.target.value); setPage(1); }}
+          options={zapOptions}
+          placeholder="Toutes les ZAP"
+          className="w-56"
+        />
       </div>
 
       <DataTable

@@ -1,24 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useBatiments, useDeleteBatiment } from '@/hooks/use-batiments';
+import { useEtablissements } from '@/hooks/use-etablissements';
 import { DataTable } from '@/components/shared/data-table';
 import { SearchBar } from '@/components/shared/search-bar';
 import { Pagination } from '@/components/shared/pagination';
 import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { formatNumber } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Filter } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
 import type { Batiment } from '@/types/batiment';
 
 export default function BatimentsPage() {
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const [etablissementFilter, setEtablissementFilter] = useState('');
   const [page, setPage] = useState(1);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedBat, setSelectedBat] = useState<Batiment | null>(null);
@@ -26,8 +29,14 @@ export default function BatimentsPage() {
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
   const perPage = 10;
 
-  const { data: batiments, isLoading } = useBatiments();
+  const { data: etablissementsData } = useEtablissements({ page: 1, limit: 999 });
+  const { data: batiments, isLoading } = useBatiments(etablissementFilter ? parseInt(etablissementFilter) : undefined);
   const { mutate: deleteBat, isPending: isDeleting } = useDeleteBatiment();
+
+  const etablissementOptions = useMemo(() => {
+    const list = etablissementsData?.data ?? [];
+    return list.map(e => ({ value: String(e.id), label: `${e.nomEtab} (${e.cisco || 'N/A'})` }));
+  }, [etablissementsData]);
 
   const filtered = (batiments ?? []).filter((b) =>
     !search || b.sigleBat?.toLowerCase().includes(search.toLowerCase())
@@ -74,9 +83,10 @@ export default function BatimentsPage() {
       render: (item: Batiment) => <Badge variant="info">{formatNumber((item as any).salles?.length ?? 0)}</Badge>,
     },
     {
-      key: 'etablissementId',
-      header: 'Établissement #',
-      render: (item: Batiment) => `#${item.etablissementId}`,
+      key: 'etablissement',
+      header: 'Établissement',
+      render: (item: Batiment & { etablissement?: { nomEtab: string } }) =>
+        (item as any).etablissement?.nomEtab ?? `#${item.etablissementId}`,
     },
     {
       key: 'actions',
@@ -108,8 +118,16 @@ export default function BatimentsPage() {
         </Button>
       </div>
 
-      <div className="mb-4">
-        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher un bâtiment..." />
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher un bâtiment..." className="flex-1" />
+        <Filter className="h-4 w-4 text-gray-400" />
+        <Select
+          value={etablissementFilter}
+          onChange={(e) => { setEtablissementFilter(e.target.value); setPage(1); }}
+          options={etablissementOptions}
+          placeholder="Tous les établissements"
+          className="w-64"
+        />
       </div>
 
       <DataTable

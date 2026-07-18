@@ -111,5 +111,6 @@ export interface EtablissementQueryDto {
   search?: string;
   dren?: string;
   cisco?: string;
+  zap?: string;
   commune?: string;
 }
