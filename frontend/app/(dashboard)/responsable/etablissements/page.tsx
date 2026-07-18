@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { formatNumber } from '@/lib/utils';
-import { School, ImageIcon } from 'lucide-react';
+import { School, ImageIcon, Phone, Globe, Camera } from 'lucide-react';
 import type { EtablissementListe } from '@/types/etablissement';
 
 export default function GestionEtablissementsPage() {
@@ -72,17 +72,17 @@ export default function GestionEtablissementsPage() {
     { key: 'commune', header: 'Commune' },
     {
       key: 'couvTelephonique',
-      header: '📞',
+      header: <Phone className="h-4 w-4" title="Couverture téléphonique" />,
       render: (item: EtablissementListe) => <BooleanBadge value={item.couvTelephonique} />,
     },
     {
       key: 'couvInternet',
-      header: '🌐',
+      header: <Globe className="h-4 w-4" title="Couverture Internet" />,
       render: (item: EtablissementListe) => <BooleanBadge value={item.couvInternet} />,
     },
     {
       key: 'photos',
-      header: '📷',
+      header: <Camera className="h-4 w-4" title="Photos" />,
       render: (item: EtablissementListe) => {
         const count = item._count?.photos ?? 0;
         return count > 0 ? (
