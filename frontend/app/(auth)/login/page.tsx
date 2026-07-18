@@ -44,9 +44,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-orange-50 via-white to-orange-50/30 px-4">
-      <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-orange-200/30 blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-orange-100/20 blur-3xl" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-green-50 via-white to-green-50/30 px-4">
+      <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-green-200/30 blur-3xl" />
+      <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-green-100/20 blur-3xl" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -73,8 +73,8 @@ export default function LoginPage() {
           className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm"
         >
           <div className="mb-6 flex items-center gap-3">
-            <div className="rounded-xl bg-orange-100 p-2.5">
-              <Shield className="h-5 w-5 text-orange-700" />
+            <div className="rounded-xl bg-green-100 p-2.5">
+              <Shield className="h-5 w-5 text-green-700" />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-gray-900">Connexion</h2>
@@ -131,7 +131,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <a
               href="/"
-              className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-orange-600 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-green-600 transition-colors"
             >
               ← Retour au site public
             </a>
