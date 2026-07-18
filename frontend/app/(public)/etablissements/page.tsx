@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 import {
   Search, List, LayoutGrid, Users, MapPin,
   CheckCircle, Wrench, AlertTriangle, Building2, School,
-  Image as ImageIcon,
+  Image as ImageIcon, SearchX,
 } from 'lucide-react';
 import { useEtablissements } from '@/hooks/use-etablissements';
 import { Badge } from '@/components/ui/badge';
@@ -78,7 +78,7 @@ export default function EtablissementsPage() {
       </div>
 
       {etablissements.length === 0 ? (
-        <EmptyState title="Aucun établissement trouvé" icon="🔍" description={search ? 'Essayez de modifier votre recherche' : ''} />
+        <EmptyState title="Aucun établissement trouvé" icon={<SearchX className="h-8 w-8" />} description={search ? 'Essayez de modifier votre recherche' : ''} />
       ) : viewMode === 'list' ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {etablissements.map((etab, idx) => {
