@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 
 export default function NotFoundPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 via-white to-orange-50/30 px-4">
-      <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-orange-200/30 blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-orange-100/20 blur-3xl" />
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-50/30 px-4">
+      <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-green-200/30 blur-3xl" />
+      <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-green-100/20 blur-3xl" />
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -21,9 +21,9 @@ export default function NotFoundPage() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.4 }}
-          className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-orange-100"
+          className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-green-100"
         >
-          <School className="h-12 w-12 text-orange-600" />
+          <School className="h-12 w-12 text-green-600" />
         </motion.div>
 
         <motion.h1
