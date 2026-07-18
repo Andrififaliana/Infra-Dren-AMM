@@ -18,7 +18,7 @@ import { Select } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { PhotoUpload } from '@/components/etablissements/PhotoUpload';
-import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight } from 'lucide-react';
 import type { Directeur, Designation, Structure } from '@/types/etablissement';
 
 export default function EditEtablissementPage() {
@@ -285,6 +285,56 @@ export default function EditEtablissementPage() {
         <CardHeader><CardTitle>Photos</CardTitle></CardHeader>
         <CardContent>
           <PhotoUpload etablissementId={etablissement.id} photos={etablissement.photos} />
+        </CardContent>
+      </Card>
+
+      {/* ─── Bâtiments ──────────────────────────────── */}
+      <Card className="mt-6">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-green-500" /> Bâtiments ({etablissement.batiments?.length ?? 0})
+            </CardTitle>
+            <Button variant="ghost" size="sm" onClick={() => router.push('/responsable/batiments/nouveau')}>
+              <Plus className="mr-1 h-4 w-4" /> Ajouter
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {etablissement.batiments && etablissement.batiments.length > 0 ? (
+            <div className="space-y-3">
+              {etablissement.batiments.map((b) => (
+                <div
+                  key={b.idBat}
+                  className="group cursor-pointer rounded-xl border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-green-200 hover:bg-green-50/50"
+                  onClick={() => router.push(`/responsable/batiments/${b.idBat}`)}
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-medium text-gray-900">{b.sigleBat || `Bâtiment #${b.idBat}`}</p>
+                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-gray-500">
+                        <span>{b.nbNiveau} niveau{b.nbNiveau > 1 ? 'x' : ''}</span>
+                        {b._count && (
+                          <>
+                            <span>{b._count.salles} salle{b._count.salles > 1 ? 's' : ''}</span>
+                            <span>{b._count.toilettes} toilette{b._count.toilettes > 1 ? 's' : ''}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-gray-300 transition-colors group-hover:text-green-500" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center">
+              <p className="text-sm text-gray-400">Aucun bâtiment</p>
+              <Button variant="ghost" size="sm" onClick={() => router.push('/responsable/batiments/nouveau')} className="mt-2">
+                <Plus className="mr-1 h-4 w-4" /> Ajouter un bâtiment
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 

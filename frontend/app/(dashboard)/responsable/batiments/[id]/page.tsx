@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Bath, Plus, Pencil, Trash2, Venus, Mars, GraduationCap, Droplets } from 'lucide-react';
+import { Bath, Plus, Pencil, Trash2, Venus, Mars, GraduationCap, Droplets, DoorOpen, ChevronRight } from 'lucide-react';
 import { useBatiment, useUpdateBatiment } from '@/hooks/use-batiments';
 import { useCreateToilette, useUpdateToilette, useDeleteToilette } from '@/hooks/use-gestion-batiment-salle';
 import { Button } from '@/components/ui/button';
@@ -104,6 +104,48 @@ export default function EditBatimentPage() {
               <Button type="submit" loading={isPending}>Enregistrer</Button>
             </div>
           </form>
+        </CardContent>
+      </Card>
+
+      {/* Section Salles */}
+      <Card className="mt-6">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <DoorOpen className="h-5 w-5 text-gray-500" />
+            Salles ({batiment.salles?.length ?? 0})
+          </CardTitle>
+          <Button size="sm" onClick={() => router.push('/responsable/salles/nouveau')}>
+            <Plus className="mr-1 h-4 w-4" /> Ajouter
+          </Button>
+        </CardHeader>
+        <CardContent>
+          {(!batiment.salles || batiment.salles.length === 0) ? (
+            <p className="py-6 text-center text-sm text-gray-400">Aucune salle enregistrée</p>
+          ) : (
+            <div className="space-y-2">
+              {batiment.salles.map((salle) => (
+                <div
+                  key={salle.idSalle}
+                  className="group flex cursor-pointer items-center justify-between rounded-lg border border-gray-100 px-4 py-3 transition-all hover:border-green-200 hover:bg-green-50/50"
+                  onClick={() => router.push(`/responsable/salles/${salle.idSalle}`)}
+                >
+                  <div className="flex items-center gap-4">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-medium text-blue-700">
+                      {salle.niveauSalle}
+                    </span>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{salle.sigleSalle || `Salle #${salle.idSalle}`}</p>
+                      <p className="text-xs text-gray-500">
+                        {salle.affectationSalle || 'Non spécifiée'}
+                        {salle.estOperationnel ? ' · Opérationnelle' : ' · Non opérationnelle'}
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-gray-300 transition-colors group-hover:text-green-500" />
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 
