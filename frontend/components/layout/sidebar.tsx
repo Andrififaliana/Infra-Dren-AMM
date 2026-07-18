@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
+import { LayoutDashboard, School } from 'lucide-react';
 
 interface NavItem {
   label: string;
   href: string;
-  icon: string;
+  icon: React.ReactNode;
   roles?: string[];
 }
 
@@ -16,13 +17,13 @@ const navItems: NavItem[] = [
   {
     label: 'Tableau de bord',
     href: '/responsable/tableau-de-bord',
-    icon: '📊',
+    icon: <LayoutDashboard className="h-5 w-5" />,
     roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
   },
   {
     label: 'Établissements',
     href: '/responsable/etablissements',
-    icon: '🏫',
+    icon: <School className="h-5 w-5" />,
     roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
   },
   {
@@ -135,7 +136,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               )}
               title={collapsed ? item.label : undefined}
             >
-              <span className="text-lg">{item.icon}</span>
+              {item.icon}
               {!collapsed && <span>{item.label}</span>}
             </Link>
           );
