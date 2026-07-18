@@ -181,7 +181,7 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
                 className={cn(
                   'relative h-16 w-20 flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all',
                   idx === selectedIndex
-                    'border-green-500 ring-1 ring-green-500'
+                    ? 'border-green-500 ring-1 ring-green-500'
                       : 'border-transparent opacity-70 hover:opacity-100',
                 )}
               >
