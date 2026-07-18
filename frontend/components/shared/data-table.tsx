@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 
 interface Column<T> {
   key: string;
-  header: string;
+  header: React.ReactNode;
   render?: (item: T) => React.ReactNode;
   className?: string;
   sortable?: boolean;

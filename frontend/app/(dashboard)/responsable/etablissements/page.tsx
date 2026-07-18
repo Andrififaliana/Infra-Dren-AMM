@@ -72,17 +72,17 @@ export default function GestionEtablissementsPage() {
     { key: 'commune', header: 'Commune' },
     {
       key: 'couvTelephonique',
-      header: <Phone className="h-4 w-4" title="Couverture téléphonique" />,
+      header: <Phone className="h-4 w-4" />,
       render: (item: EtablissementListe) => <BooleanBadge value={item.couvTelephonique} />,
     },
     {
       key: 'couvInternet',
-      header: <Globe className="h-4 w-4" title="Couverture Internet" />,
+      header: <Globe className="h-4 w-4" />,
       render: (item: EtablissementListe) => <BooleanBadge value={item.couvInternet} />,
     },
     {
       key: 'photos',
-      header: <Camera className="h-4 w-4" title="Photos" />,
+      header: <Camera className="h-4 w-4" />,
       render: (item: EtablissementListe) => {
         const count = item._count?.photos ?? 0;
         return count > 0 ? (
