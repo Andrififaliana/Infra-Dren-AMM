@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { formatNumber } from '@/lib/utils';
 import { School, ImageIcon, Phone, Globe, Camera, Pencil, Trash2 } from 'lucide-react';
+import { SelectionBar } from '@/components/shared/selection-bar';
 import type { EtablissementListe } from '@/types/etablissement';
 
 export default function GestionEtablissementsPage() {
@@ -19,6 +20,8 @@ export default function GestionEtablissementsPage() {
   const [page, setPage] = useState(1);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedEtab, setSelectedEtab] = useState<EtablissementListe | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
 
   const { data, isLoading } = useEtablissements({ page, limit: 10, search: search || undefined });
   const { mutate: deleteEtab, isPending: isDeleting } = useDeleteEtablissement();
@@ -35,6 +38,23 @@ export default function GestionEtablissementsPage() {
         },
       });
     }
+  };
+
+  const handleBulkDelete = () => {
+    Promise.all(
+      Array.from(selectedIds).map(
+        (id) =>
+          new Promise<void>((resolve, reject) => {
+            deleteEtab(id, {
+              onSuccess: () => resolve(),
+              onError: reject,
+            });
+          })
+      )
+    ).then(() => {
+      setBulkDeleteModalOpen(false);
+      setSelectedIds(new Set());
+    });
   };
 
   const columns = [
@@ -140,6 +160,9 @@ export default function GestionEtablissementsPage() {
         onRowClick={(item) => router.push(`/responsable/etablissements/${item.id}`)}
         loading={isLoading}
         emptyMessage="Aucun établissement trouvé"
+        selectable
+        selectedIds={selectedIds}
+        onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
       />
 
       {meta && (
@@ -152,6 +175,29 @@ export default function GestionEtablissementsPage() {
           />
         </div>
       )}
+
+      <SelectionBar
+        selectedCount={selectedIds.size}
+        onClear={() => setSelectedIds(new Set())}
+        onDelete={() => setBulkDeleteModalOpen(true)}
+        isDeleting={isDeleting}
+        entityName="établissement(s)"
+      />
+
+      <Modal
+        open={bulkDeleteModalOpen}
+        onClose={() => setBulkDeleteModalOpen(false)}
+        title="Confirmer la suppression groupée"
+      >
+        <p className="text-sm text-gray-600">
+          Êtes-vous sûr de vouloir supprimer <strong>{selectedIds.size}</strong> établissement{selectedIds.size > 1 ? 's' : ''} ?
+          Cette action est irréversible.
+        </p>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setBulkDeleteModalOpen(false)}>Annuler</Button>
+          <Button variant="ghost" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
+        </div>
+      </Modal>
 
       <Modal
         open={deleteModalOpen}

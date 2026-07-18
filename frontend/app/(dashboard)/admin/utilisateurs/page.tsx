@@ -11,6 +11,7 @@ import { Select } from '@/components/ui/select';
 import { Modal } from '@/components/ui/modal';
 import { Badge } from '@/components/ui/badge';
 import { Trash2 } from 'lucide-react';
+import { SelectionBar } from '@/components/shared/selection-bar';
 import { formatDateShort } from '@/lib/utils';
 import type { User, Role } from '@/types/user';
 
@@ -27,6 +28,8 @@ export default function UtilisateursPage() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
   const [formData, setFormData] = useState<UserFormData>({ email: '', nom: '', password: '', role: 'RESPONSABLE_INFRASTRUCTURE' });
 
   const { data, isLoading } = useUsers({ page, limit: 10, search: search || undefined });
@@ -55,6 +58,23 @@ export default function UtilisateursPage() {
         },
       });
     }
+  };
+
+  const handleBulkDelete = () => {
+    Promise.all(
+      Array.from(selectedIds).map(
+        (id) =>
+          new Promise<void>((resolve, reject) => {
+            deleteUser(id, {
+              onSuccess: () => resolve(),
+              onError: reject,
+            });
+          })
+      )
+    ).then(() => {
+      setBulkDeleteModalOpen(false);
+      setSelectedIds(new Set());
+    });
   };
 
   const columns = [
@@ -116,6 +136,9 @@ export default function UtilisateursPage() {
         keyExtractor={(item) => item.id}
         loading={isLoading}
         emptyMessage="Aucun utilisateur"
+        selectable
+        selectedIds={selectedIds}
+        onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
       />
 
       {meta && (
@@ -169,6 +192,24 @@ export default function UtilisateursPage() {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      <SelectionBar
+        selectedCount={selectedIds.size}
+        onClear={() => setSelectedIds(new Set())}
+        onDelete={() => setBulkDeleteModalOpen(true)}
+        isDeleting={isDeleting}
+        entityName="utilisateur(s)"
+      />
+
+      <Modal open={bulkDeleteModalOpen} onClose={() => setBulkDeleteModalOpen(false)} title="Confirmer la suppression groupée">
+        <p className="text-sm text-gray-600">
+          Supprimer <strong>{selectedIds.size}</strong> utilisateur{selectedIds.size > 1 ? 's' : ''} ?
+        </p>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setBulkDeleteModalOpen(false)}>Annuler</Button>
+          <Button variant="ghost" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
+        </div>
       </Modal>
 
       {/* Delete Confirmation */}

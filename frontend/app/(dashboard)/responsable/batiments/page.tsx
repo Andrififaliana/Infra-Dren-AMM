@@ -13,6 +13,7 @@ import { formatNumber } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Pencil, Trash2 } from 'lucide-react';
+import { SelectionBar } from '@/components/shared/selection-bar';
 import type { Batiment } from '@/types/batiment';
 
 export default function BatimentsPage() {
@@ -21,6 +22,8 @@ export default function BatimentsPage() {
   const [page, setPage] = useState(1);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedBat, setSelectedBat] = useState<Batiment | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
   const perPage = 10;
 
   const { data: batiments, isLoading } = useBatiments();
@@ -42,6 +45,24 @@ export default function BatimentsPage() {
         onError: () => toast.error('Erreur lors de la suppression'),
       });
     }
+  };
+
+  const handleBulkDelete = () => {
+    Promise.all(
+      Array.from(selectedIds).map(
+        (id) =>
+          new Promise<void>((resolve, reject) => {
+            deleteBat(id, {
+              onSuccess: () => resolve(),
+              onError: reject,
+            });
+          })
+      )
+    ).then(() => {
+      toast.success(`${selectedIds.size} bâtiment(s) supprimé(s)`);
+      setBulkDeleteModalOpen(false);
+      setSelectedIds(new Set());
+    }).catch(() => toast.error('Erreur lors de la suppression groupée'));
   };
 
   const columns = [
@@ -97,11 +118,32 @@ export default function BatimentsPage() {
         keyExtractor={(item) => item.idBat}
         loading={isLoading}
         emptyMessage="Aucun bâtiment"
+        selectable
+        selectedIds={selectedIds}
+        onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
       />
 
       <div className="mt-4">
         <Pagination page={page} totalPages={totalPages} total={filtered.length} onPageChange={setPage} />
       </div>
+
+      <SelectionBar
+        selectedCount={selectedIds.size}
+        onClear={() => setSelectedIds(new Set())}
+        onDelete={() => setBulkDeleteModalOpen(true)}
+        isDeleting={isDeleting}
+        entityName="bâtiment(s)"
+      />
+
+      <Modal open={bulkDeleteModalOpen} onClose={() => setBulkDeleteModalOpen(false)} title="Confirmer la suppression groupée">
+        <p className="text-sm text-gray-600">
+          Supprimer <strong>{selectedIds.size}</strong> bâtiment{selectedIds.size > 1 ? 's' : ''} ?
+        </p>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setBulkDeleteModalOpen(false)}>Annuler</Button>
+          <Button variant="ghost" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
+        </div>
+      </Modal>
 
       <Modal open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Confirmer la suppression">
         <p className="text-sm text-gray-600">
