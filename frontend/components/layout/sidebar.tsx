@@ -108,7 +108,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       <div className="flex h-16 items-center justify-between px-4 border-b border-gray-200">
         {!collapsed && (
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-blue-600">InfraDren</span>
+            <span className="text-xl font-bold text-green-700">InfraDren</span>
           </Link>
         )}
         <button
@@ -131,7 +131,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                 isActive
-                  ? 'bg-blue-50 text-blue-700'
+                  ? 'bg-green-50 text-green-700'
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
               )}
               title={collapsed ? item.label : undefined}
