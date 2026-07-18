@@ -126,7 +126,7 @@ export default function TableauDeBordPage() {
                       </div>
                       <div className="h-3 rounded-full bg-gray-100">
                         <div
-                          className="h-3 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-1000"
+                          className="h-3 rounded-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-1000"
                           style={{ width: `${c.couvert}%` }}
                         />
                       </div>
