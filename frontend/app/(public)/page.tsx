@@ -9,7 +9,6 @@ import {
   UserCheck,
   ArrowRight,
   CheckCircle,
-  School,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useStatsGlobales } from '@/hooks/use-statistiques';
@@ -53,46 +52,34 @@ export default function HomePage() {
     <div>
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <span className="mb-4 inline-flex items-center rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
-                DREN AMM
+        <div className="relative mx-auto max-w-4xl px-4 py-24 sm:px-6 lg:px-8">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center">
+            <span className="mb-4 inline-flex items-center rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
+              DREN AMM
+            </span>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+              Gestion des{' '}
+              <span className="text-green-700">
+                infrastructures scolaires
               </span>
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                Gestion des{' '}
-                <span className="text-green-700">
-                  infrastructures scolaires
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-600">
+              Plateforme de suivi et de gestion des établissements scolaires de la
+              Direction Régionale de l&apos;Éducation Nationale AMM.
+            </p>
+            <div className="mt-8 flex justify-center">
+              <Button size="lg" onClick={() => router.push('/etablissements')}>
+                Explorer les établissements <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+            <div className="mt-8 flex flex-wrap justify-center gap-6">
+              {['Données sécurisées', 'Suivi en temps réel', 'Transparence'].map((item) => (
+                <span key={item} className="inline-flex items-center gap-1.5 text-sm text-gray-500">
+                  <CheckCircle className="h-4 w-4 text-green-500" />{item}
                 </span>
-              </h1>
-              <p className="mt-6 text-lg leading-relaxed text-gray-600">
-                Plateforme de suivi et de gestion des établissements scolaires de la
-                Direction Régionale de l&apos;Éducation Nationale AMM.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Button size="lg" onClick={() => router.push('/etablissements')}>
-                  Explorer les établissements <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-                <Button variant="outline" size="lg" onClick={() => router.push('/statistiques')}>
-                  Voir les statistiques
-                </Button>
-              </div>
-              <div className="mt-8 flex flex-wrap gap-6">
-                {['Données sécurisées', 'Suivi en temps réel', 'Transparence'].map((item) => (
-                  <span key={item} className="inline-flex items-center gap-1.5 text-sm text-gray-500">
-                    <CheckCircle className="h-4 w-4 text-green-500" />{item}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="hidden lg:block">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-gray-50 shadow-sm border border-gray-100">
-                <div className="flex h-full items-center justify-center">
-                  <School className="h-32 w-32 text-gray-200" />
-                </div>
-              </div>
-            </motion.div>
-          </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 
