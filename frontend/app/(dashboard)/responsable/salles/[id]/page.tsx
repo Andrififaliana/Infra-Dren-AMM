@@ -162,19 +162,17 @@ export default function EditSallePage() {
       </Card>
 
       {/* Modal Ouverture */}
-      <Modal open={ouvModalOpen} onClose={() => setOuvModalOpen(false)} title={editOuv ? 'Modifier l\'ouverture' : 'Ajouter une ouverture'} size="xl">
-        <form onSubmit={handleSaveOuverture} className="space-y-4" key={editOuv?.idOuvert ?? 'new'}>
+      <Modal open={ouvModalOpen} onClose={() => setOuvModalOpen(false)} title={editOuv ? "Modifier l'ouverture" : 'Ajouter une ouverture'} size="xl">
+        <form onSubmit={handleSaveOuverture} className="space-y-4 p-6" key={editOuv?.idOuvert ?? 'new'}>
           <Select id="typeOuvert" name="typeOuvert" label="Type" defaultValue={editOuv?.typeOuvert ?? ''}
             options={[{ value: '', label: 'Sélectionner' }, { value: 'FENETRE', label: 'Fenêtre' }, { value: 'PORTE', label: 'Porte' }, { value: 'FENETRE_PORTE', label: 'Fenêtre-Porte' }]}
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <Input id="nbOuvert" name="nbOuvert" label="Nombre" type="number" defaultValue={editOuv?.nbOuvert ?? 0} />
             <Input id="largeurOuvert" name="largeurOuvert" label="Largeur (m)" type="number" step="0.1" defaultValue={editOuv?.largeurOuvert ?? ''} />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
             <Input id="hauteurOuvert" name="hauteurOuvert" label="Hauteur (m)" type="number" step="0.1" defaultValue={editOuv?.hauteurOuvert ?? ''} />
-            <Input id="surfaceOuvert" name="surfaceOuvert" label="Surface (m²)" type="number" step="0.1" defaultValue={editOuv?.surfaceOuvert ?? ''} />
           </div>
+          <Input id="surfaceOuvert" name="surfaceOuvert" label="Surface (m²)" type="number" step="0.1" defaultValue={editOuv?.surfaceOuvert ?? ''} />
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="outline" type="button" onClick={() => setOuvModalOpen(false)}>Annuler</Button>
             <Button type="submit">{editOuv ? 'Modifier' : 'Ajouter'}</Button>

@@ -204,20 +204,20 @@ export default function EditBatimentPage() {
 
       {/* Modal Toilette */}
       <Modal open={toilModalOpen} onClose={() => setToilModalOpen(false)} title={editToil ? 'Modifier la toilette' : 'Ajouter une toilette'} size="xl">
-        <form onSubmit={handleSaveToilette} className="space-y-4" key={editToil?.idToilette ?? 'new'}>
+        <form onSubmit={handleSaveToilette} className="space-y-4 p-6" key={editToil?.idToilette ?? 'new'}>
           <div className="grid grid-cols-2 gap-4">
             <Input id="nbCompartiment" name="nbCompartiment" label="Compartiments" type="number" defaultValue={editToil?.nbCompartiment ?? 0} />
             <Select id="fonctionToilette" name="fonctionToilette" label="Fonction" defaultValue={editToil?.fonctionToilette ?? ''}
               options={[
                 { value: '', label: 'Sélectionner' },
-                { value: 'FILLES', label: '🚺 Filles' },
-                { value: 'GARCONS', label: '🚹 Garçons' },
-                { value: 'ENSEIGNANTS', label: '👨‍🏫 Enseignants' },
-                { value: 'LATRINES', label: '🚽 Latrines' },
+                { value: 'FILLES', label: 'Filles' },
+                { value: 'GARCONS', label: 'Garçons' },
+                { value: 'ENSEIGNANTS', label: 'Enseignants' },
+                { value: 'LATRINES', label: 'Latrines' },
               ]}
             />
           </div>
-          <label className="flex items-center gap-2 text-sm">
+          <label className="flex items-center gap-2 text-sm cursor-pointer">
             <input type="checkbox" name="pointEau" defaultChecked={editToil?.pointEau ?? false} className="rounded" />
             Point d&apos;eau disponible
           </label>

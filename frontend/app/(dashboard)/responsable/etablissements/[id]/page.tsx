@@ -491,16 +491,20 @@ export default function EditEtablissementPage() {
 
       {/* Modal Directeur */}
       <Modal open={dirModalOpen} onClose={() => setDirModalOpen(false)} title="Directeur de l'établissement" size="xl">
-        <form onSubmit={saveDirecteur} className="space-y-4">
-          <Input id="dir_nom" label="Nom *" value={dirForm.nomDirecteur}
-            onChange={(e) => setDirForm({ ...dirForm, nomDirecteur: e.target.value })} required />
-          <Input id="dir_prenom" label="Prénom" value={dirForm.prenomDr}
-            onChange={(e) => setDirForm({ ...dirForm, prenomDr: e.target.value })} />
-          <Input id="dir_email" label="Email" type="email" value={dirForm.emailDr}
-            onChange={(e) => setDirForm({ ...dirForm, emailDr: e.target.value })} />
-          <Input id="dir_tel" label="Téléphone" type="tel" value={dirForm.telDr}
-            onChange={(e) => setDirForm({ ...dirForm, telDr: e.target.value })} />
-          <div className="flex justify-end gap-3">
+        <form onSubmit={saveDirecteur} className="space-y-4 p-6">
+          <div className="grid grid-cols-2 gap-4">
+            <Input id="dir_nom" label="Nom *" value={dirForm.nomDirecteur}
+              onChange={(e) => setDirForm({ ...dirForm, nomDirecteur: e.target.value })} required />
+            <Input id="dir_prenom" label="Prénom" value={dirForm.prenomDr}
+              onChange={(e) => setDirForm({ ...dirForm, prenomDr: e.target.value })} />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Input id="dir_email" label="Email" type="email" value={dirForm.emailDr}
+              onChange={(e) => setDirForm({ ...dirForm, emailDr: e.target.value })} />
+            <Input id="dir_tel" label="Téléphone" type="tel" value={dirForm.telDr}
+              onChange={(e) => setDirForm({ ...dirForm, telDr: e.target.value })} />
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
             <Button variant="outline" type="button" onClick={() => setDirModalOpen(false)}>Annuler</Button>
             <Button type="submit" loading={dirLoading}>Enregistrer</Button>
           </div>
@@ -510,7 +514,7 @@ export default function EditEtablissementPage() {
       {/* Modal Designation */}
       <Modal open={desModalOpen} onClose={() => setDesModalOpen(false)}
         title={editingDes ? 'Modifier la désignation' : 'Nouvelle désignation'} size="xl">
-        <form onSubmit={saveDesignation} className="space-y-4">
+        <form onSubmit={saveDesignation} className="space-y-4 p-6">
           <Input id="des_nom" label="Nom *" value={desForm.nomDesign}
             onChange={(e) => setDesForm({ ...desForm, nomDesign: e.target.value })} required />
           <div className="grid grid-cols-2 gap-4">
@@ -521,21 +525,24 @@ export default function EditEtablissementPage() {
           </div>
           <Input id="des_superficie" label="Superficie (m²)" type="number" min="0" step="0.01" value={desForm.superficieDesign}
             onChange={(e) => setDesForm({ ...desForm, superficieDesign: e.target.value })} />
-          <div className="flex flex-wrap gap-4">
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={desForm.estTitre}
-                onChange={(e) => setDesForm({ ...desForm, estTitre: e.target.checked })} className="rounded" /> Titre foncier
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={desForm.estEnceinteEtab}
-                onChange={(e) => setDesForm({ ...desForm, estEnceinteEtab: e.target.checked })} className="rounded" /> Enceinte établissement
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={desForm.estLitigieux}
-                onChange={(e) => setDesForm({ ...desForm, estLitigieux: e.target.checked })} className="rounded" /> Litigieux
-            </label>
-          </div>
-          <div className="flex justify-end gap-3">
+          <fieldset className="rounded-lg border border-gray-200 p-4">
+            <legend className="text-sm font-medium text-gray-700 px-1">Options</legend>
+            <div className="grid grid-cols-3 gap-4">
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <input type="checkbox" checked={desForm.estTitre}
+                  onChange={(e) => setDesForm({ ...desForm, estTitre: e.target.checked })} className="rounded" /> Titre foncier
+              </label>
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <input type="checkbox" checked={desForm.estEnceinteEtab}
+                  onChange={(e) => setDesForm({ ...desForm, estEnceinteEtab: e.target.checked })} className="rounded" /> Enceinte établissement
+              </label>
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <input type="checkbox" checked={desForm.estLitigieux}
+                  onChange={(e) => setDesForm({ ...desForm, estLitigieux: e.target.checked })} className="rounded" /> Litigieux
+              </label>
+            </div>
+          </fieldset>
+          <div className="flex justify-end gap-3 pt-2">
             <Button variant="outline" type="button" onClick={() => setDesModalOpen(false)}>Annuler</Button>
             <Button type="submit" loading={desCreateLoading || desUpdateLoading}>
               {editingDes ? 'Modifier' : 'Créer'}
@@ -547,37 +554,39 @@ export default function EditEtablissementPage() {
       {/* Modal Structure */}
       <Modal open={strModalOpen} onClose={() => setStrModalOpen(false)}
         title={editingStr ? 'Modifier la structure' : 'Nouvelle structure'} size="xl">
-        <form onSubmit={saveStructure} className="space-y-4">
+        <form onSubmit={saveStructure} className="space-y-4 p-6">
           <Input id="str_type" label="Type de structure" value={strForm.typeStruc}
             onChange={(e) => setStrForm({ ...strForm, typeStruc: e.target.value })} placeholder="Ex: Bibliothèque, Laboratoire..." />
-          <Select id="str_materiaux" label="Matériaux"
-            value={strForm.materiauxStruc}
-            onChange={(e) => setStrForm({ ...strForm, materiauxStruc: e.target.value })}
-            options={[
-              { value: '', label: 'Sélectionner' },
-              { value: 'DUR', label: 'Dur' },
-              { value: 'SEMI-DUR', label: 'Semi-dur' },
-              { value: 'BANCHE', label: 'Banché' },
-              { value: 'BOIS', label: 'Bois' },
-              { value: 'AUTRE', label: 'Autre' },
-            ]}
-          />
-          <Select id="str_etat" label="État"
-            value={strForm.etatStruc}
-            onChange={(e) => setStrForm({ ...strForm, etatStruc: e.target.value })}
-            options={[
-              { value: '', label: 'Sélectionner' },
-              { value: 'BON', label: 'Bon' },
-              { value: 'MOYEN', label: 'Moyen' },
-              { value: 'MAUVAIS', label: 'Mauvais' },
-            ]}
-          />
-          <label className="flex items-center gap-2 text-sm">
+          <div className="grid grid-cols-2 gap-4">
+            <Select id="str_materiaux" label="Matériaux"
+              value={strForm.materiauxStruc}
+              onChange={(e) => setStrForm({ ...strForm, materiauxStruc: e.target.value })}
+              options={[
+                { value: '', label: 'Sélectionner' },
+                { value: 'DUR', label: 'Dur' },
+                { value: 'SEMI-DUR', label: 'Semi-dur' },
+                { value: 'BANCHE', label: 'Banché' },
+                { value: 'BOIS', label: 'Bois' },
+                { value: 'AUTRE', label: 'Autre' },
+              ]}
+            />
+            <Select id="str_etat" label="État"
+              value={strForm.etatStruc}
+              onChange={(e) => setStrForm({ ...strForm, etatStruc: e.target.value })}
+              options={[
+                { value: '', label: 'Sélectionner' },
+                { value: 'BON', label: 'Bon' },
+                { value: 'MOYEN', label: 'Moyen' },
+                { value: 'MAUVAIS', label: 'Mauvais' },
+              ]}
+            />
+          </div>
+          <label className="flex items-center gap-2 text-sm cursor-pointer">
             <input type="checkbox" checked={strForm.existenceStruc}
               onChange={(e) => setStrForm({ ...strForm, existenceStruc: e.target.checked })} className="rounded" />
             Structure existante
           </label>
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-3 pt-2">
             <Button variant="outline" type="button" onClick={() => setStrModalOpen(false)}>Annuler</Button>
             <Button type="submit" loading={strCreateLoading || strUpdateLoading}>
               {editingStr ? 'Modifier' : 'Créer'}
