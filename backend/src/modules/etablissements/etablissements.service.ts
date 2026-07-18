@@ -27,6 +27,28 @@ export class EtablissementsService {
     private readonly r2Service: R2Service,
   ) {}
 
+  /**
+   * Remplace les URLs directes R2 par des URLs présignées (valides 1h)
+   * pour un tableau de photos. Les objets sont mutés sur place.
+   */
+  private async signPhotoUrls(
+    photos: Array<{ key: string; url: string }>,
+  ): Promise<void> {
+    await Promise.all(
+      photos.map(async (photo) => {
+        try {
+          photo.url = await this.r2Service.getPresignedUrl(photo.key);
+        } catch (error) {
+          this.logger.warn(
+            `Impossible de générer une URL présignée pour ${photo.key}`,
+            error,
+          );
+          // Garder l'URL directe en fallback
+        }
+      }),
+    );
+  }
+
   async create(dto: CreateEtablissementDto) {
     const etablissement = await this.prisma.etablissement.create({
       data: dto,
@@ -88,9 +110,42 @@ export class EtablissementsService {
           nbEnseignantF: true,
           nbSectionG: true,
           nbSectionF: true,
+          photos: {
+            select: {
+              id: true,
+              key: true,
+              url: true,
+              originalName: true,
+              mimeType: true,
+              fileSize: true,
+              estPrincipale: true,
+              etablissementId: true,
+              createdAt: true,
+            },
+            take: 1,
+            orderBy: { estPrincipale: 'desc' },
+          },
+          _count: {
+            select: {
+              batiments: true,
+              designations: true,
+              structures: true,
+              photos: true,
+            },
+          },
         },
         orderBy: { nomEtab: 'asc' },
       });
+
+      // Signer les URLs des photos pour tous les établissements en parallèle
+      await Promise.all(
+        data.map((etab) =>
+          etab.photos?.length
+            ? this.signPhotoUrls(etab.photos as Array<{ key: string; url: string }>)
+            : Promise.resolve(),
+        ),
+      );
+
       const total = await this.prisma.etablissement.count({ where });
 
       return {
@@ -141,6 +196,14 @@ export class EtablissementsService {
     });
     if (!etablissement)
       throw new NotFoundException(`Établissement #${id} non trouvé`);
+
+    // Signer les URLs des photos
+    if (etablissement.photos?.length) {
+      await this.signPhotoUrls(
+        etablissement.photos as Array<{ key: string; url: string }>,
+      );
+    }
+
     return etablissement;
   }
 
