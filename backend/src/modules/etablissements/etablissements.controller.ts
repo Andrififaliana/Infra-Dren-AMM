@@ -177,6 +177,23 @@ export class EtablissementsController {
     );
   }
 
+  @Patch(':id/photos/:photoId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Définir une photo comme principale" })
+  setPhotoPrincipale(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('photoId', ParseIntPipe) photoId: number,
+    @Body('estPrincipale') estPrincipale?: string,
+  ) {
+    return this.etablissementsService.setPhotoPrincipale(
+      id,
+      photoId,
+      estPrincipale !== 'false',
+    );
+  }
+
   @Delete(':id/photos/:photoId')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)

@@ -489,6 +489,38 @@ export class EtablissementsService {
     await this.auditService.modification('ETABLISSEMENT', etablissementId, 'Structure supprimée');
   }
 
+  /** Définir une photo comme principale */
+  async setPhotoPrincipale(
+    etablissementId: number,
+    photoId: number,
+    estPrincipale: boolean,
+  ) {
+    const photo = await this.prisma.photo.findFirst({
+      where: { id: photoId, etablissementId },
+    });
+    if (!photo) throw new NotFoundException(`Photo #${photoId} non trouvée`);
+
+    if (estPrincipale) {
+      // Retirer le flag principal de toutes les autres photos
+      await this.prisma.photo.updateMany({
+        where: { etablissementId, estPrincipale: true },
+        data: { estPrincipale: false },
+      });
+    }
+
+    const updated = await this.prisma.photo.update({
+      where: { id: photoId },
+      data: { estPrincipale },
+    });
+
+    await this.auditService.modification(
+      'ETABLISSEMENT',
+      etablissementId,
+      `Photo ${estPrincipale ? 'définie comme principale' : 'retirée comme principale'}`,
+    );
+    return updated;
+  }
+
   /** Supprimer une photo */
   async deletePhoto(etablissementId: number, photoId: number) {
     const photo = await this.prisma.photo.findFirst({

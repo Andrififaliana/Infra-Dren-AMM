@@ -9,7 +9,8 @@ import { Pagination } from '@/components/shared/pagination';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
-import { formatDateShort, formatNumber } from '@/lib/utils';
+import { formatNumber } from '@/lib/utils';
+import { School, ImageIcon } from 'lucide-react';
 import type { EtablissementListe } from '@/types/etablissement';
 
 export default function GestionEtablissementsPage() {
@@ -37,7 +38,35 @@ export default function GestionEtablissementsPage() {
   };
 
   const columns = [
-    { key: 'nomEtab', header: 'Nom', className: 'min-w-[200px]' },
+    {
+      key: 'photo',
+      header: '',
+      className: 'w-12',
+      render: (item: EtablissementListe) => {
+        const mainPhoto = item.photos?.find((p) => p.estPrincipale) ?? item.photos?.[0] ?? null;
+        return (
+          <div className="flex items-center justify-center">
+            <div className="h-10 w-10 overflow-hidden rounded-xl">
+              {mainPhoto ? (
+                <img
+                  src={mainPhoto.url}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-orange-100 to-orange-50">
+                  <School className="h-5 w-5 text-orange-300/60" />
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      },
+    },
+    { key: 'nomEtab', header: 'Nom', className: 'min-w-[180px]' },
     { key: 'dren', header: 'DREN' },
     { key: 'cisco', header: 'CISCO' },
     { key: 'commune', header: 'Commune' },
@@ -52,11 +81,17 @@ export default function GestionEtablissementsPage() {
       render: (item: EtablissementListe) => <BooleanBadge value={item.couvInternet} />,
     },
     {
-      key: '_count',
-      header: 'Bâtiments',
-      render: (item: EtablissementListe) => (
-        <Badge variant="info">{formatNumber(item._count?.batiments ?? 0)}</Badge>
-      ),
+      key: 'photos',
+      header: '📷',
+      render: (item: EtablissementListe) => {
+        const count = item._count?.photos ?? 0;
+        return count > 0 ? (
+          <span className="inline-flex items-center gap-1 text-xs text-gray-400">
+            <ImageIcon className="h-3.5 w-3.5" />
+            {count}
+          </span>
+        ) : null;
+      },
     },
     {
       key: 'actions',
