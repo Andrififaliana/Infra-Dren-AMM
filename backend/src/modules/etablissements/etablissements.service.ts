@@ -11,6 +11,11 @@ import { Prisma } from '@prisma/client';
 import { CreateEtablissementDto } from './dto/create-etablissement.dto';
 import { UpdateEtablissementDto } from './dto/update-etablissement.dto';
 import { EtablissementQueryDto } from './dto/etablissement-query.dto';
+import { UpsertDirecteurDto } from './dto/upsert-directeur.dto';
+import { CreateDesignationDto } from './dto/create-designation.dto';
+import { UpdateDesignationDto } from './dto/update-designation.dto';
+import { CreateStructureDto } from './dto/create-structure.dto';
+import { UpdateStructureDto } from './dto/update-structure.dto';
 
 @Injectable()
 export class EtablissementsService {
@@ -351,7 +356,7 @@ export class EtablissementsService {
 
   // ─── Directeur ─────────────────────────────────────
 
-  async upsertDirecteur(etablissementId: number, dto: { nomDirecteur: string; prenomDr?: string; emailDr?: string; telDr?: string }) {
+  async upsertDirecteur(etablissementId: number, dto: UpsertDirecteurDto) {
     await this.findOne(etablissementId);
     const directeur = await this.prisma.directeur.upsert({
       where: { etablissementId },
@@ -371,10 +376,7 @@ export class EtablissementsService {
 
   // ─── Designations ───────────────────────────────────
 
-  async createDesignation(etablissementId: number, dto: {
-    nomDesign: string; estEnceinteEtab?: boolean; estTitre?: boolean;
-    typeDesignation?: string; numCadastre?: string; superficieDesign?: number; estLitigieux?: boolean;
-  }) {
+  async createDesignation(etablissementId: number, dto: CreateDesignationDto) {
     await this.findOne(etablissementId);
     const designation = await this.prisma.designation.create({
       data: { ...dto, etablissementId },
@@ -383,10 +385,7 @@ export class EtablissementsService {
     return designation;
   }
 
-  async updateDesignation(id: number, etablissementId: number, dto: {
-    nomDesign?: string; estEnceinteEtab?: boolean; estTitre?: boolean;
-    typeDesignation?: string; numCadastre?: string; superficieDesign?: number; estLitigieux?: boolean;
-  }) {
+  async updateDesignation(id: number, etablissementId: number, dto: UpdateDesignationDto) {
     const existing = await this.prisma.designation.findFirst({ where: { idDesign: id, etablissementId } });
     if (!existing) throw new NotFoundException(`Désignation #${id} non trouvée`);
     const designation = await this.prisma.designation.update({ where: { idDesign: id }, data: dto });
@@ -403,9 +402,7 @@ export class EtablissementsService {
 
   // ─── Structures ─────────────────────────────────────
 
-  async createStructure(etablissementId: number, dto: {
-    typeStruc?: string; existenceStruc?: boolean; materiauxStruc?: string; etatStruc?: string;
-  }) {
+  async createStructure(etablissementId: number, dto: CreateStructureDto) {
     await this.findOne(etablissementId);
     const structure = await this.prisma.structure.create({
       data: { ...dto, etablissementId },
@@ -414,9 +411,7 @@ export class EtablissementsService {
     return structure;
   }
 
-  async updateStructure(id: number, etablissementId: number, dto: {
-    typeStruc?: string; existenceStruc?: boolean; materiauxStruc?: string; etatStruc?: string;
-  }) {
+  async updateStructure(id: number, etablissementId: number, dto: UpdateStructureDto) {
     const existing = await this.prisma.structure.findFirst({ where: { idStruc: id, etablissementId } });
     if (!existing) throw new NotFoundException(`Structure #${id} non trouvée`);
     const structure = await this.prisma.structure.update({ where: { idStruc: id }, data: dto });

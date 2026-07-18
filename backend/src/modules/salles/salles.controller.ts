@@ -6,6 +6,8 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@ne
 import { SallesService } from './salles.service';
 import { CreateSalleDto } from './dto/create-salle.dto';
 import { UpdateSalleDto } from './dto/update-salle.dto';
+import { CreateOuvertureDto } from './dto/create-ouverture.dto';
+import { UpdateOuvertureDto } from './dto/update-ouverture.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -50,5 +52,36 @@ export class SallesController {
   @ApiOperation({ summary: 'Supprimer une salle' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.sallesService.remove(id);
+  }
+
+  // ─── Ouvertures ─────────────────────────────────────
+
+  @Post(':id/ouvertures')
+  @ApiOperation({ summary: 'Ajouter une ouverture (fenêtre/porte) à une salle' })
+  createOuverture(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: CreateOuvertureDto,
+  ) {
+    return this.sallesService.createOuverture(id, dto);
+  }
+
+  @Patch(':id/ouvertures/:ouvertureId')
+  @ApiOperation({ summary: 'Modifier une ouverture' })
+  updateOuverture(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ouvertureId', ParseIntPipe) ouvertureId: number,
+    @Body() dto: UpdateOuvertureDto,
+  ) {
+    return this.sallesService.updateOuverture(ouvertureId, id, dto);
+  }
+
+  @Delete(':id/ouvertures/:ouvertureId')
+  @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Supprimer une ouverture' })
+  deleteOuverture(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ouvertureId', ParseIntPipe) ouvertureId: number,
+  ) {
+    return this.sallesService.deleteOuverture(ouvertureId, id);
   }
 }

@@ -1,18 +1,35 @@
 'use client';
 
+import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { Bath, Plus, Pencil, Trash2 } from 'lucide-react';
 import { useBatiment, useUpdateBatiment } from '@/hooks/use-batiments';
+import { useCreateToilette, useUpdateToilette, useDeleteToilette } from '@/hooks/use-gestion-batiment-salle';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Modal } from '@/components/ui/modal';
 import { Skeleton } from '@/components/ui/skeleton';
+import type { Toilette } from '@/types/batiment';
 
 export default function EditBatimentPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const { data: batiment, isLoading } = useBatiment(Number(id));
-  const { mutate: updateBatiment, isPending } = useUpdateBatiment(Number(id));
+  const batimentId = Number(id);
+  const { data: batiment, isLoading } = useBatiment(batimentId);
+  const { mutate: updateBatiment, isPending } = useUpdateBatiment(batimentId);
+
+  // Toilettes
+  const { mutate: createToilette } = useCreateToilette(batimentId);
+  const { mutate: updateToilette } = useUpdateToilette(batimentId);
+  const { mutate: deleteToilette } = useDeleteToilette(batimentId);
+
+  const [toilModalOpen, setToilModalOpen] = useState(false);
+  const [editToil, setEditToil] = useState<Toilette | null>(null);
+  const [delToilModalOpen, setDelToilModalOpen] = useState(false);
+  const [delToilTarget, setDelToilTarget] = useState<Toilette | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,6 +45,33 @@ export default function EditBatimentPage() {
       onSuccess: () => { toast.success('Bâtiment modifié'); router.push('/responsable/batiments'); },
       onError: () => toast.error('Erreur lors de la modification'),
     });
+  };
+
+  const openToilModal = (toilette?: Toilette) => {
+    setEditToil(toilette ?? null);
+    setToilModalOpen(true);
+  };
+
+  const handleSaveToilette = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const dto = {
+      nbCompartiment: Number(form.get('nbCompartiment')) || 0,
+      fonctionToilette: (form.get('fonctionToilette') as string) || undefined,
+      pointEau: form.get('pointEau') === 'on',
+    };
+
+    if (editToil) {
+      updateToilette({ id: editToil.idToilette, dto }, {
+        onSuccess: () => { toast.success('Toilette modifiée'); setToilModalOpen(false); },
+        onError: () => toast.error('Erreur'),
+      });
+    } else {
+      createToilette(dto, {
+        onSuccess: () => { toast.success('Toilette ajoutée'); setToilModalOpen(false); },
+        onError: () => toast.error('Erreur'),
+      });
+    }
   };
 
   if (isLoading) return <div className="mx-auto max-w-2xl"><Skeleton className="h-96" /></div>;
@@ -54,6 +98,99 @@ export default function EditBatimentPage() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Section Toilettes */}
+      <Card className="mt-6">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Bath className="h-5 w-5 text-gray-500" />
+            Toilettes / Latrines
+          </CardTitle>
+          <Button size="sm" onClick={() => openToilModal()}>
+            <Plus className="mr-1 h-4 w-4" /> Ajouter
+          </Button>
+        </CardHeader>
+        <CardContent>
+          {(!batiment.toilettes || batiment.toilettes.length === 0) ? (
+            <p className="py-6 text-center text-sm text-gray-400">Aucune toilette enregistrée</p>
+          ) : (
+            <div className="space-y-2">
+              {batiment.toilettes.map((toil) => (
+                <div key={toil.idToilette} className="group flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 hover:border-orange-200 hover:bg-orange-50/50 transition-all">
+                  <div className="flex items-center gap-4">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-medium text-blue-700">
+                      {toil.nbCompartiment}
+                    </span>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {toil.fonctionToilette === 'FILLES' ? '🚺 Filles' :
+                         toil.fonctionToilette === 'GARCONS' ? '🚹 Garçons' :
+                         toil.fonctionToilette === 'ENSEIGNANTS' ? '👨‍🏫 Enseignants' :
+                         toil.fonctionToilette === 'LATRINES' ? '🚽 Latrines' :
+                         toil.fonctionToilette || 'Toilette'}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {toil.nbCompartiment} compartiment{toil.nbCompartiment > 1 ? 's' : ''}
+                        {toil.pointEau ? ' · 💧 Point d\'eau' : ' · Sans point d\'eau'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => openToilModal(toil)} className="rounded-lg p-2 text-gray-400 hover:bg-blue-100 hover:text-blue-600 transition-colors">
+                      <Pencil className="h-4 w-4" />
+                    </button>
+                    <button onClick={() => { setDelToilTarget(toil); setDelToilModalOpen(true); }} className="rounded-lg p-2 text-gray-400 hover:bg-red-100 hover:text-red-600 transition-colors">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Modal Toilette */}
+      <Modal open={toilModalOpen} onClose={() => setToilModalOpen(false)} title={editToil ? 'Modifier la toilette' : 'Ajouter une toilette'}>
+        <form onSubmit={handleSaveToilette} className="space-y-4" key={editToil?.idToilette ?? 'new'}>
+          <div className="grid grid-cols-2 gap-4">
+            <Input id="nbCompartiment" name="nbCompartiment" label="Compartiments" type="number" defaultValue={editToil?.nbCompartiment ?? 0} />
+            <Select id="fonctionToilette" name="fonctionToilette" label="Fonction" defaultValue={editToil?.fonctionToilette ?? ''}
+              options={[
+                { value: '', label: 'Sélectionner' },
+                { value: 'FILLES', label: '🚺 Filles' },
+                { value: 'GARCONS', label: '🚹 Garçons' },
+                { value: 'ENSEIGNANTS', label: '👨‍🏫 Enseignants' },
+                { value: 'LATRINES', label: '🚽 Latrines' },
+              ]}
+            />
+          </div>
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" name="pointEau" defaultChecked={editToil?.pointEau ?? false} className="rounded" />
+            Point d&apos;eau disponible
+          </label>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button variant="outline" type="button" onClick={() => setToilModalOpen(false)}>Annuler</Button>
+            <Button type="submit">{editToil ? 'Modifier' : 'Ajouter'}</Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Modal confirmation suppression toilette */}
+      <Modal open={delToilModalOpen} onClose={() => setDelToilModalOpen(false)} title="Supprimer cette toilette ?">
+        <p className="mb-6 text-sm text-gray-600">Cette action est irréversible.</p>
+        <div className="flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setDelToilModalOpen(false)}>Annuler</Button>
+          <Button variant="danger" onClick={() => {
+            if (delToilTarget) {
+              deleteToilette(delToilTarget.idToilette, {
+                onSuccess: () => { toast.success('Toilette supprimée'); setDelToilModalOpen(false); setDelToilTarget(null); },
+                onError: () => toast.error('Erreur'),
+              });
+            }
+          }}>Supprimer</Button>
+        </div>
+      </Modal>
     </div>
   );
 }

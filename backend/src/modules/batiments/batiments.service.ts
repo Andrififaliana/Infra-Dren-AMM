@@ -3,6 +3,8 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { AuditService } from '../../common/services/audit.service';
 import { CreateBatimentDto } from './dto/create-batiment.dto';
 import { UpdateBatimentDto } from './dto/update-batiment.dto';
+import { CreateToiletteDto } from './dto/create-toilette.dto';
+import { UpdateToiletteDto } from './dto/update-toilette.dto';
 
 @Injectable()
 export class BatimentsService {
@@ -46,5 +48,31 @@ export class BatimentsService {
     await this.findOne(id);
     await this.prisma.batiment.delete({ where: { idBat: id } });
     await this.auditService.suppression('BATIMENT', id);
+  }
+
+  // ─── Toilettes ──────────────────────────────────────
+
+  async createToilette(batimentId: number, dto: CreateToiletteDto) {
+    await this.findOne(batimentId);
+    const toilette = await this.prisma.toilette.create({
+      data: { ...dto, batimentId },
+    });
+    await this.auditService.modification('BATIMENT', batimentId, 'Toilette ajoutée');
+    return toilette;
+  }
+
+  async updateToilette(id: number, batimentId: number, dto: UpdateToiletteDto) {
+    const existing = await this.prisma.toilette.findFirst({ where: { idToilette: id, batimentId } });
+    if (!existing) throw new NotFoundException(`Toilette #${id} non trouvée`);
+    const toilette = await this.prisma.toilette.update({ where: { idToilette: id }, data: dto });
+    await this.auditService.modification('BATIMENT', batimentId, 'Toilette modifiée');
+    return toilette;
+  }
+
+  async deleteToilette(id: number, batimentId: number) {
+    const existing = await this.prisma.toilette.findFirst({ where: { idToilette: id, batimentId } });
+    if (!existing) throw new NotFoundException(`Toilette #${id} non trouvée`);
+    await this.prisma.toilette.delete({ where: { idToilette: id } });
+    await this.auditService.modification('BATIMENT', batimentId, 'Toilette supprimée');
   }
 }

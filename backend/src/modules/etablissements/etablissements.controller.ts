@@ -26,6 +26,11 @@ import { EtablissementsService } from './etablissements.service';
 import { CreateEtablissementDto } from './dto/create-etablissement.dto';
 import { UpdateEtablissementDto } from './dto/update-etablissement.dto';
 import { EtablissementQueryDto } from './dto/etablissement-query.dto';
+import { UpsertDirecteurDto } from './dto/upsert-directeur.dto';
+import { CreateDesignationDto } from './dto/create-designation.dto';
+import { UpdateDesignationDto } from './dto/update-designation.dto';
+import { CreateStructureDto } from './dto/create-structure.dto';
+import { UpdateStructureDto } from './dto/update-structure.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -193,7 +198,7 @@ export class EtablissementsController {
   @ApiOperation({ summary: "Créer ou mettre à jour le directeur d'un établissement" })
   upsertDirecteur(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: any,
+    @Body() dto: UpsertDirecteurDto,
   ) {
     return this.etablissementsService.upsertDirecteur(id, dto);
   }
@@ -216,7 +221,7 @@ export class EtablissementsController {
   @ApiOperation({ summary: "Ajouter une désignation à un établissement" })
   createDesignation(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: any,
+    @Body() dto: CreateDesignationDto,
   ) {
     return this.etablissementsService.createDesignation(id, dto);
   }
@@ -229,7 +234,7 @@ export class EtablissementsController {
   updateDesignation(
     @Param('id', ParseIntPipe) id: number,
     @Param('designationId', ParseIntPipe) designationId: number,
-    @Body() dto: any,
+    @Body() dto: UpdateDesignationDto,
   ) {
     return this.etablissementsService.updateDesignation(designationId, id, dto);
   }
@@ -255,7 +260,7 @@ export class EtablissementsController {
   @ApiOperation({ summary: "Ajouter une structure à un établissement" })
   createStructure(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: any,
+    @Body() dto: CreateStructureDto,
   ) {
     return this.etablissementsService.createStructure(id, dto);
   }
@@ -268,7 +273,7 @@ export class EtablissementsController {
   updateStructure(
     @Param('id', ParseIntPipe) id: number,
     @Param('structureId', ParseIntPipe) structureId: number,
-    @Body() dto: any,
+    @Body() dto: UpdateStructureDto,
   ) {
     return this.etablissementsService.updateStructure(structureId, id, dto);
   }

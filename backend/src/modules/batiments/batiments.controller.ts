@@ -6,6 +6,8 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@ne
 import { BatimentsService } from './batiments.service';
 import { CreateBatimentDto } from './dto/create-batiment.dto';
 import { UpdateBatimentDto } from './dto/update-batiment.dto';
+import { CreateToiletteDto } from './dto/create-toilette.dto';
+import { UpdateToiletteDto } from './dto/update-toilette.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -52,5 +54,36 @@ export class BatimentsController {
   @ApiOperation({ summary: 'Supprimer un bâtiment' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.batimentsService.remove(id);
+  }
+
+  // ─── Toilettes ──────────────────────────────────────
+
+  @Post(':id/toilettes')
+  @ApiOperation({ summary: 'Ajouter une toilette à un bâtiment' })
+  createToilette(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: CreateToiletteDto,
+  ) {
+    return this.batimentsService.createToilette(id, dto);
+  }
+
+  @Patch(':id/toilettes/:toiletteId')
+  @ApiOperation({ summary: 'Modifier une toilette' })
+  updateToilette(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('toiletteId', ParseIntPipe) toiletteId: number,
+    @Body() dto: UpdateToiletteDto,
+  ) {
+    return this.batimentsService.updateToilette(toiletteId, id, dto);
+  }
+
+  @Delete(':id/toilettes/:toiletteId')
+  @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Supprimer une toilette' })
+  deleteToilette(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('toiletteId', ParseIntPipe) toiletteId: number,
+  ) {
+    return this.batimentsService.deleteToilette(toiletteId, id);
   }
 }

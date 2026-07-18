@@ -73,6 +73,12 @@ const navItems: NavItem[] = [
     icon: '💾',
     roles: ['ADMIN'],
   },
+  {
+    label: 'Profil',
+    href: '/responsable/profil',
+    icon: '👤',
+    roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
+  },
 ];
 
 interface SidebarProps {
