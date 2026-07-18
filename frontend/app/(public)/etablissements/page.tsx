@@ -57,21 +57,21 @@ export default function EtablissementsPage() {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               placeholder="Rechercher un établissement..."
-              className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20" />
+              className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20" />
           </div>
           <select value={filtreDren} onChange={(e) => { setFiltreDren(e.target.value); setPage(1); }}
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20">
+            className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
             <option value="">Tous districts</option>
             {drens.map((d) => <option key={d} value={d}>{d}</option>)}
           </select>
         </div>
         <div className="flex items-center gap-2 rounded-xl border border-gray-200 p-1">
           <button onClick={() => setViewMode('list')}
-            className={`rounded-lg p-2 transition-colors ${viewMode === 'list' ? 'bg-orange-100 text-orange-700' : 'text-gray-400 hover:text-gray-600'}`}>
+            className={`rounded-lg p-2 transition-colors ${viewMode === 'list' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
             <List className="h-4 w-4" />
           </button>
           <button onClick={() => setViewMode('gallery')}
-            className={`rounded-lg p-2 transition-colors ${viewMode === 'gallery' ? 'bg-orange-100 text-orange-700' : 'text-gray-400 hover:text-gray-600'}`}>
+            className={`rounded-lg p-2 transition-colors ${viewMode === 'gallery' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
             <LayoutGrid className="h-4 w-4" />
           </button>
         </div>
@@ -105,7 +105,7 @@ export default function EtablissementsPage() {
                     <span className="flex items-center gap-1"><Building2 className="h-3.5 w-3.5" /> {formatNumber(etab._count?.batiments ?? 0)}</span>
                     <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" /> {formatNumber(etab.nbEnseignantG + etab.nbEnseignantF)} ens.</span>
                     {(etab._count?.photos ?? 0) > 0 && (
-                      <span className="flex items-center gap-1 text-orange-500"><ImageIcon className="h-3.5 w-3.5" /> {etab._count?.photos}</span>
+                      <span className="flex items-center gap-1 text-green-500"><ImageIcon className="h-3.5 w-3.5" /> {etab._count?.photos}</span>
                     )}
                   </div>
                 </Card>
@@ -125,8 +125,8 @@ export default function EtablissementsPage() {
                   <img src={mainPhoto.url} alt={etab.nomEtab} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-orange-100 to-orange-50">
-                    <School className="h-20 w-20 text-orange-300/60" />
+                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-green-100 to-green-50">
+                    <School className="h-20 w-20 text-green-300/60" />
                   </div>
                 )}
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4">
