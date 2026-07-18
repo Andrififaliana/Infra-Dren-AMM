@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
-import { LayoutDashboard, School, Building2, DoorOpen, Package, Bus, Waves, Users } from 'lucide-react';
+import { LayoutDashboard, School, Building2, DoorOpen, Package, Bus, Waves, Users, ClipboardList, Save, User } from 'lucide-react';
 
 interface NavItem {
   label: string;
@@ -65,19 +65,19 @@ const navItems: NavItem[] = [
   {
     label: 'Journal d\'audit',
     href: '/admin/logs',
-    icon: '📋',
+    icon: <ClipboardList className="h-5 w-5" />,
     roles: ['ADMIN'],
   },
   {
     label: 'Sauvegarde',
     href: '/admin/backup',
-    icon: '💾',
+    icon: <Save className="h-5 w-5" />,
     roles: ['ADMIN'],
   },
   {
     label: 'Profil',
     href: '/responsable/profil',
-    icon: '👤',
+    icon: <User className="h-5 w-5" />,
     roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
   },
 ];
