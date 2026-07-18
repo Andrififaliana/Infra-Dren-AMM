@@ -490,7 +490,7 @@ export default function EditEtablissementPage() {
       {/* ═══════════════════════════════════════════════ */}
 
       {/* Modal Directeur */}
-      <Modal open={dirModalOpen} onClose={() => setDirModalOpen(false)} title="Directeur de l'établissement">
+      <Modal open={dirModalOpen} onClose={() => setDirModalOpen(false)} title="Directeur de l'établissement" size="xl">
         <form onSubmit={saveDirecteur} className="space-y-4">
           <Input id="dir_nom" label="Nom *" value={dirForm.nomDirecteur}
             onChange={(e) => setDirForm({ ...dirForm, nomDirecteur: e.target.value })} required />
@@ -509,7 +509,7 @@ export default function EditEtablissementPage() {
 
       {/* Modal Designation */}
       <Modal open={desModalOpen} onClose={() => setDesModalOpen(false)}
-        title={editingDes ? 'Modifier la désignation' : 'Nouvelle désignation'}>
+        title={editingDes ? 'Modifier la désignation' : 'Nouvelle désignation'} size="xl">
         <form onSubmit={saveDesignation} className="space-y-4">
           <Input id="des_nom" label="Nom *" value={desForm.nomDesign}
             onChange={(e) => setDesForm({ ...desForm, nomDesign: e.target.value })} required />
@@ -546,7 +546,7 @@ export default function EditEtablissementPage() {
 
       {/* Modal Structure */}
       <Modal open={strModalOpen} onClose={() => setStrModalOpen(false)}
-        title={editingStr ? 'Modifier la structure' : 'Nouvelle structure'}>
+        title={editingStr ? 'Modifier la structure' : 'Nouvelle structure'} size="xl">
         <form onSubmit={saveStructure} className="space-y-4">
           <Input id="str_type" label="Type de structure" value={strForm.typeStruc}
             onChange={(e) => setStrForm({ ...strForm, typeStruc: e.target.value })} placeholder="Ex: Bibliothèque, Laboratoire..." />

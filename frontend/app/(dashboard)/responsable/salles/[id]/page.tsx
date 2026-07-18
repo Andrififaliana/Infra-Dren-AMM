@@ -162,7 +162,7 @@ export default function EditSallePage() {
       </Card>
 
       {/* Modal Ouverture */}
-      <Modal open={ouvModalOpen} onClose={() => setOuvModalOpen(false)} title={editOuv ? 'Modifier l\'ouverture' : 'Ajouter une ouverture'}>
+      <Modal open={ouvModalOpen} onClose={() => setOuvModalOpen(false)} title={editOuv ? 'Modifier l\'ouverture' : 'Ajouter une ouverture'} size="xl">
         <form onSubmit={handleSaveOuverture} className="space-y-4" key={editOuv?.idOuvert ?? 'new'}>
           <Select id="typeOuvert" name="typeOuvert" label="Type" defaultValue={editOuv?.typeOuvert ?? ''}
             options={[{ value: '', label: 'Sélectionner' }, { value: 'FENETRE', label: 'Fenêtre' }, { value: 'PORTE', label: 'Porte' }, { value: 'FENETRE_PORTE', label: 'Fenêtre-Porte' }]}

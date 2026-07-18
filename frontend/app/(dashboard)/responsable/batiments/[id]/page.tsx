@@ -203,7 +203,7 @@ export default function EditBatimentPage() {
       </Card>
 
       {/* Modal Toilette */}
-      <Modal open={toilModalOpen} onClose={() => setToilModalOpen(false)} title={editToil ? 'Modifier la toilette' : 'Ajouter une toilette'}>
+      <Modal open={toilModalOpen} onClose={() => setToilModalOpen(false)} title={editToil ? 'Modifier la toilette' : 'Ajouter une toilette'} size="xl">
         <form onSubmit={handleSaveToilette} className="space-y-4" key={editToil?.idToilette ?? 'new'}>
           <div className="grid grid-cols-2 gap-4">
             <Input id="nbCompartiment" name="nbCompartiment" label="Compartiments" type="number" defaultValue={editToil?.nbCompartiment ?? 0} />
