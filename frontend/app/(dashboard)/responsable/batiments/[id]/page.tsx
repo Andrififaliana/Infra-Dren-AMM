@@ -124,7 +124,7 @@ export default function EditBatimentPage() {
           ) : (
             <div className="space-y-2">
               {batiment.toilettes.map((toil) => (
-                <div key={toil.idToilette} className="group flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 hover:border-orange-200 hover:bg-orange-50/50 transition-all">
+                <div key={toil.idToilette} className="group flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 hover:border-green-200 hover:bg-green-50/50 transition-all">
                   <div className="flex items-center gap-4">
                     <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-medium text-blue-700">
                       {toil.nbCompartiment}
