@@ -29,13 +29,13 @@ export function EtablissementPhoto({
     return (
       <div
         className={cn(
-          'flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-50',
+          'flex items-center justify-center bg-gradient-to-br from-green-100 to-green-50',
           fixedHeight && 'h-40',
           className,
         )}
       >
         <School
-          className="text-orange-300/60"
+          className="text-green-300/60"
           style={{ width: iconSize, height: iconSize }}
         />
       </div>
@@ -181,8 +181,8 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
                 className={cn(
                   'relative h-16 w-20 flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all',
                   idx === selectedIndex
-                    ? 'border-orange-500 ring-1 ring-orange-500'
-                    : 'border-transparent opacity-70 hover:opacity-100',
+                    'border-green-500 ring-1 ring-green-500'
+                      : 'border-transparent opacity-70 hover:opacity-100',
                 )}
               >
                 <img
