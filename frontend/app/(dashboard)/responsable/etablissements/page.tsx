@@ -57,8 +57,8 @@ export default function GestionEtablissementsPage() {
                   }}
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-orange-100 to-orange-50">
-                  <School className="h-5 w-5 text-orange-300/60" />
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-green-100 to-green-50">
+                  <School className="h-5 w-5 text-green-300/60" />
                 </div>
               )}
             </div>
