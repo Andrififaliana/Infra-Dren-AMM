@@ -52,9 +52,7 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-white to-green-50/30">
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-green-200/30 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-green-100/20 blur-3xl" />
+      <section className="relative overflow-hidden bg-green-50">
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -63,7 +61,7 @@ export default function HomePage() {
               </span>
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                 Gestion des{' '}
-                <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
+                <span className="text-green-700">
                   infrastructures scolaires
                 </span>
               </h1>
@@ -88,7 +86,7 @@ export default function HomePage() {
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="hidden lg:block">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-gradient-to-br from-green-100 to-green-50 shadow-xl">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-green-100 shadow-xl">
                 <div className="flex h-full items-center justify-center">
                   <School className="h-32 w-32 text-green-300" />
                 </div>
