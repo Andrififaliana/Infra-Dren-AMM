@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CardSkeleton } from '@/components/shared/loading-skeleton';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { formatNumber } from '@/lib/utils';
-import { School, Building2, DoorOpen, Package } from 'lucide-react';
+import { School, Building2, DoorOpen, Package, Phone, Globe } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -120,7 +120,7 @@ export default function TableauDeBordPage() {
                     <div key={c.type}>
                       <div className="mb-2 flex items-center justify-between text-sm">
                         <span className="font-medium">
-                          {c.type === 'telephone' ? '📞 Couverture téléphonique' : '🌐 Couverture Internet'}
+                          <span className="inline-flex items-center gap-1.5">{c.type === 'telephone' ? <><Phone className="h-4 w-4" /> Couverture téléphonique</> : <><Globe className="h-4 w-4" /> Couverture Internet</>}</span>
                         </span>
                         <span className="font-semibold text-gray-900">{c.couvert}%</span>
                       </div>
