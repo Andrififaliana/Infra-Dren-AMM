@@ -14,6 +14,14 @@ import { Modal } from '@/components/ui/modal';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Toilette } from '@/types/batiment';
 
+function getToiletteIcon(fonction?: string) {
+  if (fonction === 'FILLES') return <Venus className="h-4 w-4 text-pink-500" />;
+  if (fonction === 'GARCONS') return <Mars className="h-4 w-4 text-blue-500" />;
+  if (fonction === 'ENSEIGNANTS') return <GraduationCap className="h-4 w-4 text-amber-600" />;
+  if (fonction === 'LATRINES') return <Bath className="h-4 w-4 text-gray-500" />;
+  return null;
+}
+
 export default function EditBatimentPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -122,16 +130,18 @@ export default function EditBatimentPage() {
                       {toil.nbCompartiment}
                     </span>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        <span className="inline-flex items-center gap-1.5">{toil.fonctionToilette === 'FILLES' ? <><Venus className="h-4 w-4 text-pink-500" /> Filles</> :
-                         toil.fonctionToilette === 'GARCONS' ? <><Mars className="h-4 w-4 text-blue-500" /> Garçons</> :
-                         toil.fonctionToilette === 'ENSEIGNANTS' ? <><GraduationCap className="h-4 w-4 text-amber-600" /> Enseignants</> :
-                         toil.fonctionToilette === 'LATRINES' ? <><Bath className="h-4 w-4 text-gray-500" /> Latrines</> :
+                      <p className="text-sm font-medium text-gray-900 flex items-center gap-1.5">
+                        {getToiletteIcon(toil.fonctionToilette)}
+                        <span>{toil.fonctionToilette === 'FILLES' ? 'Filles' :
+                         toil.fonctionToilette === 'GARCONS' ? 'Garçons' :
+                         toil.fonctionToilette === 'ENSEIGNANTS' ? 'Enseignants' :
+                         toil.fonctionToilette === 'LATRINES' ? 'Latrines' :
                          toil.fonctionToilette || 'Toilette'}</span>
                       </p>
                       <p className="text-xs text-gray-500">
                         {toil.nbCompartiment} compartiment{toil.nbCompartiment > 1 ? 's' : ''}
-                        {toil.pointEau ? <span className="inline-flex items-center gap-1"> · <Droplets className="h-3.5 w-3.5 text-blue-400" /> Point d'eau</span> : ' · Sans point d'eau'}
+                         · {toil.pointEau ? <Droplets className="h-3.5 w-3.5 text-blue-400 inline mr-1" /> : null}
+                        {toil.pointEau ? "Point d'eau" : "Sans point d'eau"}
                       </p>
                     </div>
                   </div>
