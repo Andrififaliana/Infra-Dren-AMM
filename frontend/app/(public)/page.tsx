@@ -52,7 +52,7 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-green-50">
+      <section className="relative overflow-hidden">
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -86,9 +86,9 @@ export default function HomePage() {
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="hidden lg:block">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-green-100 shadow-xl">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-gray-50 shadow-sm border border-gray-100">
                 <div className="flex h-full items-center justify-center">
-                  <School className="h-32 w-32 text-green-300" />
+                  <School className="h-32 w-32 text-gray-200" />
                 </div>
               </div>
             </motion.div>
