@@ -26,7 +26,7 @@ export function StatCard({ title, value, icon, description, trend, className }: 
           )}
         </div>
         {icon && (
-          <div className="text-orange-500">
+          <div className="text-green-500">
             {typeof icon === 'string' ? <span className="text-2xl">{icon}</span> : icon}
           </div>
         )}
