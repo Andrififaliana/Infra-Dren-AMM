@@ -120,18 +120,18 @@ export function PhotoUpload({ etablissementId, photos = [] }: PhotoUploadProps) 
     <div className="space-y-4">
       {/* Compteur de photos */}
       {sortedPhotos.length > 0 && (
-        <div className="flex items-center justify-between rounded-xl bg-orange-50 px-4 py-2.5">
-          <div className="flex items-center gap-2 text-sm text-orange-700">
+        <div className="flex items-center justify-between rounded-xl bg-green-50 px-4 py-2.5">
+          <div className="flex items-center gap-2 text-sm text-green-700">
             <ImagePlus className="h-4 w-4" />
             <span className="font-medium">{sortedPhotos.length} photo{sortedPhotos.length > 1 ? 's' : ''}</span>
             {mainPhoto && (
-              <span className="ml-1 text-orange-500/70">
+              <span className="ml-1 text-green-500/70">
                 — {mainPhoto.originalName || 'Photo principale'}
               </span>
             )}
           </div>
           {photos.length !== sortedPhotos.length && (
-            <span className="text-xs text-orange-400">{photos.length} au total</span>
+            <span className="text-xs text-green-400">{photos.length} au total</span>
           )}
         </div>
       )}
@@ -142,7 +142,7 @@ export function PhotoUpload({ etablissementId, photos = [] }: PhotoUploadProps) 
           {sortedPhotos.map((photo, idx) => (
             <div
               key={photo.id}
-              className="group relative overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200/50 transition-all hover:ring-2 hover:ring-orange-300"
+              className="group relative overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200/50 transition-all hover:ring-2 hover:ring-green-300"
             >
               <button
                 type="button"
@@ -165,7 +165,7 @@ export function PhotoUpload({ etablissementId, photos = [] }: PhotoUploadProps) 
               </div>
 
               {photo.estPrincipale && (
-                <div className="absolute left-2 top-2 rounded-full bg-orange-500 p-1.5 shadow-lg">
+                <div className="absolute left-2 top-2 rounded-full bg-green-500 p-1.5 shadow-lg">
                   <Star className="h-3.5 w-3.5 text-white fill-white" />
                 </div>
               )}
@@ -177,7 +177,7 @@ export function PhotoUpload({ etablissementId, photos = [] }: PhotoUploadProps) 
                     type="button"
                     onClick={() => handleSetMain(photo.id)}
                     disabled={settingMain === photo.id}
-                    className="rounded-lg bg-white/20 p-1.5 text-white backdrop-blur-sm transition-colors hover:bg-orange-500/80"
+                    className="rounded-lg bg-white/20 p-1.5 text-white backdrop-blur-sm transition-colors hover:bg-green-500/80"
                     title="Définir comme principale"
                   >
                     {settingMain === photo.id ? (
@@ -228,12 +228,12 @@ export function PhotoUpload({ etablissementId, photos = [] }: PhotoUploadProps) 
                 ? 'border-gray-200 bg-gray-100 cursor-not-allowed'
                 : 'cursor-pointer',
               dragOver && !atLimit
-                ? 'scale-[1.02] border-orange-400 bg-orange-50 shadow-lg'
-                : !atLimit && 'border-gray-200 bg-gray-50 hover:border-orange-300 hover:bg-orange-50/50',
+                ? 'scale-[1.02] border-green-400 bg-green-50 shadow-lg'
+                : !atLimit && 'border-gray-200 bg-gray-50 hover:border-green-300 hover:bg-green-50/50',
             )}
           >
             {uploading ? (
-              <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+              <Loader2 className="h-8 w-8 animate-spin text-green-500" />
             ) : atLimit ? (
               <>
                 <div className="mb-3 rounded-xl bg-gray-200 p-3">
@@ -350,7 +350,7 @@ function LightboxModal({
 
       {/* Badge principale */}
       {current.estPrincipale && (
-        <span className="absolute top-4 left-1/2 -translate-x-1/2 rounded-full bg-orange-500 px-3 py-1.5 text-sm text-white shadow-lg">
+        <span className="absolute top-4 left-1/2 -translate-x-1/2 rounded-full bg-green-500 px-3 py-1.5 text-sm text-white shadow-lg">
           <Star className="mr-1 inline-block h-3.5 w-3.5 fill-white" />
           Photo principale
         </span>
