@@ -75,12 +75,12 @@ export default function EtablissementDetailPage() {
             <CardContent className="space-y-3 text-sm">
               {etab.directeur && (
                 <>
-                  <div className="flex items-center gap-2 text-gray-600"><Users className="h-4 w-4 text-orange-500" />{etab.directeur.nomDirecteur} {etab.directeur.prenomDr || ''}</div>
-                  {etab.directeur.emailDr && <div className="flex items-center gap-2 text-gray-600"><Mail className="h-4 w-4 text-orange-500" />{etab.directeur.emailDr}</div>}
-                  {etab.directeur.telDr && <div className="flex items-center gap-2 text-gray-600"><Phone className="h-4 w-4 text-orange-500" />{etab.directeur.telDr}</div>}
+                  <div className="flex items-center gap-2 text-gray-600"><Users className="h-4 w-4 text-green-500" />{etab.directeur.nomDirecteur} {etab.directeur.prenomDr || ''}</div>
+                  {etab.directeur.emailDr && <div className="flex items-center gap-2 text-gray-600"><Mail className="h-4 w-4 text-green-500" />{etab.directeur.emailDr}</div>}
+                  {etab.directeur.telDr && <div className="flex items-center gap-2 text-gray-600"><Phone className="h-4 w-4 text-green-500" />{etab.directeur.telDr}</div>}
                 </>
               )}
-              <div className="flex items-center gap-2 text-gray-600"><MapPin className="h-4 w-4 text-orange-500" />{[etab.commune, etab.fokontany, etab.quartier].filter(Boolean).join(', ') || 'Non renseigné'}</div>
+              <div className="flex items-center gap-2 text-gray-600"><MapPin className="h-4 w-4 text-green-500" />{[etab.commune, etab.fokontany, etab.quartier].filter(Boolean).join(', ') || 'Non renseigné'}</div>
             </CardContent>
           </Card>
         </motion.div>
@@ -108,20 +108,20 @@ export default function EtablissementDetailPage() {
             <CardHeader><CardTitle>Infrastructures</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2 text-sm"><Building2 className="h-4 w-4 text-orange-500" />Bâtiments</span>
+                <span className="flex items-center gap-2 text-sm"><Building2 className="h-4 w-4 text-green-500" />Bâtiments</span>
                 <span className="font-semibold">{formatNumber(etab._count?.batiments ?? 0)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2 text-sm"><DoorOpen className="h-4 w-4 text-orange-500" />Désignations</span>
+                <span className="flex items-center gap-2 text-sm"><DoorOpen className="h-4 w-4 text-green-500" />Désignations</span>
                 <span className="font-semibold">{formatNumber(etab._count?.designations ?? 0)}</span>
               </div>
               <div className="border-t pt-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-sm"><Wifi className="h-4 w-4 text-orange-500" />Internet</span>
+                  <span className="flex items-center gap-2 text-sm"><Wifi className="h-4 w-4 text-green-500" />Internet</span>
                   <Badge variant={etab.couvInternet ? 'success' : 'danger'}>{etab.couvInternet ? 'Disponible' : 'Non disponible'}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-sm"><Droplets className="h-4 w-4 text-orange-500" />Téléphone</span>
+                  <span className="flex items-center gap-2 text-sm"><Droplets className="h-4 w-4 text-green-500" />Téléphone</span>
                   <Badge variant={etab.couvTelephonique ? 'success' : 'danger'}>{etab.couvTelephonique ? 'Disponible' : 'Non disponible'}</Badge>
                 </div>
               </div>
