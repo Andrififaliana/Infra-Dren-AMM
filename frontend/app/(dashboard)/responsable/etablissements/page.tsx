@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { formatNumber } from '@/lib/utils';
-import { School, ImageIcon, Phone, Globe, Camera } from 'lucide-react';
+import { School, ImageIcon, Phone, Globe, Camera, Pencil, Trash2 } from 'lucide-react';
 import type { EtablissementListe } from '@/types/etablissement';
 
 export default function GestionEtablissementsPage() {
@@ -103,14 +103,14 @@ export default function GestionEtablissementsPage() {
             size="sm"
             onClick={() => router.push(`/responsable/etablissements/${item.id}`)}
           >
-            Modifier
+            <Pencil className="h-4 w-4" />
           </Button>
           <Button
-            variant="danger"
+            variant="ghost"
             size="sm"
             onClick={() => { setSelectedEtab(item); setDeleteModalOpen(true); }}
           >
-            Supprimer
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       ),
@@ -166,7 +166,7 @@ export default function GestionEtablissementsPage() {
           <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
             Annuler
           </Button>
-          <Button variant="danger" onClick={handleDelete} loading={isDeleting}>
+          <Button variant="ghost" onClick={handleDelete} loading={isDeleting}>
             Supprimer
           </Button>
         </div>

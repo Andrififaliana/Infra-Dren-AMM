@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Modal } from '@/components/ui/modal';
 import { Badge } from '@/components/ui/badge';
+import { Trash2 } from 'lucide-react';
 import { formatDateShort } from '@/lib/utils';
 import type { User, Role } from '@/types/user';
 
@@ -84,11 +85,11 @@ export default function UtilisateursPage() {
       render: (item: User) => (
         <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
           <Button
-            variant="danger"
+            variant="ghost"
             size="sm"
             onClick={() => { setSelectedUser(item); setDeleteModalOpen(true); }}
           >
-            Supprimer
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       ),
@@ -179,7 +180,7 @@ export default function UtilisateursPage() {
           <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
             Annuler
           </Button>
-          <Button variant="danger" onClick={handleDelete} loading={isDeleting}>
+          <Button variant="ghost" onClick={handleDelete} loading={isDeleting}>
             Supprimer
           </Button>
         </div>

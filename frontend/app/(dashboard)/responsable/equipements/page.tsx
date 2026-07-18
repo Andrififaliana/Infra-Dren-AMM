@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { toast } from 'sonner';
+import { Pencil, Trash2 } from 'lucide-react';
 import type { Equipement } from '@/types/equipement';
 
 export default function EquipementsPage() {
@@ -52,10 +53,10 @@ export default function EquipementsPage() {
       render: (item: Equipement) => (
         <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
           <Button variant="ghost" size="sm" onClick={() => router.push(`/responsable/equipements/${item.id}`)}>
-            Modifier
+            <Pencil className="h-4 w-4" />
           </Button>
-          <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedEquip(item); setDeleteModalOpen(true); }}>
-            Supprimer
+          <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedEquip(item); setDeleteModalOpen(true); }}>
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       ),
@@ -98,7 +99,7 @@ export default function EquipementsPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Annuler</Button>
-          <Button variant="danger" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
+          <Button variant="ghost" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
         </div>
       </Modal>
     </div>

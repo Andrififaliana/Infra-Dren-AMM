@@ -12,6 +12,7 @@ import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { formatNumber } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { Pencil, Trash2 } from 'lucide-react';
 import type { Batiment } from '@/types/batiment';
 
 export default function BatimentsPage() {
@@ -62,10 +63,10 @@ export default function BatimentsPage() {
       render: (item: Batiment) => (
         <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
           <Button variant="ghost" size="sm" onClick={() => router.push(`/responsable/batiments/${item.idBat}`)}>
-            Modifier
+            <Pencil className="h-4 w-4" />
           </Button>
-          <Button variant="danger" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedBat(item); setDeleteModalOpen(true); }}>
-            Supprimer
+          <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); setSelectedBat(item); setDeleteModalOpen(true); }}>
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       ),
@@ -108,7 +109,7 @@ export default function BatimentsPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Annuler</Button>
-          <Button variant="danger" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
+          <Button variant="ghost" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
         </div>
       </Modal>
     </div>
