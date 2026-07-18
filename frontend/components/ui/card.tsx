@@ -14,7 +14,7 @@ export function Card({ children, className, padding = true, hover = false, onCli
       onClick={onClick}
       className={cn(
         'rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-200',
-        hover && 'cursor-pointer hover:border-orange-200/60 hover:shadow-md',
+        hover && 'cursor-pointer hover:border-green-200/60 hover:shadow-md',
         onClick && 'cursor-pointer',
         padding && 'p-6',
         className
