@@ -7,656 +7,479 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-async function main() {
-  console.log('🌱 Début du seed...\n');
+function randomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-  // 1. Création des utilisateurs
+function randomFloat(min: number, max: number) {
+  return Math.round((Math.random() * (max - min) + min) * 100) / 100;
+}
+
+function pick<T>(arr: readonly T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function pickN<T>(arr: T[], n: number): T[] {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, n);
+}
+
+const etats = ['BON', 'MOYEN', 'MAUVAIS'] as const;
+const materiauxStructures = ['PARPAING', 'BRIQUE', 'BOIS', 'METAL', 'TERRE_BATTUE', 'BANCHE'] as const;
+const materiauxMur = ['PARPAING', 'BRIQUE', 'BANCHE', 'BOIS'] as const;
+const sourcesFinancement = ['ETAT', 'BANQUE_MONDIALE', 'BID', 'UNICEF', 'PAM', 'ONG', 'COMMUNAUTE', 'FONDS_PROPRES'] as const;
+const agencesConstruction = ['MINISTERE_EDUCATION', 'BANQUE_MONDIALE', 'BID', 'ONG_LOCALE', 'COMMUNE', 'FONDS_PROPRES'] as const;
+const fonctionsToilette = ['FILLES', 'GARCONS', 'ENSEIGNANTS', 'LATRINES'] as const;
+const typesEquipement = ['MOBILIER', 'MATERIEL_DIDACTIQUE', 'MATERIEL_SCIENTIFIQUE', 'INFORMATIQUE'] as const;
+const nomsEquipement: Record<string, string[]> = {
+  MOBILIER: ['Table-banc', 'Bureau', 'Chaise', 'Armoire', 'Bibliothèque', 'Table', 'Etagère'],
+  MATERIEL_DIDACTIQUE: ['Tableau noir', 'Tableau blanc', 'Carte géographique', 'Globe terrestre', 'Appareil de projection'],
+  MATERIEL_SCIENTIFIQUE: ['Microscope', 'Balance', 'Eprouvette', 'Boussole', 'Thermomètre'],
+  INFORMATIQUE: ['Ordinateur', 'Imprimante', 'Tablette', 'Projecteur'],
+};
+
+const prenomsDir = [
+  'Jean', 'Marie', 'Henri', 'Pauline', 'Faly', 'Lalao', 'Rivo', 'Mamy', 'Haja', 'Soa',
+  'Tiana', 'Nirina', 'Miora', 'Toky', 'Feno', 'Mbola', 'Voahirana', 'Harilala', 'Manitra', 'Tafita',
+];
+
+const nomsDir = [
+  'Rakotondrazaka', 'Randrianasolo', 'Razafimandimby', 'Rajaonarison', 'Rakotoarisoa',
+  'Andriamiarintsoa', 'Razanajatovo', 'Rakotomalala', 'Randriambeloma', 'Razanamparany',
+  'Rakotonirina', 'Andrianantenaina', 'Rakotovao', 'Razafindrakoto', 'Ranaivoson',
+];
+
+type ZapItem = { cis: string; zap: string; communs: string[] };
+
+const zaps: ZapItem[] = [
+  { cis: 'CISCO Ambositra', zap: 'ZAP Ambositra I', communs: ['Ambositra'] },
+  { cis: 'CISCO Ambositra', zap: 'ZAP Ambositra II', communs: ['Ambositra', 'Sahatsiho Ambohimanjaka'] },
+  { cis: 'CISCO Ambositra', zap: 'ZAP Ilaka', communs: ['Ilaka Centre', 'Ambohibary', 'Ankazoambo'] },
+  { cis: 'CISCO Ambositra', zap: 'ZAP Ivato', communs: ['Ivato', 'Isaha', 'Sandrandahy'] },
+  { cis: 'CISCO Ambositra', zap: 'ZAP Tsarazaza', communs: ['Tsarazaza', 'Ambalamanakana', 'Alatsinainy Ibity'] },
+  { cis: 'CISCO Ambositra', zap: 'ZAP Antoetra', communs: ['Antoetra', 'Ambinanindrano'] },
+  { cis: 'CISCO Ambositra', zap: 'ZAP Imady', communs: ['Imerina Imady', 'Maintinandry', 'Andina'] },
+  { cis: 'CISCO Fandriana', zap: 'ZAP Fandriana I', communs: ['Fandriana', 'Miarinavaratra'] },
+  { cis: 'CISCO Fandriana', zap: 'ZAP Fandriana II', communs: ['Sahamadio', 'Tolongoina', 'Mahazoarivo'] },
+  { cis: 'CISCO Fandriana', zap: 'ZAP Imito', communs: ['Imito', 'Miadanandriana'] },
+  { cis: 'CISCO Fandriana', zap: 'ZAP Fiadanana', communs: ['Fiadanana', 'Andohariana', 'Ambohimahazo'] },
+  { cis: 'CISCO Manandriana', zap: 'ZAP Manandriana I', communs: ['Ambovombe', 'Anjomakely', 'Ambohimahazo'] },
+  { cis: 'CISCO Manandriana', zap: 'ZAP Manandriana II', communs: ['Ankarimbary', 'Ambatomarina', 'Andoharano'] },
+  { cis: 'CISCO Ambatofinandrahana', zap: 'ZAP Ambatofinandrahana', communs: ['Ambatofinandrahana', 'Ambondromisotra'] },
+  { cis: 'CISCO Ambatofinandrahana', zap: 'ZAP Amborompotsy', communs: ['Amborompotsy', 'Ambatomifanongoa'] },
+  { cis: 'CISCO Ambatofinandrahana', zap: 'ZAP Ranotsara', communs: ['Ranotsara', 'Andohanosy', 'Soanindrariny'] },
+];
+
+function getZap(cis: string, commune: string): string | undefined {
+  return zaps.find(z => z.cis === cis && z.communs.includes(commune))?.zap;
+}
+
+function makeEtablissement(
+  nom: string,
+  ciscoNom: string,
+  commune: string,
+  fokontany: string,
+  quartier: string,
+): any {
+  const nbEnsG = randomInt(3, 25);
+  const nbEnsF = randomInt(5, 30);
+  const nbSecG = randomInt(2, 12);
+  const nbSecF = randomInt(3, 15);
+  const nbBatiments = randomInt(1, 3);
+
+  const sallesParBatiment = (): any[] => {
+    const n = randomInt(1, 5);
+    const salles: any[] = [];
+    for (let i = 0; i < n; i++) {
+      const niveau = randomInt(0, 3);
+      const longueur = randomFloat(5, 10);
+      const hauteur = randomFloat(2.5, 4);
+      const estOp = Math.random() > 0.2;
+      salles.push({
+        sigleSalle: `S${String(niveau + 1)}${String(i + 1).padStart(2, '0')}`,
+        niveauSalle: niveau,
+        affectationSalle: Math.random() > 0.15 ? 'CLASSE' : pick(['LABORATOIRE', 'ADMINISTRATION', 'BIBLIOTHEQUE']),
+        etatSalle: pick(etats),
+        estOperationnel: estOp,
+        estElectrifiee: Math.random() > 0.3,
+        longueurInt: longueur,
+        hauteurSP: hauteur,
+        nbEleveF: estOp ? randomInt(10, 30) : 0,
+        nbEleveG: estOp ? randomInt(8, 28) : 0,
+        equipements: {
+          create: pickN(nomsEquipement.MOBILIER, randomInt(1, 3)).map(nom => ({
+            nomEquip: nom,
+            typeEquip: 'MOBILIER',
+            etat: pick(etats),
+            quantite: randomInt(5, 30),
+          })).concat(
+            Math.random() > 0.5
+              ? pickN(nomsEquipement.MATERIEL_DIDACTIQUE, 1).map(nom => ({
+                  nomEquip: nom,
+                  typeEquip: 'MATERIEL_DIDACTIQUE',
+                  etat: pick(etats),
+                  quantite: 1,
+                }))
+              : []
+          ),
+        },
+        ouvertures: {
+          create: [
+            { typeOuvert: 'FENETRE', nbOuvert: randomInt(2, 6), largeurOuvert: 1.2, hauteurOuvert: 1.5, surfaceOuvert: 1.8 },
+            { typeOuvert: 'PORTE', nbOuvert: 1, largeurOuvert: 0.9, hauteurOuvert: 2.1, surfaceOuvert: 1.89 },
+          ],
+        },
+      } as any);
+    }
+    return salles;
+  };
+
+  const batiments: any[] = [];
+  for (let b = 0; b < nbBatiments; b++) {
+    const nbToilTypes = randomInt(0, 3);
+    const toilettes = fonctionsToilette.slice(0, nbToilTypes).map(f => ({
+      nbCompartiment: randomInt(1, 6),
+      fonctionToilette: f,
+      pointEau: Math.random() > 0.4,
+    }));
+    batiments.push({
+      sigleBat: `BAT-${String.fromCharCode(65 + b)}`,
+      nbNiveau: randomInt(1, 2),
+      srcFic: pick(sourcesFinancement),
+      agenceC: pick(agencesConstruction),
+      anneeRecProvC: new Date(`${randomInt(2015, 2021)}-01-01`),
+      anneeDefC: new Date(`${randomInt(2016, 2022)}-06-01`),
+      dispositifAc: Math.random() > 0.5 ? 'EXTINCTEUR' : undefined,
+      salles: { create: sallesParBatiment() },
+      toilettes: toilettes.length > 0 ? { create: toilettes } : undefined,
+    } as any);
+  }
+
+  const nbDesigs = randomInt(0, 2);
+  const designations = nbDesigs > 0
+    ? Array.from({ length: nbDesigs }, (_, i) => ({
+        nomDesign: `Terrain ${String.fromCharCode(65 + i)}`,
+        estEnceinteEtab: Math.random() > 0.3,
+        estTitre: Math.random() > 0.5,
+        typeDesignation: pick(['TITRE_FONCIER', 'ARRETE', 'OCCUPATION']),
+        numCadastre: Math.random() > 0.3 ? `TG ${String(randomInt(10000, 99999))}` : undefined,
+        superficieDesign: randomFloat(500, 8000),
+        estLitigieux: Math.random() > 0.8,
+      }))
+    : [];
+
+  const nbStructures = randomInt(0, 3);
+  const typesStructure = ['MUR_CLOTURE', 'PORTAL', 'TERRAIN_SPORT', 'BIBLIOTHEQUE', 'LABORATOIRE', 'INFIRMERIE', 'CANTINE'];
+  const structures = nbStructures > 0
+    ? pickN(typesStructure, nbStructures).map(type => ({
+        typeStruc: type,
+        existenceStruc: Math.random() > 0.15,
+        materiauxStruc: type === 'MUR_CLOTURE' || type === 'PORTAL' ? pick(materiauxMur) : pick(materiauxStructures),
+        etatStruc: pick(etats),
+      }))
+    : [];
+
+  return {
+    nomEtab: nom,
+    dren: "DREN Amoron'i Mania",
+    cisco: ciscoNom,
+    zap: getZap(ciscoNom, commune) || undefined,
+    commune,
+    fokontany,
+    quartier,
+    couvTelephonique: Math.random() > 0.25,
+    couvInternet: Math.random() > 0.5,
+    nbEnseignantG: nbEnsG,
+    nbEnseignantF: nbEnsF,
+    nbSectionG: nbSecG,
+    nbSectionF: nbSecF,
+    directeur: {
+      create: {
+        nomDirecteur: pick(nomsDir),
+        prenomDr: pick(prenomsDir),
+        emailDr: `directeur.${nom.toLowerCase().replace(/[^a-z0-9]/g, '')}@education.mg`,
+        telDr: `+261 ${randomInt(32, 34)} ${randomInt(10, 99)} ${randomInt(10, 99)} ${randomInt(10, 99)}`,
+      },
+    },
+    designations: designations.length > 0 ? { create: designations } : undefined,
+    structures: structures.length > 0 ? { create: structures } : undefined,
+    batiments: { create: batiments },
+  };
+}
+
+const ecoles: {
+  nom: string;
+  cisco: string;
+  commune: string;
+  fokontany: string;
+  quartier: string;
+}[] = [
+  // ── CISCO Ambositra ──────────────────────────────
+  { nom: "Lycée Rakotoarisoa Ambositra", cisco: "CISCO Ambositra", commune: "Ambositra", fokontany: "Ambositra Centre", quartier: "Antsahameva" },
+  { nom: "CEG Ambositra", cisco: "CISCO Ambositra", commune: "Ambositra", fokontany: "Ambositra Centre", quartier: "Andohan'Ambositra" },
+  { nom: "EPP Ambositra I", cisco: "CISCO Ambositra", commune: "Ambositra", fokontany: "Ambositra Est", quartier: "Antanambao" },
+  { nom: "EPP Ambositra II", cisco: "CISCO Ambositra", commune: "Ambositra", fokontany: "Ambositra Ouest", quartier: "Tsaralàna" },
+  { nom: "EPP Sahatsiho Ambohimanjaka", cisco: "CISCO Ambositra", commune: "Sahatsiho Ambohimanjaka", fokontany: "Ambohimanjaka", quartier: "Centre" },
+  { nom: "CEG Sahatsiho Ambohimanjaka", cisco: "CISCO Ambositra", commune: "Sahatsiho Ambohimanjaka", fokontany: "Sahatsiho", quartier: "Nord" },
+  { nom: "EPP Ambohibary", cisco: "CISCO Ambositra", commune: "Ambohibary", fokontany: "Ambohibary Est", quartier: "Atsimo" },
+  { nom: "CEG Ambohibary", cisco: "CISCO Ambositra", commune: "Ambohibary", fokontany: "Ambohibary Ouest", quartier: "Centre" },
+  { nom: "EPP Ilaka Centre", cisco: "CISCO Ambositra", commune: "Ilaka Centre", fokontany: "Ilaka", quartier: "Andrefana" },
+  { nom: "CEG Ilaka", cisco: "CISCO Ambositra", commune: "Ilaka Centre", fokontany: "Ilaka Nord", quartier: "Est" },
+  { nom: "EPP Ivato", cisco: "CISCO Ambositra", commune: "Ivato", fokontany: "Ivato Centre", quartier: "Ambatobe" },
+  { nom: "CEG Ivato", cisco: "CISCO Ambositra", commune: "Ivato", fokontany: "Ivato Atsimo", quartier: "Andoharanofotsy" },
+  { nom: "EPP Antoetra", cisco: "CISCO Ambositra", commune: "Antoetra", fokontany: "Antoetra", quartier: "Zafimaniry" },
+  { nom: "EPP Imerina Imady", cisco: "CISCO Ambositra", commune: "Imerina Imady", fokontany: "Imady Centre", quartier: "Ambony" },
+  { nom: "CEG Andina", cisco: "CISCO Ambositra", commune: "Andina", fokontany: "Andina", quartier: "Firaisana" },
+  { nom: "EPP Tsarazaza", cisco: "CISCO Ambositra", commune: "Tsarazaza", fokontany: "Tsarazaza", quartier: "Centre" },
+  { nom: "EPP Sandrandahy", cisco: "CISCO Ambositra", commune: "Sandrandahy", fokontany: "Sandrandahy", quartier: "Ambohimanarina" },
+  { nom: "CEG Isaha", cisco: "CISCO Ambositra", commune: "Isaha", fokontany: "Isaha", quartier: "Atsimo" },
+
+  // ── CISCO Fandriana ──────────────────────────────
+  { nom: "Lycée Fandriana", cisco: "CISCO Fandriana", commune: "Fandriana", fokontany: "Fandriana Centre", quartier: "Antsahameva" },
+  { nom: "CEG Fandriana", cisco: "CISCO Fandriana", commune: "Fandriana", fokontany: "Fandriana Est", quartier: "Ambony" },
+  { nom: "EPP Fandriana I", cisco: "CISCO Fandriana", commune: "Fandriana", fokontany: "Fandriana Centre", quartier: "Andrefana" },
+  { nom: "EPP Fandriana II", cisco: "CISCO Fandriana", commune: "Fandriana", fokontany: "Fandriana Ouest", quartier: "Atsimo" },
+  { nom: "EPP Sahamadio", cisco: "CISCO Fandriana", commune: "Sahamadio", fokontany: "Sahamadio Centre", quartier: "Nord" },
+  { nom: "CEG Sahamadio", cisco: "CISCO Fandriana", commune: "Sahamadio", fokontany: "Sahamadio Atsimo", quartier: "Est" },
+  { nom: "Lycée Technique Fandriana", cisco: "CISCO Fandriana", commune: "Fandriana", fokontany: "Fandriana Nord", quartier: "Ankadivory" },
+  { nom: "EPP Mahazoarivo", cisco: "CISCO Fandriana", commune: "Mahazoarivo", fokontany: "Mahazoarivo", quartier: "Firaisana" },
+  { nom: "CEG Miarinavaratra", cisco: "CISCO Fandriana", commune: "Miarinavaratra", fokontany: "Miarinavaratra", quartier: "Ambany" },
+  { nom: "EPP Imito", cisco: "CISCO Fandriana", commune: "Imito", fokontany: "Imito", quartier: "Andrefana" },
+  { nom: "CEG Fiadanana", cisco: "CISCO Fandriana", commune: "Fiadanana", fokontany: "Fiadanana", quartier: "Centre" },
+
+  // ── CISCO Manandriana ────────────────────────────
+  { nom: "CEG Manandriana", cisco: "CISCO Manandriana", commune: "Ambovombe", fokontany: "Manandriana Centre", quartier: "Antaninarenina" },
+  { nom: "Lycée Manandriana", cisco: "CISCO Manandriana", commune: "Ambovombe", fokontany: "Ambovombe", quartier: "Est" },
+  { nom: "EPP Ambovombe", cisco: "CISCO Manandriana", commune: "Ambovombe", fokontany: "Ambovombe Nord", quartier: "Ouest" },
+  { nom: "EPP Anjomakely", cisco: "CISCO Manandriana", commune: "Anjomakely", fokontany: "Anjomakely", quartier: "Firaisana" },
+  { nom: "CEG Ankarimbary", cisco: "CISCO Manandriana", commune: "Ankarimbary", fokontany: "Ankarimbary", quartier: "Atsimo" },
+  { nom: "EPP Ambatomarina", cisco: "CISCO Manandriana", commune: "Ambatomarina", fokontany: "Ambatomarina", quartier: "Centre" },
+  { nom: "CEG Andoharano", cisco: "CISCO Manandriana", commune: "Andoharano", fokontany: "Andoharano", quartier: "Nord" },
+
+  // ── CISCO Ambatofinandrahana ──────────────────────
+  { nom: "Lycée Ambatofinandrahana", cisco: "CISCO Ambatofinandrahana", commune: "Ambatofinandrahana", fokontany: "Ambatofinandrahana Centre", quartier: "Antsahameva" },
+  { nom: "CEG Ambatofinandrahana", cisco: "CISCO Ambatofinandrahana", commune: "Ambatofinandrahana", fokontany: "Ambatofinandrahana Est", quartier: "Andrefana" },
+  { nom: "EPP Ambatofinandrahana I", cisco: "CISCO Ambatofinandrahana", commune: "Ambatofinandrahana", fokontany: "Ambatofinandrahana Centre", quartier: "Ambony" },
+  { nom: "EPP Ambatofinandrahana II", cisco: "CISCO Ambatofinandrahana", commune: "Ambatofinandrahana", fokontany: "Ambatofinandrahana Ouest", quartier: "Atsimo" },
+  { nom: "CEG Ambondromisotra", cisco: "CISCO Ambatofinandrahana", commune: "Ambondromisotra", fokontany: "Ambondromisotra", quartier: "Centre" },
+  { nom: "EPP Amborompotsy", cisco: "CISCO Ambatofinandrahana", commune: "Amborompotsy", fokontany: "Amborompotsy", quartier: "Antsahameva" },
+  { nom: "CEG Ambatomifanongoa", cisco: "CISCO Ambatofinandrahana", commune: "Ambatomifanongoa", fokontany: "Ambatomifanongoa", quartier: "Firaisana" },
+  { nom: "EPP Ranotsara", cisco: "CISCO Ambatofinandrahana", commune: "Ranotsara", fokontany: "Ranotsara", quartier: "Nord" },
+];
+
+async function main() {
+  console.log('🌱 Début du seed DREN Amoron\'i Mania...\n');
+
+  // 1. Utilisateurs
   console.log('👤 Création des utilisateurs...');
   await prisma.user.upsert({
-    where: { email: 'admin@dren.mg' },
+    where: { email: 'admin@amm.mg' },
     update: {},
     create: {
-      email: 'admin@dren.mg',
+      email: 'admin@amm.mg',
       nom: 'Rakotoarisoa Jean',
       role: 'ADMIN',
-      supabaseUserId: 'seed-admin',
+      supabaseUserId: 'seed-admin-amm',
     },
   });
-
   await prisma.user.upsert({
-    where: { email: 'responsable@dren.mg' },
+    where: { email: 'responsable@amm.mg' },
     update: {},
     create: {
-      email: 'responsable@dren.mg',
+      email: 'responsable@amm.mg',
       nom: 'Randrianasolo Marie',
       role: 'RESPONSABLE_INFRASTRUCTURE',
-      supabaseUserId: 'seed-resp1',
+      supabaseUserId: 'seed-resp-amm',
     },
   });
 
-  // 2. Création des établissements avec toutes leurs relations
-  console.log('🏫 Création des établissements...');
+  // 2. Nettoyage des données existantes (ordre inverse des dépendances)
+  console.log('🧹 Nettoyage des données existantes...');
+  await prisma.effetAleat.deleteMany();
+  await prisma.log.deleteMany();
+  await prisma.ouverture.deleteMany();
+  await prisma.equipement.deleteMany();
+  await prisma.salle.deleteMany();
+  await prisma.toilette.deleteMany();
+  await prisma.batiment.deleteMany();
+  await prisma.directeur.deleteMany();
+  await prisma.designation.deleteMany();
+  await prisma.structure.deleteMany();
+  await prisma.photo.deleteMany();
+  await prisma.etablissement.deleteMany();
+  await prisma.trajet.deleteMany();
+  await prisma.periodeDifficile.deleteMany();
+  await prisma.moyens.deleteMany();
+  await prisma.alea.deleteMany();
 
-  // Établissement 1: École Primaire d'Ambohimanarina
-  await prisma.etablissement.create({
-    data: {
-      nomEtab: "École Primaire Publique d'Ambohimanarina",
-      dren: 'DREN Analamanga',
-      cisco: 'CISCO Antananarivo-Renivohitra',
-      commune: 'Ambohimanarina',
-      fokontany: 'Ambohimanarina Centre',
-      quartier: 'Quartier A',
-      couvTelephonique: true,
-      couvInternet: true,
-      nbEnseignantG: 8,
-      nbEnseignantF: 12,
-      nbSectionG: 6,
-      nbSectionF: 8,
+  // 3. Création des établissements
+  console.log(`🏫 Création de ${ecoles.length} établissements...`);
+  for (const ecole of ecoles) {
+    const data = makeEtablissement(ecole.nom, ecole.cisco, ecole.commune, ecole.fokontany, ecole.quartier);
+    await prisma.etablissement.create({ data: data as any });
+  }
+  console.log(`   ✅ ${ecoles.length} établissements créés`);
 
-      directeur: {
-        create: {
-          nomDirecteur: 'Rakotondrazaka',
-          prenomDr: 'Henri',
-          emailDr: 'directeur.ambohimanarina@education.mg',
-          telDr: '+261 34 12 345 67',
-        },
-      },
-
-      designations: {
-        create: [
-          {
-            nomDesign: 'Terrain A',
-            estEnceinteEtab: true,
-            estTitre: true,
-            typeDesignation: 'TITRE_FONCIER',
-            numCadastre: 'TG 12345',
-            superficieDesign: 2500.0,
-            estLitigieux: false,
-          },
-        ],
-      },
-
-      structures: {
-        create: [
-          {
-            typeStruc: 'MUR_CLOTURE',
-            existenceStruc: true,
-            materiauxStruc: 'PARPAING',
-            etatStruc: 'BON',
-          },
-          {
-            typeStruc: 'PORTAL',
-            existenceStruc: true,
-            materiauxStruc: 'METAL',
-            etatStruc: 'MOYEN',
-          },
-          {
-            typeStruc: 'TERRAIN_SPORT',
-            existenceStruc: true,
-            materiauxStruc: 'TERRE_BATTUE',
-            etatStruc: 'MAUVAIS',
-          },
-        ],
-      },
-
-      batiments: {
-        create: [
-          {
-            sigleBat: 'BAT-A',
-            nbNiveau: 1,
-            srcFic: 'BANQUE_MONDIALE',
-            agenceC: 'BANQUE_MONDIALE',
-            anneeRecProvC: new Date('2018-01-01'),
-            anneeDefC: new Date('2019-06-01'),
-            anneeR: new Date('2023-03-01'),
-            dispositifAc: 'EXTINCTEUR',
-            salles: {
-              create: [
-                {
-                  sigleSalle: 'CLASSE-01',
-                  niveauSalle: 0,
-                  affectationSalle: 'CLASSE',
-                  etatSalle: 'BON',
-                  estOperationnel: true,
-                  estElectrifiee: true,
-                  longueurInt: 8.0,
-                  hauteurSP: 3.5,
-                  nbEleveF: 15,
-                  nbEleveG: 17,
-                  equipements: {
-                    create: [
-                      {
-                        nomEquip: 'Table-banc',
-                        typeEquip: 'MOBILIER',
-                        etat: 'BON',
-                        quantite: 20,
-                      },
-                      {
-                        nomEquip: 'Tableau noir',
-                        typeEquip: 'MATERIEL_DIDACTIQUE',
-                        etat: 'MOYEN',
-                        quantite: 1,
-                      },
-                      {
-                        nomEquip: 'Bibliothèque',
-                        typeEquip: 'MOBILIER',
-                        etat: 'BON',
-                        quantite: 1,
-                      },
-                    ],
-                  },
-                  ouvertures: {
-                    create: [
-                      {
-                        typeOuvert: 'FENETRE',
-                        nbOuvert: 4,
-                        largeurOuvert: 1.2,
-                        hauteurOuvert: 1.5,
-                        surfaceOuvert: 1.8,
-                      },
-                      {
-                        typeOuvert: 'PORTE',
-                        nbOuvert: 1,
-                        largeurOuvert: 0.9,
-                        hauteurOuvert: 2.1,
-                        surfaceOuvert: 1.89,
-                      },
-                    ],
-                  },
-                },
-                {
-                  sigleSalle: 'CLASSE-02',
-                  niveauSalle: 0,
-                  affectationSalle: 'CLASSE',
-                  etatSalle: 'MOYEN',
-                  estOperationnel: true,
-                  estElectrifiee: true,
-                  longueurInt: 7.5,
-                  hauteurSP: 3.2,
-                  nbEleveF: 14,
-                  nbEleveG: 16,
-                  equipements: {
-                    create: [
-                      {
-                        nomEquip: 'Table-banc',
-                        typeEquip: 'MOBILIER',
-                        etat: 'MOYEN',
-                        quantite: 18,
-                      },
-                      {
-                        nomEquip: 'Tableau noir',
-                        typeEquip: 'MATERIEL_DIDACTIQUE',
-                        etat: 'MAUVAIS',
-                        quantite: 1,
-                      },
-                    ],
-                  },
-                },
-                {
-                  sigleSalle: 'BUREAU-DIR',
-                  niveauSalle: 0,
-                  affectationSalle: 'ADMINISTRATION',
-                  etatSalle: 'BON',
-                  estOperationnel: true,
-                  estElectrifiee: true,
-                  longueurInt: 4.0,
-                  hauteurSP: 3.0,
-                  nbEleveF: 0,
-                  nbEleveG: 0,
-                  equipements: {
-                    create: [
-                      {
-                        nomEquip: 'Bureau',
-                        typeEquip: 'MOBILIER',
-                        etat: 'BON',
-                        quantite: 1,
-                      },
-                      {
-                        nomEquip: 'Chaise',
-                        typeEquip: 'MOBILIER',
-                        etat: 'BON',
-                        quantite: 3,
-                      },
-                      {
-                        nomEquip: 'Armoire',
-                        typeEquip: 'MOBILIER',
-                        etat: 'MOYEN',
-                        quantite: 2,
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-            toilettes: {
-              create: [
-                {
-                  nbCompartiment: 4,
-                  fonctionToilette: 'FILLES',
-                  pointEau: true,
-                },
-                {
-                  nbCompartiment: 3,
-                  fonctionToilette: 'GARCONS',
-                  pointEau: true,
-                },
-                {
-                  nbCompartiment: 1,
-                  fonctionToilette: 'ENSEIGNANTS',
-                  pointEau: true,
-                },
-              ],
-            },
-          },
-          {
-            sigleBat: 'BAT-B',
-            nbNiveau: 1,
-            srcFic: 'ETAT',
-            agenceC: 'MINISTERE_EDUCATION',
-            dispositifAc: 'EXTINCTEUR',
-            salles: {
-              create: [
-                {
-                  sigleSalle: 'CLASSE-03',
-                  niveauSalle: 0,
-                  affectationSalle: 'CLASSE',
-                  etatSalle: 'MAUVAIS',
-                  estOperationnel: false,
-                  estElectrifiee: false,
-                  longueurInt: 7.0,
-                  hauteurSP: 3.0,
-                  nbEleveF: 0,
-                  nbEleveG: 0,
-                },
-              ],
-            },
-            toilettes: {
-              create: [
-                {
-                  nbCompartiment: 2,
-                  fonctionToilette: 'LATRINES',
-                  pointEau: false,
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  });
-
-  // Établissement 2: Collège d'Enseignement Général (CEG) d'Anosizato
-  await prisma.etablissement.create({
-    data: {
-      nomEtab: 'CEG Anosizato',
-      dren: 'DREN Analamanga',
-      cisco: 'CISCO Antananarivo-Renivohitra',
-      commune: 'Anosizato',
-      fokontany: 'Anosizato Ouest',
-      quartier: 'Quartier Industriel',
-      couvTelephonique: true,
-      couvInternet: false,
-      nbEnseignantG: 18,
-      nbEnseignantF: 15,
-      nbSectionG: 10,
-      nbSectionF: 12,
-
-      directeur: {
-        create: {
-          nomDirecteur: 'Razafimandimby',
-          prenomDr: 'Pauline',
-          emailDr: 'directeur.ceganosizato@education.mg',
-          telDr: '+261 33 98 765 43',
-        },
-      },
-
-      designations: {
-        create: [
-          {
-            nomDesign: 'Terrain Principal',
-            estEnceinteEtab: true,
-            estTitre: false,
-            typeDesignation: 'ARRETE',
-            superficieDesign: 5000.0,
-            estLitigieux: true,
-          },
-        ],
-      },
-
-      structures: {
-        create: [
-          {
-            typeStruc: 'MUR_CLOTURE',
-            existenceStruc: true,
-            materiauxStruc: 'BRIQUE',
-            etatStruc: 'MAUVAIS',
-          },
-          {
-            typeStruc: 'PORTAL',
-            existenceStruc: true,
-            materiauxStruc: 'BOIS',
-            etatStruc: 'MAUVAIS',
-          },
-        ],
-      },
-
-      batiments: {
-        create: [
-          {
-            sigleBat: 'PEDAGO-1',
-            nbNiveau: 2,
-            srcFic: 'BID',
-            agenceC: 'BID',
-            dispositifAc: 'EXTINCTEUR',
-            salles: {
-              create: [
-                {
-                  sigleSalle: 'S101',
-                  niveauSalle: 1,
-                  affectationSalle: 'CLASSE',
-                  etatSalle: 'BON',
-                  estOperationnel: true,
-                  estElectrifiee: true,
-                  longueurInt: 9.0,
-                  hauteurSP: 3.5,
-                  nbEleveF: 20,
-                  nbEleveG: 22,
-                  equipements: {
-                    create: [
-                      {
-                        nomEquip: 'Table-banc',
-                        typeEquip: 'MOBILIER',
-                        etat: 'BON',
-                        quantite: 25,
-                      },
-                      {
-                        nomEquip: 'Tableau blanc',
-                        typeEquip: 'MATERIEL_DIDACTIQUE',
-                        etat: 'BON',
-                        quantite: 1,
-                      },
-                    ],
-                  },
-                },
-                {
-                  sigleSalle: 'S102',
-                  niveauSalle: 1,
-                  affectationSalle: 'CLASSE',
-                  etatSalle: 'BON',
-                  estOperationnel: true,
-                  estElectrifiee: true,
-                  longueurInt: 9.0,
-                  hauteurSP: 3.5,
-                  nbEleveF: 18,
-                  nbEleveG: 20,
-                },
-                {
-                  sigleSalle: 'LABO-SCIENCES',
-                  niveauSalle: 2,
-                  affectationSalle: 'LABORATOIRE',
-                  etatSalle: 'MOYEN',
-                  estOperationnel: true,
-                  estElectrifiee: true,
-                  longueurInt: 10.0,
-                  hauteurSP: 4.0,
-                  equipements: {
-                    create: [
-                      {
-                        nomEquip: 'Paillasse',
-                        typeEquip: 'MOBILIER',
-                        etat: 'MOYEN',
-                        quantite: 8,
-                      },
-                      {
-                        nomEquip: 'Microscope',
-                        typeEquip: 'MATERIEL_SCIENTIFIQUE',
-                        etat: 'BON',
-                        quantite: 5,
-                      },
-                      {
-                        nomEquip: 'Balance',
-                        typeEquip: 'MATERIEL_SCIENTIFIQUE',
-                        etat: 'MOYEN',
-                        quantite: 3,
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  });
-
-  // Établissement 3: École Primaire d'Ambohibary - DREN Itasy
-  await prisma.etablissement.create({
-    data: {
-      nomEtab: "École Primaire Publique d'Ambohibary",
-      dren: 'DREN Itasy',
-      cisco: 'CISCO Arivonimamo',
-      commune: 'Ambohibary',
-      fokontany: 'Ambohibary Est',
-      quartier: 'Centre',
-      couvTelephonique: true,
-      couvInternet: false,
-      nbEnseignantG: 4,
-      nbEnseignantF: 6,
-      nbSectionG: 3,
-      nbSectionF: 4,
-
-      directeur: {
-        create: {
-          nomDirecteur: 'Rajaonarison',
-          prenomDr: 'Faly',
-          emailDr: 'directeur.ambohibary@education.mg',
-          telDr: '+261 32 56 78 90',
-        },
-      },
-
-      designations: {
-        create: [
-          {
-            nomDesign: 'Terrain scolaire',
-            estEnceinteEtab: false,
-            estTitre: false,
-            typeDesignation: 'OCCUPATION',
-            superficieDesign: 1500.0,
-            estLitigieux: false,
-          },
-        ],
-      },
-
-      batiments: {
-        create: [
-          {
-            sigleBat: 'BAT-UNIQ',
-            nbNiveau: 1,
-            anneeRecProvC: new Date('2015-01-01'),
-            anneeDefC: new Date('2016-12-01'),
-            salles: {
-              create: [
-                {
-                  sigleSalle: 'CP1',
-                  niveauSalle: 0,
-                  affectationSalle: 'CLASSE',
-                  etatSalle: 'MOYEN',
-                  estOperationnel: true,
-                  estElectrifiee: true,
-                  nbEleveF: 12,
-                  nbEleveG: 10,
-                  equipements: {
-                    create: [
-                      {
-                        nomEquip: 'Table-banc',
-                        typeEquip: 'MOBILIER',
-                        etat: 'MOYEN',
-                        quantite: 12,
-                      },
-                      {
-                        nomEquip: 'Tableau noir',
-                        typeEquip: 'MATERIEL_DIDACTIQUE',
-                        etat: 'MAUVAIS',
-                        quantite: 1,
-                      },
-                    ],
-                  },
-                },
-                {
-                  sigleSalle: 'CE1',
-                  niveauSalle: 0,
-                  affectationSalle: 'CLASSE',
-                  etatSalle: 'MOYEN',
-                  estOperationnel: true,
-                  estElectrifiee: false,
-                  nbEleveF: 8,
-                  nbEleveG: 10,
-                },
-              ],
-            },
-            toilettes: {
-              create: [
-                {
-                  nbCompartiment: 2,
-                  fonctionToilette: 'LATRINES',
-                  pointEau: false,
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  });
-
-  // 3. Création des trajets et moyens
+  // 4. Trajets
   console.log('🚗 Création des trajets...');
+  const trajetsData = [
+    {
+      nomTrajet: 'Ambositra → Fandriana',
+      typeMoyen: 'TAXI-BROUSSE', duree: 60, distance: 45,
+      debutPeriode: new Date('2024-01-15'), finPeriode: new Date('2024-03-15'),
+    },
+    {
+      nomTrajet: 'Ambositra → Ambatofinandrahana',
+      typeMoyen: 'TAXI-BROUSSE', duree: 120, distance: 85,
+    },
+    {
+      nomTrajet: 'Ambositra → Manandriana',
+      typeMoyen: 'BUS', duree: 45, distance: 35,
+    },
+    {
+      nomTrajet: 'Ambositra → Antoetra',
+      typeMoyen: 'PIED', duree: 150, distance: 18,
+      debutPeriode: new Date('2024-01-01'), finPeriode: new Date('2024-04-30'),
+    },
+    {
+      nomTrajet: 'Fandriana → Sahamadio',
+      typeMoyen: 'PIED', duree: 90, distance: 10,
+    },
+    {
+      nomTrajet: 'Ambositra → Ilaka',
+      typeMoyen: 'BUS', duree: 30, distance: 20,
+    },
+    {
+      nomTrajet: 'Ambositra → Ivato',
+      typeMoyen: 'TAXI-BROUSSE', duree: 75, distance: 55,
+      debutPeriode: new Date('2024-12-01'), finPeriode: new Date('2025-02-28'),
+    },
+  ];
 
-  const trajet1 = await prisma.trajet.create({
-    data: {
-      nomTrajet: 'Antananarivo → Ambohimanarina',
-      debutTrajet: new Date('2024-01-01'),
-      finTrajet: new Date('2024-12-31'),
-      moyens: {
-        create: {
-          typeMoyen: 'TAXI-BROUSSE',
-          dureeMoyen: 45,
-          distanceMoyen: 12.5,
+  const trajets: any[] = [];
+  for (const t of trajetsData) {
+    const trajet = await prisma.trajet.create({
+      data: {
+        nomTrajet: t.nomTrajet,
+        debutTrajet: new Date('2024-01-01'),
+        finTrajet: new Date('2024-12-31'),
+        moyens: {
+          create: { typeMoyen: t.typeMoyen, dureeMoyen: t.duree, distanceMoyen: t.distance },
         },
+        ...(t.debutPeriode
+          ? {
+              periode: {
+                create: { debutPeriode: t.debutPeriode, finPeriode: t.finPeriode },
+              },
+            }
+          : {}),
       },
-    },
-  });
+    });
+    trajets.push(trajet);
+  }
+  console.log(`   ✅ ${trajets.length} trajets créés`);
 
-  const trajet2 = await prisma.trajet.create({
-    data: {
-      nomTrajet: 'Antananarivo → Anosizato',
-      debutTrajet: new Date('2024-01-01'),
-      finTrajet: new Date('2024-12-31'),
-      moyens: {
-        create: { typeMoyen: 'BUS', dureeMoyen: 30, distanceMoyen: 5.0 },
-      },
-    },
-  });
-
-  const trajet3 = await prisma.trajet.create({
-    data: {
-      nomTrajet: 'Arivonimamo → Ambohibary',
-      debutTrajet: new Date('2024-01-01'),
-      finTrajet: new Date('2024-12-31'),
-      moyens: {
-        create: { typeMoyen: 'PIED', dureeMoyen: 90, distanceMoyen: 6.0 },
-      },
-      periode: {
-        create: {
-          debutPeriode: new Date('2024-01-15'),
-          finPeriode: new Date('2024-03-15'),
-        },
-      },
-    },
-  });
-
-  // 4. Création des aléas
+  // 5. Aléas
   console.log('🌧️ Création des aléas...');
-
-  await prisma.alea.create({
-    data: {
+  const aleasData = [
+    {
       typeAleat: 'INONDATION',
-      nomAleat: 'Inondation Ambohimanarina',
-      dateAleat: new Date('2024-02-15'),
-      explication:
-        "Fortes pluies ayant provoqué l'inondation de l'école pendant 3 jours",
-      effets: {
-        create: [
-          {
-            trajetId: trajet1.idTrajet,
-            nbElevesG: 17,
-            nbElevesF: 15,
-            nbEnseignG: 2,
-            nbEnseignF: 1,
-          },
-        ],
-      },
+      nomAleat: 'Inondation Ambositra',
+      dateAleat: new Date('2024-02-10'),
+      explication: 'Fortes pluies ayant provoqué l\'inondation du Lycée Rakotoarisoa Ambositra',
+      trajetIdx: 0,
+      nbElevesG: 45, nbElevesF: 38, nbEnseignG: 5, nbEnseignF: 3,
     },
-  });
-
-  await prisma.alea.create({
-    data: {
+    {
       typeAleat: 'VENT',
-      nomAleat: 'Cyclone Ambohibary',
-      dateAleat: new Date('2024-03-10'),
-      explication: 'Toiture partiellement endommagée par le cyclone',
-      effets: {
-        create: [
-          {
-            trajetId: trajet3.idTrajet,
-            nbElevesG: 10,
-            nbElevesF: 8,
-            nbEnseignG: 2,
-            nbEnseignF: 1,
-          },
-        ],
-      },
+      nomAleat: 'Cyclone Manandriana',
+      dateAleat: new Date('2024-03-05'),
+      explication: 'Toiture du CEG Manandriana partiellement endommagée',
+      trajetIdx: 2,
+      nbElevesG: 30, nbElevesF: 25, nbEnseignG: 4, nbEnseignF: 2,
     },
-  });
-
-  await prisma.alea.create({
-    data: {
+    {
       typeAleat: 'GLOISSEMENT_TERRAIN',
-      nomAleat: 'Glissement terrain Anosizato',
+      nomAleat: 'Glissement Antoetra',
       dateAleat: new Date('2024-01-20'),
-      explication: 'Glissement de terrain ayant endommagé le mur de clôture',
-      effets: {
-        create: [
-          {
-            trajetId: trajet2.idTrajet,
-            nbElevesG: 20,
-            nbElevesF: 18,
-            nbEnseignG: 3,
-            nbEnseignF: 2,
-          },
-        ],
-      },
+      explication: 'Route coupée entre Ambositra et Antoetra après un glissement de terrain',
+      trajetIdx: 3,
+      nbElevesG: 15, nbElevesF: 12, nbEnseignG: 2, nbEnseignF: 1,
     },
-  });
+    {
+      typeAleat: 'SECHERESSE',
+      nomAleat: 'Sécheresse Ambatofinandrahana',
+      dateAleat: new Date('2024-09-15'),
+      explication: 'Pénurie d\'eau potable dans les écoles de la région',
+      trajetIdx: 1,
+      nbElevesG: 60, nbElevesF: 55, nbEnseignG: 8, nbEnseignF: 6,
+    },
+    {
+      typeAleat: 'INCENDIE',
+      nomAleat: 'Incendie Fandriana',
+      dateAleat: new Date('2024-07-22'),
+      explication: 'Incendie de brousse ayant touché les infrastructures scolaires',
+      trajetIdx: 4,
+      nbElevesG: 20, nbElevesF: 18, nbEnseignG: 3, nbEnseignF: 2,
+    },
+  ];
 
-  // 5. Création des logs initiaux
-  console.log('📝 Création des logs...');
+  for (const a of aleasData) {
+    await prisma.alea.create({
+      data: {
+        typeAleat: a.typeAleat,
+        nomAleat: a.nomAleat,
+        dateAleat: a.dateAleat,
+        explication: a.explication,
+        effets: {
+          create: [{
+            trajetId: trajets[a.trajetIdx].idTrajet,
+            nbElevesG: a.nbElevesG,
+            nbElevesF: a.nbElevesF,
+            nbEnseignG: a.nbEnseignG,
+            nbEnseignF: a.nbEnseignF,
+          }],
+        },
+      },
+    });
+  }
+  console.log(`   ✅ ${aleasData.length} aléas créés`);
 
+  // 6. Log initial
+  console.log('📝 Création du log...');
   await prisma.log.create({
     data: {
       action: 'CREATE',
       entity: 'SEED',
-      details: 'Initialisation de la base de données via seed',
+      details: "Initialisation de la base de données DREN Amoron'i Mania",
     },
   });
 
-  console.log('\n✅ Seed terminé avec succès !');
+  // Résumé
+  const stats = {
+    etablissements: await prisma.etablissement.count(),
+    batiments: await prisma.batiment.count(),
+    salles: await prisma.salle.count(),
+    equipements: await prisma.equipement.count(),
+    toilettes: await prisma.toilette.count(),
+    trajets: await prisma.trajet.count(),
+    aleas: await prisma.alea.count(),
+    users: await prisma.user.count(),
+  };
+
+  console.log('\n═══════════════════════════════════════════');
+  console.log('✅ Seed DREN Amoron\'i Mania terminé !');
+  console.log('═══════════════════════════════════════════');
   console.log(`   📊 Résumé :`);
-  console.log(`   - ${3} établissements créés`);
-  console.log(`   - ${2} utilisateurs créés`);
-  console.log(`   - ${3} trajets créés`);
-  console.log(`   - ${3} aléas créés`);
+  console.log(`   🏫 Établissements  : ${stats.etablissements}`);
+  console.log(`   🏢 Bâtiments       : ${stats.batiments}`);
+  console.log(`   🚪 Salles          : ${stats.salles}`);
+  console.log(`   📦 Équipements     : ${stats.equipements}`);
+  console.log(`   🚽 Toilettes       : ${stats.toilettes}`);
+  console.log(`   🚗 Trajets         : ${stats.trajets}`);
+  console.log(`   🌧️ Aléas           : ${stats.aleas}`);
+  console.log(`   👤 Utilisateurs    : ${stats.users}`);
+  console.log('═══════════════════════════════════════════');
 }
 
 main()

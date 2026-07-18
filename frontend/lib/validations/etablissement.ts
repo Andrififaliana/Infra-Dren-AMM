@@ -4,6 +4,7 @@ export const etablissementSchema = z.object({
   nomEtab: z.string().min(1, 'Le nom est requis'),
   dren: z.string().optional(),
   cisco: z.string().optional(),
+  zap: z.string().optional(),
   commune: z.string().optional(),
   fokontany: z.string().optional(),
   quartier: z.string().optional(),

@@ -25,6 +25,11 @@ export class CreateEtablissementDto {
   @IsString()
   cisco?: string;
 
+  @ApiPropertyOptional({ example: 'ZAP Ambositra' })
+  @IsOptional()
+  @IsString()
+  zap?: string;
+
   @ApiPropertyOptional({ example: 'Ambohimanarina' })
   @IsOptional()
   @IsString()

@@ -17,6 +17,7 @@ export default function NouvelEtablissementPage() {
       nomEtab: form.get('nomEtab') as string,
       dren: form.get('dren') as string || undefined,
       cisco: form.get('cisco') as string || undefined,
+      zap: form.get('zap') as string || undefined,
       commune: form.get('commune') as string || undefined,
       fokontany: form.get('fokontany') as string || undefined,
       quartier: form.get('quartier') as string || undefined,
@@ -49,6 +50,7 @@ export default function NouvelEtablissementPage() {
               <Input id="dren" name="dren" label="DREN" />
               <Input id="cisco" name="cisco" label="CISCO" />
             </div>
+            <Input id="zap" name="zap" label="ZAP" />
             <Input id="commune" name="commune" label="Commune" />
             <div className="grid grid-cols-2 gap-4">
               <Input id="fokontany" name="fokontany" label="Fokontany" />

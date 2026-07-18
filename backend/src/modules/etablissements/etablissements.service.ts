@@ -87,6 +87,9 @@ export class EtablissementsService {
     if (query.cisco) {
       where.cisco = { contains: query.cisco, mode: 'insensitive' };
     }
+    if (query.zap) {
+      where.zap = { contains: query.zap, mode: 'insensitive' };
+    }
     if (query.commune) {
       where.commune = { contains: query.commune, mode: 'insensitive' };
     }
@@ -101,6 +104,7 @@ export class EtablissementsService {
           nomEtab: true,
           dren: true,
           cisco: true,
+          zap: true,
           commune: true,
           fokontany: true,
           quartier: true,

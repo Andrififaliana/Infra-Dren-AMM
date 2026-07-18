@@ -21,6 +21,11 @@ export class UpdateEtablissementDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  zap?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   commune?: string;
 
   @ApiPropertyOptional()

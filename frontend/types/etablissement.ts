@@ -53,6 +53,7 @@ export interface Etablissement {
   nomEtab: string;
   dren?: string;
   cisco?: string;
+  zap?: string;
   commune?: string;
   fokontany?: string;
   quartier?: string;
@@ -90,6 +91,7 @@ export interface CreateEtablissementDto {
   nomEtab: string;
   dren?: string;
   cisco?: string;
+  zap?: string;
   commune?: string;
   fokontany?: string;
   quartier?: string;

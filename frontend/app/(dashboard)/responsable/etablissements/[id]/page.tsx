@@ -64,6 +64,7 @@ export default function EditEtablissementPage() {
       nomEtab: form.get('nomEtab') as string,
       dren: form.get('dren') as string || undefined,
       cisco: form.get('cisco') as string || undefined,
+      zap: form.get('zap') as string || undefined,
       commune: form.get('commune') as string || undefined,
       fokontany: form.get('fokontany') as string || undefined,
       quartier: form.get('quartier') as string || undefined,
@@ -248,6 +249,7 @@ export default function EditEtablissementPage() {
               <Input id="dren" name="dren" label="DREN" defaultValue={etablissement.dren ?? ''} />
               <Input id="cisco" name="cisco" label="CISCO" defaultValue={etablissement.cisco ?? ''} />
             </div>
+            <Input id="zap" name="zap" label="ZAP" defaultValue={etablissement.zap ?? ''} />
             <Input id="commune" name="commune" label="Commune" defaultValue={etablissement.commune ?? ''} />
             <div className="grid grid-cols-2 gap-4">
               <Input id="fokontany" name="fokontany" label="Fokontany" defaultValue={etablissement.fokontany ?? ''} />

@@ -11,6 +11,7 @@ model Etablissement {
   nomEtab          String  @map("nom_etab")
   dren             String? @map("dren")
   cisco            String? @map("cisco")
+  zap              String? @map("zap")
   commune          String? @map("commune")
   fokontany        String? @map("fokontany")
   quartier         String? @map("quartier")

@@ -35,5 +35,10 @@ export class EtablissementQueryDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  zap?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   commune?: string;
 }
