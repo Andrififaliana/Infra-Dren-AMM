@@ -88,7 +88,7 @@ export class EtablissementsController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Supprimer un établissement' })
   @ApiResponse({ status: 200, description: 'Supprimé' })
