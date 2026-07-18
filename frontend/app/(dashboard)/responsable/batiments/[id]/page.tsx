@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Bath, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Bath, Plus, Pencil, Trash2, Venus, Mars, GraduationCap, Droplets } from 'lucide-react';
 import { useBatiment, useUpdateBatiment } from '@/hooks/use-batiments';
 import { useCreateToilette, useUpdateToilette, useDeleteToilette } from '@/hooks/use-gestion-batiment-salle';
 import { Button } from '@/components/ui/button';
@@ -123,15 +123,15 @@ export default function EditBatimentPage() {
                     </span>
                     <div>
                       <p className="text-sm font-medium text-gray-900">
-                        {toil.fonctionToilette === 'FILLES' ? '🚺 Filles' :
-                         toil.fonctionToilette === 'GARCONS' ? '🚹 Garçons' :
-                         toil.fonctionToilette === 'ENSEIGNANTS' ? '👨‍🏫 Enseignants' :
-                         toil.fonctionToilette === 'LATRINES' ? '🚽 Latrines' :
-                         toil.fonctionToilette || 'Toilette'}
+                        <span className="inline-flex items-center gap-1.5">{toil.fonctionToilette === 'FILLES' ? <><Venus className="h-4 w-4 text-pink-500" /> Filles</> :
+                         toil.fonctionToilette === 'GARCONS' ? <><Mars className="h-4 w-4 text-blue-500" /> Garçons</> :
+                         toil.fonctionToilette === 'ENSEIGNANTS' ? <><GraduationCap className="h-4 w-4 text-amber-600" /> Enseignants</> :
+                         toil.fonctionToilette === 'LATRINES' ? <><Bath className="h-4 w-4 text-gray-500" /> Latrines</> :
+                         toil.fonctionToilette || 'Toilette'}</span>
                       </p>
                       <p className="text-xs text-gray-500">
                         {toil.nbCompartiment} compartiment{toil.nbCompartiment > 1 ? 's' : ''}
-                        {toil.pointEau ? ' · 💧 Point d\'eau' : ' · Sans point d\'eau'}
+                        {toil.pointEau ? <span className="inline-flex items-center gap-1"> · <Droplets className="h-3.5 w-3.5 text-blue-400" /> Point d'eau</span> : ' · Sans point d'eau'}
                       </p>
                     </div>
                   </div>
