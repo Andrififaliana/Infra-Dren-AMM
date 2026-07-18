@@ -51,7 +51,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   className={cn(
                     'relative flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors',
                     isActive
-                      ? 'text-orange-700 bg-orange-50'
+                      ? 'text-green-700 bg-green-50'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                   )}
                 >
@@ -60,7 +60,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   {isActive && (
                     <motion.div
                       layoutId="activeTab"
-                      className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-orange-600"
+                      className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-green-600"
                     />
                   )}
                 </Link>
@@ -72,7 +72,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="hidden items-center gap-2 rounded-xl border-2 border-orange-200 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50 hover:border-orange-300 transition-all sm:inline-flex"
+              className="hidden items-center gap-2 rounded-xl border-2 border-green-200 bg-white px-4 py-2 text-sm font-semibold text-green-700 hover:bg-green-50 hover:border-green-300 transition-all sm:inline-flex"
             >
               <Shield className="h-4 w-4" />
               Administration
@@ -108,7 +108,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                       className={cn(
                         'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors',
                         isActive
-                          ? 'bg-orange-50 text-orange-700'
+                          ? 'bg-green-50 text-green-700'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       )}
                     >
@@ -120,7 +120,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl bg-orange-600 px-4 py-3 text-sm font-semibold text-white"
+                  className="flex items-center gap-3 rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white"
                 >
                   <Shield className="h-5 w-5" />
                   Administration
@@ -150,9 +150,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">Liens</h4>
               <ul className="space-y-2 text-sm text-gray-500">
-                <li><Link href="/etablissements" className="hover:text-orange-600 transition-colors">Établissements</Link></li>
-                <li><Link href="/statistiques" className="hover:text-orange-600 transition-colors">Statistiques</Link></li>
-                <li><Link href="/login" className="hover:text-orange-600 transition-colors">Administration</Link></li>
+                <li><Link href="/etablissements" className="hover:text-green-600 transition-colors">Établissements</Link></li>
+                <li><Link href="/statistiques" className="hover:text-green-600 transition-colors">Statistiques</Link></li>
+                <li><Link href="/login" className="hover:text-green-600 transition-colors">Administration</Link></li>
               </ul>
             </div>
             <div>
