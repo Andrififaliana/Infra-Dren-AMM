@@ -293,7 +293,7 @@ export default function EditEtablissementPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5 text-orange-500" /> Directeur
+              <User className="h-5 w-5 text-green-500" /> Directeur
             </CardTitle>
             <div className="flex gap-2">
               <Button variant="ghost" size="sm" onClick={openDirModal}>
@@ -333,7 +333,7 @@ export default function EditEtablissementPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-orange-500" /> Désignations ({etablissement.designations?.length ?? 0})
+              <FileText className="h-5 w-5 text-green-500" /> Désignations ({etablissement.designations?.length ?? 0})
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => openDesModal()}>
               <Plus className="mr-1 h-4 w-4" /> Ajouter
@@ -389,7 +389,7 @@ export default function EditEtablissementPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-orange-500" /> Structures ({etablissement.structures?.length ?? 0})
+              <Building2 className="h-5 w-5 text-green-500" /> Structures ({etablissement.structures?.length ?? 0})
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => openStrModal()}>
               <Plus className="mr-1 h-4 w-4" /> Ajouter
