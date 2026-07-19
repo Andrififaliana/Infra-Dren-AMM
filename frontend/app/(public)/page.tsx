@@ -7,12 +7,26 @@ import {
   Image as ImageIcon,
   BarChart3,
   UserCheck,
+  Map,
   ArrowRight,
   CheckCircle,
 } from 'lucide-react';
+import { useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { useStatsGlobales } from '@/hooks/use-statistiques';
+import { useEtablissements } from '@/hooks/use-etablissements';
 import { formatNumber } from '@/lib/utils';
+import type { EtablissementListe } from '@/types/etablissement';
+
+const EtablissementsMap = dynamic(
+  () => import('@/components/map/etablissements-map'),
+  { ssr: false, loading: () => (
+    <div className="flex h-[500px] items-center justify-center rounded-2xl border bg-gray-50 text-sm text-gray-500">
+      Chargement de la carte...
+    </div>
+  )}
+);
 
 const features = [
   {
@@ -47,6 +61,13 @@ const steps = [
 export default function HomePage() {
   const router = useRouter();
   const { data: stats } = useStatsGlobales();
+  const { data: etabData } = useEtablissements({ page: 1, limit: 999 });
+
+  const etablissements = (etabData?.data ?? []) as EtablissementListe[];
+  const schoolsWithCoords = useMemo(
+    () => etablissements.filter(e => typeof e.latitude === 'number' && typeof e.longitude === 'number'),
+    [etablissements]
+  );
 
   return (
     <div>
@@ -144,6 +165,32 @@ export default function HomePage() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Map Section */}
+      <section className="border-t border-gray-100">
+        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="mb-12 text-center">
+              <div className="mb-4 inline-flex rounded-xl bg-green-100 p-3 text-green-600">
+                <Map className="h-6 w-6" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900">Carte interactive</h2>
+              <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+                Visualisez l&apos;emplacement de tous les établissements scolaires de la r&eacute;gion AMM.
+                {schoolsWithCoords.length > 0 && (
+                  <span> <strong>{schoolsWithCoords.length}</strong> &eacute;tablissements g&eacute;olocalis&eacute;s.</span>
+                )}
+              </p>
+            </div>
+            <EtablissementsMap
+              schools={etablissements}
+              showAleas={false}
+              showTrajets={false}
+              onSchoolClick={(id) => router.push(`/etablissements/${id}`)}
+            />
+          </motion.div>
         </div>
       </section>
     </div>
