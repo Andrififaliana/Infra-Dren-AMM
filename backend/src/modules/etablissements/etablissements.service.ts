@@ -108,6 +108,8 @@ export class EtablissementsService {
           commune: true,
           fokontany: true,
           quartier: true,
+          latitude: true,
+          longitude: true,
           couvTelephonique: true,
           couvInternet: true,
           nbEnseignantG: true,
