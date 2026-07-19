@@ -13,7 +13,7 @@ import {
   PieChart, Pie, Cell, Legend,
 } from 'recharts';
 
-const COLORS = ['#f97316', '#ef4444', '#22c55e', '#3b82f6', '#8b5cf6', '#14b8a6', '#eab308'];
+const COLORS = ['#16a34a', '#22c55e', '#4ade80', '#86efac', '#15803d', '#166534', '#14532d'];
 
 export default function TableauDeBordPage() {
   const { data: globales, isLoading } = useStatsGlobales();
@@ -70,8 +70,8 @@ export default function TableauDeBordPage() {
                         <Tooltip
                           contentStyle={{ borderRadius: 12, border: '1px solid #e5e7eb', fontSize: 12 }}
                         />
-                        <Bar dataKey="nbEtablissements" name="Établissements" fill="#f97316" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="nbSalles" name="Salles" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="nbEtablissements" name="Établissements" fill="#16a34a" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="nbSalles" name="Salles" fill="#22c55e" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
