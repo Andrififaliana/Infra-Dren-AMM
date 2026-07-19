@@ -95,8 +95,17 @@ export default function EtablissementsPage() {
         </div>
       </div>
 
-      {etablissements.length === 0 ? (
+      {etablissements.length === 0 && viewMode !== 'map' ? (
         <EmptyState title="Aucun établissement trouvé" icon={<SearchX className="h-8 w-8" />} description={search ? 'Essayez de modifier votre recherche' : ''} />
+      ) : viewMode === 'map' ? (
+        <div className="h-[600px] overflow-hidden rounded-2xl border">
+          <EtablissementsMap
+            schools={allEtablissements}
+            showAleas={false}
+            showTrajets={false}
+            onSchoolClick={(id) => router.push(`/etablissements/${id}`)}
+          />
+        </div>
       ) : viewMode === 'list' ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {etablissements.map((etab, idx) => {
