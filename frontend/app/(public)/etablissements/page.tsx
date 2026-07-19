@@ -34,7 +34,7 @@ export default function EtablissementsPage() {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [viewMode, setViewMode] = useState<'list' | 'gallery'>('gallery');
+  const [viewMode, setViewMode] = useState<'list' | 'gallery' | 'map'>('gallery');
   const [filtreDren, setFiltreDren] = useState('');
 
   const { data, isLoading } = useEtablissements({ page, limit: 12, search: search || undefined, dren: filtreDren || undefined });
@@ -84,6 +84,10 @@ export default function EtablissementsPage() {
           <button onClick={() => setViewMode('gallery')}
             className={`rounded-lg p-2 transition-colors ${viewMode === 'gallery' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
             <LayoutGrid className="h-4 w-4" />
+          </button>
+          <button onClick={() => setViewMode('map')}
+            className={`rounded-lg p-2 transition-colors ${viewMode === 'map' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
+            <Map className="h-4 w-4" />
           </button>
         </div>
       </div>
