@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEtablissements } from '@/hooks/use-etablissements';
 import { useAleas } from '@/hooks/use-aleas';
 import { useTrajets } from '@/hooks/use-trajets';
+import { SearchBar } from '@/components/shared/search-bar';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { Select } from '@/components/ui/select';
 import type { EtablissementListe } from '@/types/etablissement';
@@ -17,6 +18,7 @@ const EtablissementsMap = dynamic(
 
 export default function CartePage() {
   const router = useRouter();
+  const [search, setSearch] = useState('');
   const [ciscoFilter, setCiscoFilter] = useState('');
   const [couvertureFilter, setCouvertureFilter] = useState('toutes');
   const [etatFilter, setEtatFilter] = useState('tous');
@@ -35,7 +37,9 @@ export default function CartePage() {
   }, [etablissements]);
 
   const filtered = useMemo(() => {
+    const searchLower = search.toLowerCase();
     return etablissements.filter(e => {
+      if (search && !e.nomEtab.toLowerCase().includes(searchLower) && !(e.commune ?? '').toLowerCase().includes(searchLower)) return false;
       if (ciscoFilter && e.cisco !== ciscoFilter) return false;
       if (couvertureFilter === 'telephonique' && !e.couvTelephonique) return false;
       if (couvertureFilter === 'internet' && !e.couvInternet) return false;
@@ -45,7 +49,7 @@ export default function CartePage() {
       }
       return true;
     });
-  }, [etablissements, ciscoFilter, couvertureFilter, etatFilter]);
+  }, [etablissements, search, ciscoFilter, couvertureFilter, etatFilter]);
 
   const couvOptions = [
     { value: 'toutes', label: 'Toutes les couvertures' },
@@ -73,6 +77,12 @@ export default function CartePage() {
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          placeholder="Rechercher un établissement ou une commune…"
+          className="flex-1"
+        />
         <Select
           value={ciscoFilter}
           onChange={(e) => setCiscoFilter(e.target.value)}
