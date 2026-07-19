@@ -18,14 +18,14 @@ export function StatCard({ title, value, icon, description, trend, className, in
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1, duration: 0.4 }}
-      className={cn('rounded-xl border border-gray-200 bg-white p-6 shadow-sm', className)}
+      className={cn('rounded-xl border border-slate-200 bg-white p-6 shadow-sm', className)}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm font-medium text-slate-500">{title}</p>
+          <p className="text-2xl font-bold text-slate-900">{value}</p>
           {description && (
-            <p className="text-xs text-gray-400">{description}</p>
+            <p className="text-xs text-slate-400">{description}</p>
           )}
           {trend && (
             <p className={cn('text-xs font-medium', trend.isPositive ? 'text-green-600' : 'text-red-600')}>

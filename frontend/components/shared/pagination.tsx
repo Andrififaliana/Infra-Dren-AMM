@@ -13,8 +13,8 @@ export function Pagination({ page, totalPages, total, onPageChange }: Pagination
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-      <p className="text-sm text-gray-600">
+    <div className="flex items-center justify-between border-t border-slate-200 pt-4">
+      <p className="text-sm text-slate-600">
         Page {page} sur {totalPages} ({total} résultats)
       </p>
       <div className="flex items-center gap-2">
@@ -29,7 +29,7 @@ export function Pagination({ page, totalPages, total, onPageChange }: Pagination
 
         {generatePageNumbers(page, totalPages).map((p, i) =>
           p === -1 ? (
-            <span key={`dots-${i}`} className="px-1 text-gray-400">...</span>
+            <span key={`dots-${i}`} className="px-1 text-slate-400">...</span>
           ) : (
             <Button
               key={p}

@@ -13,7 +13,7 @@ export function Card({ children, className, padding = true, hover = false, onCli
     <div
       onClick={onClick}
       className={cn(
-        'rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-200',
+        'rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-200',
         hover && 'cursor-pointer hover:border-green-200/60 hover:shadow-md',
         onClick && 'cursor-pointer',
         padding && 'p-6',
@@ -30,7 +30,7 @@ export function CardHeader({ children, className }: { children: React.ReactNode;
 }
 
 export function CardTitle({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <h3 className={cn('text-lg font-semibold text-gray-900', className)}>{children}</h3>;
+  return <h3 className={cn('text-lg font-semibold text-slate-800', className)}>{children}</h3>;
 }
 
 export function CardContent({ children, className }: { children: React.ReactNode; className?: string }) {

@@ -67,25 +67,25 @@ export function DataTable<T>({
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white">
-        <div className="p-8 text-center text-sm text-gray-500">Chargement...</div>
+      <div className="rounded-xl border border-slate-200 bg-white">
+        <div className="p-8 text-center text-sm text-slate-500">Chargement...</div>
       </div>
     );
   }
 
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white">
-        <div className="p-8 text-center text-sm text-gray-500">{emptyMessage}</div>
+      <div className="rounded-xl border border-slate-200 bg-white">
+        <div className="p-8 text-center text-sm text-slate-500">{emptyMessage}</div>
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-slate-200">
+          <thead className="bg-slate-50">
             <tr>
               {selectable && (
                 <th className="w-10 px-2 py-3">
@@ -106,7 +106,7 @@ export function DataTable<T>({
                 <th
                   key={col.key}
                   className={cn(
-                    'px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500',
+                    'px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500',
                     col.className
                   )}
                 >
@@ -115,7 +115,7 @@ export function DataTable<T>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-slate-200">
             {data.map((item) => {
             const id = keyExtractor(item);
             const isSelected = selectedIds.has(id);
@@ -126,7 +126,7 @@ export function DataTable<T>({
                 className={cn(
                   'transition-colors',
                   (onRowClick || selectable) ? 'cursor-pointer' : '',
-                  isSelected ? 'bg-green-50/60' : 'hover:bg-gray-50'
+                  isSelected ? 'bg-green-50/60' : 'hover:bg-slate-50'
                 )}
               >
                 {selectable && (
@@ -147,7 +147,7 @@ export function DataTable<T>({
                     return (
                       <td
                         key={col.key}
-                        className={cn('whitespace-nowrap px-4 py-3 text-sm text-gray-700', col.className)}
+                        className={cn('whitespace-nowrap px-4 py-3 text-sm text-slate-700', col.className)}
                       >
                         {value}
                       </td>
