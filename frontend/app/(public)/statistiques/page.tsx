@@ -56,10 +56,10 @@ export default function StatistiquesPage() {
           className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
         >
           {[
-            { icon: School, label: 'Établissements', value: globales.totalEtablissements, color: 'text-blue-600 bg-blue-50' },
-            { icon: Building2, label: 'Bâtiments', value: globales.totalBatiments, color: 'text-amber-600 bg-amber-50' },
-            { icon: DoorOpen, label: 'Salles de classe', value: globales.totalSalles, color: 'text-green-600 bg-green-50' },
-            { icon: TrendingUp, label: 'Équipements', value: globales.totalEquipements, color: 'text-purple-600 bg-purple-50' },
+            { icon: School, label: 'Établissements', value: globales.totalEtablissements, color: 'text-green-600 bg-green-50' },
+            { icon: Building2, label: 'Bâtiments', value: globales.totalBatiments, color: 'text-green-700 bg-green-100' },
+            { icon: DoorOpen, label: 'Salles de classe', value: globales.totalSalles, color: 'text-green-800 bg-green-200' },
+            { icon: TrendingUp, label: 'Équipements', value: globales.totalEquipements, color: 'text-emerald-600 bg-emerald-50' },
           ].map((kpi) => (
             <Card key={kpi.label}>
               <CardContent className="flex items-center gap-4">
