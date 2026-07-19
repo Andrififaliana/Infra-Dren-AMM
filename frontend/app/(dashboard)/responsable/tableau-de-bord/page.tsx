@@ -39,10 +39,10 @@ export default function TableauDeBordPage() {
       ) : globales ? (
         <>
           <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <StatCard title="Établissements" value={globales.totalEtablissements} icon={<School className="h-5 w-5" />} />
-            <StatCard title="Bâtiments" value={globales.totalBatiments} icon={<Building2 className="h-5 w-5" />} />
-            <StatCard title="Salles" value={globales.totalSalles} icon={<DoorOpen className="h-5 w-5" />} />
-            <StatCard title="Équipements" value={globales.totalEquipements} icon={<Package className="h-5 w-5" />} />
+            <StatCard title="Établissements" value={globales.totalEtablissements} icon={<School className="h-5 w-5" />} index={0} />
+            <StatCard title="Bâtiments" value={globales.totalBatiments} icon={<Building2 className="h-5 w-5" />} index={1} />
+            <StatCard title="Salles" value={globales.totalSalles} icon={<DoorOpen className="h-5 w-5" />} index={2} />
+            <StatCard title="Équipements" value={globales.totalEquipements} icon={<Package className="h-5 w-5" />} index={3} />
           </div>
 
           {/* Graphiques */}
