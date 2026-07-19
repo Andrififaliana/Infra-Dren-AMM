@@ -1,15 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { UseQueryOptions } from '@tanstack/react-query';
 import apiClient from '@/lib/api-client';
 import type { Etablissement, EtablissementListe, CreateEtablissementDto, UpdateEtablissementDto, EtablissementQueryDto } from '@/types/etablissement';
 import type { ApiResponse, PaginatedResponse } from '@/types/api';
 
-export function useEtablissements(query: EtablissementQueryDto = {}) {
+type QueryOptions = Omit<UseQueryOptions<PaginatedResponse<EtablissementListe>>, 'queryKey' | 'queryFn'>;
+
+export function useEtablissements(query: EtablissementQueryDto = {}, options?: QueryOptions) {
   return useQuery({
     queryKey: ['etablissements', query],
     queryFn: async () => {
       const { data } = await apiClient.get<PaginatedResponse<EtablissementListe>>('/etablissements', { params: query });
       return data;
     },
+    ...options,
   });
 }
 
