@@ -37,8 +37,9 @@ export default function EtablissementsPage() {
   const [viewMode, setViewMode] = useState<'list' | 'gallery' | 'map'>('gallery');
   const [filtreDren, setFiltreDren] = useState('');
   const [filtreCisco, setFiltreCisco] = useState('');
+  const [filtreZap, setFiltreZap] = useState('');
 
-  const { data, isLoading } = useEtablissements({ page, limit: 12, search: search || undefined, dren: filtreDren || undefined, cisco: filtreCisco || undefined });
+  const { data, isLoading } = useEtablissements({ page, limit: 12, search: search || undefined, dren: filtreDren || undefined, cisco: filtreCisco || undefined, zap: filtreZap || undefined });
   const { data: allData } = useEtablissements({ page: 1, limit: 999 }, { enabled: viewMode === 'map' });
 
   const etablissements = data?.data ?? [];
@@ -46,6 +47,12 @@ export default function EtablissementsPage() {
   const meta = data?.meta;
   const drens = [...new Set(etablissements.map((e) => e.dren).filter(Boolean))];
   const ciscos = [...new Set(etablissements.map((e) => e.cisco).filter(Boolean))];
+  const zaps = useMemo(() => {
+    const filtered = filtreCisco
+      ? etablissements.filter(e => e.cisco === filtreCisco)
+      : etablissements;
+    return [...new Set(filtered.map(e => e.zap).filter(Boolean))];
+  }, [etablissements, filtreCisco]);
 
   if (isLoading) {
     return (
@@ -80,10 +87,15 @@ export default function EtablissementsPage() {
             <option value="">Tous districts</option>
             {drens.map((d) => <option key={d} value={d}>{d}</option>)}
           </select>
-          <select value={filtreCisco} onChange={(e) => { setFiltreCisco(e.target.value); setPage(1); }}
+          <select value={filtreCisco} onChange={(e) => { setFiltreCisco(e.target.value); setFiltreZap(''); setPage(1); }}
             className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
             <option value="">Tous CISCO</option>
             {ciscos.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <select value={filtreZap} onChange={(e) => { setFiltreZap(e.target.value); setPage(1); }}
+            className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
+            <option value="">Toutes ZAP</option>
+            {zaps.map((z) => <option key={z} value={z}>{z}</option>)}
           </select>
         </div>
         <div className="flex items-center gap-2 rounded-xl border border-gray-200 p-1">
