@@ -38,7 +38,10 @@ export default function EtablissementsPage() {
   const [filtreDren, setFiltreDren] = useState('');
 
   const { data, isLoading } = useEtablissements({ page, limit: 12, search: search || undefined, dren: filtreDren || undefined });
+  const { data: allData } = useEtablissements({ page: 1, limit: 999 });
+
   const etablissements = data?.data ?? [];
+  const allEtablissements = (allData?.data ?? []) as EtablissementListe[];
   const meta = data?.meta;
   const drens = [...new Set(etablissements.map((e) => e.dren).filter(Boolean))];
 
