@@ -32,22 +32,22 @@ const features = [
   {
     icon: Database, title: 'Base de données centralisée',
     desc: 'Toutes les informations sur les infrastructures scolaires de la région, accessibles en un clic.',
-    color: 'bg-blue-50 text-blue-600', href: '/etablissements',
+    color: 'bg-green-50 text-green-600', href: '/etablissements',
   },
   {
     icon: ImageIcon, title: 'Galerie photos',
     desc: 'Photographies des établissements pour un suivi visuel précis de l\'état des infrastructures.',
-    color: 'bg-amber-50 text-amber-600', href: '/etablissements',
+    color: 'bg-green-100 text-green-700', href: '/etablissements',
   },
   {
     icon: BarChart3, title: 'Statistiques & Rapports',
     desc: 'Tableaux de bord interactifs et indicateurs clés pour la prise de décision.',
-    color: 'bg-green-50 text-green-600', href: '/statistiques',
+    color: 'bg-green-200 text-green-800', href: '/statistiques',
   },
   {
     icon: UserCheck, title: 'Gestion administrateur',
     desc: 'Interface sécurisée pour la mise à jour et la maintenance des données.',
-    color: 'bg-purple-50 text-purple-600', href: '/login',
+    color: 'bg-emerald-50 text-emerald-600', href: '/login',
   },
 ];
 
