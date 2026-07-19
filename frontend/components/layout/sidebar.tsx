@@ -107,11 +107,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 h-screen bg-white border-r border-gray-200 transition-all duration-300',
+        'fixed left-0 top-0 z-40 h-screen bg-white border-r border-slate-200 transition-all duration-300',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
-      <div className="flex h-16 items-center justify-between px-4 border-b border-gray-200">
+      <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200">
         {!collapsed && (
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-green-700">InfraDren</span>
@@ -119,7 +119,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         )}
         <button
           onClick={onToggle}
-          className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 transition-colors"
+          className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 transition-colors"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={collapsed ? 'M13 5l7 7-7 7M5 5l7 7-7 7' : 'M11 19l-7-7 7-7m8 14l-7-7 7-7'} />
@@ -138,7 +138,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                 isActive
                   ? 'bg-green-50 text-green-700'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               )}
               title={collapsed ? item.label : undefined}
             >

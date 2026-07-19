@@ -18,18 +18,18 @@ export function Navbar({ onMenuToggle }: NavbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 border-b border-gray-200 bg-white">
+    <header className="sticky top-0 z-30 h-16 border-b border-slate-200 bg-white">
       <div className="flex h-full items-center justify-between px-4 lg:px-6">
         <div className="flex items-center gap-4">
           <button
             onClick={onMenuToggle}
-            className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 transition-colors lg:hidden"
+            className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 transition-colors lg:hidden"
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-slate-500">
             {isAuthenticated ? `Bienvenue, ${user?.nom}` : 'InfraDren AMM'}
           </span>
         </div>
@@ -39,7 +39,7 @@ export function Navbar({ onMenuToggle }: NavbarProps) {
             <>
               <Link
                 href="/"
-                className="rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 transition-colors"
+                className="rounded-lg px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 transition-colors"
               >
                 Site public
               </Link>
