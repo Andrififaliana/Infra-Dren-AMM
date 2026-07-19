@@ -10,7 +10,7 @@ import type { Trajet } from '@/types/trajet';
 
 const schoolIcon = L.divIcon({
   className: '',
-  html: `<div style="background:#16a34a;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);font-size:16px;">🏫</div>`,
+  html: `<div style="background:#16a34a;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>`,
   iconSize: [32, 32],
   iconAnchor: [16, 32],
   popupAnchor: [0, -36],
@@ -18,7 +18,7 @@ const schoolIcon = L.divIcon({
 
 const schoolIconWarning = L.divIcon({
   className: '',
-  html: `<div style="background:#eab308;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);font-size:16px;">⚠️</div>`,
+  html: `<div style="background:#eab308;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>`,
   iconSize: [32, 32],
   iconAnchor: [16, 32],
   popupAnchor: [0, -36],
@@ -26,7 +26,7 @@ const schoolIconWarning = L.divIcon({
 
 const schoolIconDanger = L.divIcon({
   className: '',
-  html: `<div style="background:#ef4444;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);font-size:16px;">❌</div>`,
+  html: `<div style="background:#ef4444;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>`,
   iconSize: [32, 32],
   iconAnchor: [16, 32],
   popupAnchor: [0, -36],
@@ -34,7 +34,7 @@ const schoolIconDanger = L.divIcon({
 
 const aleaIcon = L.divIcon({
   className: '',
-  html: `<div style="background:#8b5cf6;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);font-size:12px;">🌊</div>`,
+  html: `<div style="background:#8b5cf6;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>`,
   iconSize: [28, 28],
   iconAnchor: [14, 28],
   popupAnchor: [0, -32],
@@ -122,11 +122,11 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
                   <p>{school.cisco} — {school.zap}</p>
                   <p>{school.commune}{school.fokontany ? `, ${school.fokontany}` : ''}</p>
                   <p>
-                    📞 {school.couvTelephonique ? 'Oui' : 'Non'}
-                    {' | '}🌐 {school.couvInternet ? 'Oui' : 'Non'}
+                    <span className="font-medium">Tel. :</span> {school.couvTelephonique ? 'Oui' : 'Non'}
+                    {' | '}<span className="font-medium">Internet :</span> {school.couvInternet ? 'Oui' : 'Non'}
                   </p>
-                  <p>👨‍🏫 {school.nbEnseignantG + school.nbEnseignantF} enseignants</p>
-                  <p>🏫 {school._count?.batiments ?? 0} bâtiments</p>
+                  <p><span className="font-medium">Enseignants :</span> {school.nbEnseignantG + school.nbEnseignantF}</p>
+                  <p><span className="font-medium">Batiments :</span> {school._count?.batiments ?? 0}</p>
                 </div>
                 <button
                   onClick={() => onSchoolClick(school.id)}
