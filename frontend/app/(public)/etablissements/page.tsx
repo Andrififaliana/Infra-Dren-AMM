@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
 import {
-  Search, List, LayoutGrid, Users, MapPin,
+  Search, List, LayoutGrid, Map, Users, MapPin,
   CheckCircle, Wrench, AlertTriangle, Building2, School,
   Image as ImageIcon, SearchX,
 } from 'lucide-react';
@@ -16,6 +17,16 @@ import { EmptyState } from '@/components/shared/empty-state';
 import { Pagination } from '@/components/shared/pagination';
 import { EtablissementPhoto } from '@/components/etablissements/EtablissementPhoto';
 import { formatNumber, getEtablissementStatus } from '@/lib/utils';
+import type { EtablissementListe } from '@/types/etablissement';
+
+const EtablissementsMap = dynamic(
+  () => import('@/components/map/etablissements-map'),
+  { ssr: false, loading: () => (
+    <div className="flex h-[500px] items-center justify-center rounded-2xl border bg-gray-50 text-sm text-gray-500">
+      Chargement de la carte...
+    </div>
+  )}
+);
 
 const statusIcons = { success: CheckCircle, warning: Wrench, danger: AlertTriangle };
 
