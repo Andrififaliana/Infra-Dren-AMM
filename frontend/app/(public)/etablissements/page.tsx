@@ -45,8 +45,8 @@ export default function EtablissementsPage() {
   const etablissements = data?.data ?? [];
   const allEtablissements = (allData?.data ?? []) as EtablissementListe[];
   const meta = data?.meta;
-  const drens = [...new Set(etablissements.map((e) => e.dren).filter(Boolean))];
-  const ciscos = [...new Set(etablissements.map((e) => e.cisco).filter(Boolean))];
+  const drens = useMemo(() => [...new Set(etablissements.map(e => e.dren).filter(Boolean) as string[])], [etablissements]);
+  const ciscos = useMemo(() => [...new Set(etablissements.map(e => e.cisco).filter(Boolean) as string[])], [etablissements]);
   const zaps = useMemo(() => {
     const filtered = filtreCisco
       ? etablissements.filter(e => e.cisco === filtreCisco)
