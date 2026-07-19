@@ -10,9 +10,9 @@ interface BadgeProps {
 
 const badgeVariants = {
   success: 'bg-green-50 text-green-700 border-green-200',
-  warning: 'bg-amber-50 text-amber-700 border-amber-200',
-  danger: 'bg-red-50 text-red-700 border-red-200',
-  info: 'bg-blue-50 text-blue-700 border-blue-200',
+  warning: 'bg-green-100 text-green-800 border-green-300',
+  danger: 'bg-green-200 text-green-900 border-green-400',
+  info: 'bg-green-50 text-green-600 border-green-200',
   default: 'bg-gray-100 text-gray-700 border-gray-200',
 };
 

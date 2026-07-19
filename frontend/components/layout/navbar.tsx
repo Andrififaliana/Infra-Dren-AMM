@@ -43,12 +43,12 @@ export function Navbar({ onMenuToggle }: NavbarProps) {
               >
                 Site public
               </Link>
-              <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
                 {user?.role === 'ADMIN' ? 'Admin' : 'Responsable'}
               </span>
               <button
                 onClick={handleLogout}
-                className="rounded-lg px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                className="rounded-lg px-3 py-1.5 text-sm text-green-600 hover:bg-green-50 transition-colors"
               >
                 Déconnexion
               </button>
@@ -56,7 +56,7 @@ export function Navbar({ onMenuToggle }: NavbarProps) {
           ) : (
             <Link
               href="/login"
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+              className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors"
             >
               Connexion
             </Link>
