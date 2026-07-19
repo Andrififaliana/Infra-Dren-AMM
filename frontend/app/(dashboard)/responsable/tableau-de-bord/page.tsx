@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'motion/react';
 import { useStatsGlobales, useStatsParDren, useCouvertureReseau, useRepartitionSalles } from '@/hooks/use-statistiques';
 import { StatCard } from '@/components/shared/stat-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,6 +50,12 @@ export default function TableauDeBordPage() {
           <div className="mb-8 grid gap-6 lg:grid-cols-2">
             {/* Bar Chart - Répartition par DREN */}
             {parDren && parDren.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              >
               <Card>
                 <CardHeader>
                   <CardTitle>Établissements par district</CardTitle>
@@ -70,10 +77,17 @@ export default function TableauDeBordPage() {
                   </div>
                 </CardContent>
               </Card>
+              </motion.div>
             )}
 
             {/* Pie Chart - État des salles */}
             {repartition && repartition.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+              >
               <Card>
                 <CardHeader>
                   <CardTitle>État des salles de classe</CardTitle>
@@ -107,10 +121,18 @@ export default function TableauDeBordPage() {
                   </div>
                 </CardContent>
               </Card>
+              </motion.div>
             )}
 
             {/* Couverture réseau */}
             {couverture && couverture.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+                className="lg:col-span-2"
+              >
               <Card>
                 <CardHeader>
                   <CardTitle>Couverture réseau</CardTitle>
@@ -134,6 +156,7 @@ export default function TableauDeBordPage() {
                   ))}
                 </CardContent>
               </Card>
+              </motion.div>
             )}
           </div>
 
