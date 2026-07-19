@@ -20,22 +20,22 @@ const stats = [
     icon: GraduationCap,
     label: 'Établissements recensés',
     desc: 'Suivi complet des infrastructures',
-    color: 'from-green-50 to-emerald-50',
-    iconBg: 'bg-green-100 text-green-600',
+    color: 'from-green-50 to-green-100',
+    iconBg: 'bg-green-100 text-green-700',
   },
   {
     icon: Building2,
     label: 'Infrastructures suivies',
     desc: 'Bâtiments, salles & équipements',
-    color: 'from-blue-50 to-cyan-50',
-    iconBg: 'bg-blue-100 text-blue-600',
+    color: 'from-green-100 to-green-200',
+    iconBg: 'bg-green-200 text-green-800',
   },
   {
     icon: MapPin,
     label: 'Région AMM',
     desc: "Amoron'i Mania, Madagascar",
-    color: 'from-purple-50 to-violet-50',
-    iconBg: 'bg-purple-100 text-purple-600',
+    color: 'from-green-200 to-green-50',
+    iconBg: 'bg-green-50 text-green-600',
   },
 ];
 
