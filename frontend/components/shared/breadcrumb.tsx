@@ -15,11 +15,11 @@ interface BreadcrumbProps {
 export function Breadcrumb({ items }: BreadcrumbProps) {
   return (
     <nav aria-label="Fil d'Ariane" className="mb-6">
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-gray-500">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-slate-500">
         <li>
           <Link
             href="/responsable/tableau-de-bord"
-            className="flex items-center gap-1 rounded-lg px-2 py-1 transition-colors hover:bg-gray-100 hover:text-gray-700"
+            className="flex items-center gap-1 rounded-lg px-2 py-1 transition-colors hover:bg-slate-100 hover:text-slate-700"
           >
             <Home className="h-3.5 w-3.5" />
             <span className="sr-only">Accueil</span>
@@ -27,16 +27,16 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
         </li>
         {items.map((item, idx) => (
           <li key={idx} className="flex items-center gap-1.5">
-            <ChevronRight className="h-3.5 w-3.5 text-gray-300" />
+            <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
             {item.href ? (
               <Link
                 href={item.href}
-                className="rounded-lg px-2 py-1 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                className="rounded-lg px-2 py-1 transition-colors hover:bg-slate-100 hover:text-slate-700"
               >
                 {item.label}
               </Link>
             ) : (
-              <span className="rounded-lg px-2 py-1 font-medium text-gray-900">
+              <span className="rounded-lg px-2 py-1 font-medium text-slate-800">
                 {item.label}
               </span>
             )}
