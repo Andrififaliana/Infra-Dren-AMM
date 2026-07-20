@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { Bath, Plus, Pencil, Trash2, Venus, Mars, GraduationCap, Droplets, DoorOpen, ChevronRight, Image } from 'lucide-react';
 import { useBatiment, useUpdateBatiment } from '@/hooks/use-batiments';
 import { useCreateToilette, useUpdateToilette, useDeleteToilette } from '@/hooks/use-gestion-batiment-salle';
-import { BatimentPhotoUpload } from '@/components/batiments/BatimentPhotoUpload';
+import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
@@ -159,7 +159,13 @@ export default function EditBatimentPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <BatimentPhotoUpload batimentId={batiment.idBat} photos={(batiment as any).photos ?? []} />
+          <GenericPhotoUpload
+            entityId={batiment.idBat}
+            apiBasePath="/batiments"
+            queryKey={['batiments', batiment.idBat]}
+            photos={(batiment as any).photos ?? []}
+            entityName="ce bâtiment"
+          />
         </CardContent>
       </Card>
 

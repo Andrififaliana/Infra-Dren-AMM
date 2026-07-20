@@ -17,7 +17,7 @@ import { Modal } from '@/components/ui/modal';
 import { Select } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
-import { PhotoUpload } from '@/components/etablissements/PhotoUpload';
+import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
 import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight } from 'lucide-react';
 import type { Directeur, Designation, Structure } from '@/types/etablissement';
 
@@ -286,7 +286,13 @@ export default function EditEtablissementPage() {
       <Card className="mt-6">
         <CardHeader><CardTitle>Photos</CardTitle></CardHeader>
         <CardContent>
-          <PhotoUpload etablissementId={etablissement.id} photos={etablissement.photos} />
+          <GenericPhotoUpload
+            entityId={etablissement.id}
+            apiBasePath="/etablissements"
+            queryKey={['etablissements', etablissement.id]}
+            photos={etablissement.photos}
+            entityName="cet établissement"
+          />
         </CardContent>
       </Card>
 
