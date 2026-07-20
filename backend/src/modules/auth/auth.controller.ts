@@ -20,6 +20,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ForgotPasswordDto, ForgotPasswordResponseDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto, ResetPasswordResponseDto } from './dto/reset-password.dto';
+import { ConfirmSignupDto, ConfirmSignupResponseDto } from './dto/confirm-signup.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -131,5 +132,25 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Token invalide ou expiré' })
   async resetPassword(@Body() dto: ResetPasswordDto) {
     return this.authService.resetPassword(dto);
+  }
+
+  @Post('confirm-signup')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Confirmer l\'inscription après clic sur le lien email',
+    description:
+      'Confirme l\'email de l\'utilisateur après qu\'il a cliqué sur le lien de vérification ' +
+      'reçu par email. Le token est extrait du hash de l\'URL de redirection.',
+  })
+  @ApiBody({ type: ConfirmSignupDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Email confirmé',
+    type: ConfirmSignupResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Token invalide ou expiré' })
+  async confirmSignup(@Body() dto: ConfirmSignupDto) {
+    return this.authService.confirmSignup(dto);
   }
 }

@@ -13,6 +13,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ConfirmSignupDto } from './dto/confirm-signup.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +35,14 @@ export class AuthService {
 
     if (error || !data.session) {
       this.logger.warn(`Échec de connexion pour ${email}: ${error?.message}`);
+
+      // Vérifier si l'erreur est due à un email non confirmé
+      if (error?.message?.toLowerCase().includes('email not confirmed')) {
+        throw new UnauthorizedException(
+          'Email non confirmé. Veuillez vérifier votre boîte de réception et cliquer sur le lien de confirmation.',
+        );
+      }
+
       throw new UnauthorizedException('Email ou mot de passe incorrect');
     }
 
@@ -78,12 +87,13 @@ export class AuthService {
       throw new ConflictException('Un utilisateur avec cet email existe déjà');
     }
 
+    // 1. Créer l'utilisateur dans Supabase sans confirmer l'email
     const { data, error } = await this.supabaseService
       .getAdminClient()
       .auth.admin.createUser({
         email,
         password,
-        email_confirm: true,
+        email_confirm: false,
         user_metadata: { nom, role: role ?? 'RESPONSABLE_INFRASTRUCTURE' },
       });
 
@@ -96,6 +106,7 @@ export class AuthService {
       );
     }
 
+    // 2. Créer l'utilisateur dans la base de données locale
     const dbUser = await this.prisma.user.create({
       data: {
         email,
@@ -105,11 +116,32 @@ export class AuthService {
       },
     });
 
+    // 3. Envoyer un email d'invitation/confirmation via Supabase
+    const appUrl = this.configService.get<string>('cors.origin') || 'http://localhost:3000';
+    try {
+      const { error: inviteError } = await this.supabaseService
+        .getAdminClient()
+        .auth.admin.inviteUserByEmail(email, {
+          redirectTo: `${appUrl}/auth/confirm`,
+        });
+
+      if (inviteError) {
+        this.logger.warn(
+          `Erreur envoi invitation Supabase: ${inviteError.message}`,
+        );
+      } else {
+        this.logger.log(`Email de confirmation envoyé à ${email}`);
+      }
+    } catch (inviteError) {
+      this.logger.warn(`Erreur inattendue envoi invitation: ${inviteError}`);
+    }
+
     return {
       id: dbUser.id,
       email: dbUser.email,
       nom: dbUser.nom,
       role: dbUser.role,
+      pendingConfirmation: true,
     };
   }
 
@@ -159,6 +191,69 @@ export class AuthService {
         role: dbUser.role,
       },
     };
+  }
+
+  /**
+   * Confirme l'inscription d'un utilisateur après qu'il a cliqué sur le lien
+   * de vérification reçu par email.
+   */
+  async confirmSignup(dto: ConfirmSignupDto): Promise<{ success: boolean; message: string }> {
+    const { accessToken } = dto;
+
+    try {
+      const { data: userData, error: userError } = await this.supabaseService
+        .getClient()
+        .auth.getUser(accessToken);
+
+      if (userError || !userData.user) {
+        this.logger.warn(`Token de confirmation invalide: ${userError?.message}`);
+        throw new UnauthorizedException(
+          'Le lien de confirmation est invalide ou a expiré.',
+        );
+      }
+
+      const supabaseUserId = userData.user.id;
+
+      const dbUser = await this.prisma.user.findUnique({
+        where: { supabaseUserId },
+      });
+
+      if (!dbUser) {
+        throw new UnauthorizedException('Utilisateur non trouvé dans le système.');
+      }
+
+      if (userData.user.email_confirmed_at) {
+        this.logger.log(`Email déjà confirmé pour ${dbUser.email}`);
+        return {
+          success: true,
+          message: 'Email déjà confirmé. Vous pouvez vous connecter.',
+        };
+      }
+
+      const { error: confirmError } = await this.supabaseService
+        .getAdminClient()
+        .auth.admin.updateUserById(supabaseUserId, {
+          email_confirm: true,
+        });
+
+      if (confirmError) {
+        this.logger.error(`Erreur confirmation email: ${confirmError.message}`);
+        throw new BadRequestException('Erreur lors de la confirmation de l\'email.');
+      }
+
+      await this.auditService.modification('AUTH', dbUser.id, 'Email confirmé');
+      this.logger.log(`Email confirmé pour ${dbUser.email}`);
+      return {
+        success: true,
+        message: 'Email confirmé avec succès. Vous pouvez maintenant vous connecter.',
+      };
+    } catch (error) {
+      if (error instanceof UnauthorizedException || error instanceof BadRequestException) {
+        throw error;
+      }
+      this.logger.error(`Erreur inattendue confirmSignup: ${error}`);
+      throw new BadRequestException('Erreur lors de la confirmation de l\'email.');
+    }
   }
 
   /**

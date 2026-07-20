@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Modal } from '@/components/ui/modal';
 import { Badge } from '@/components/ui/badge';
-import { Trash2 } from 'lucide-react';
+import { Trash2, MailCheck } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
 import { formatDateShort } from '@/lib/utils';
 import type { User, Role } from '@/types/user';
@@ -31,6 +31,8 @@ export default function UtilisateursPage() {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
   const [formData, setFormData] = useState<UserFormData>({ email: '', nom: '', password: '', role: 'RESPONSABLE_INFRASTRUCTURE' });
+  const [showConfirmBanner, setShowConfirmBanner] = useState(false);
+  const [createdEmail, setCreatedEmail] = useState('');
 
   const { data, isLoading } = useUsers({ page, limit: 10, search: search || undefined });
   const { mutate: createUser, isPending: isCreating } = useCreateUser();
@@ -42,9 +44,13 @@ export default function UtilisateursPage() {
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
     createUser(formData, {
-      onSuccess: () => {
+      onSuccess: (result: any) => {
         setCreateModalOpen(false);
+        setCreatedEmail(formData.email);
+        setShowConfirmBanner(true);
         setFormData({ email: '', nom: '', password: '', role: 'RESPONSABLE_INFRASTRUCTURE' });
+        // Cacher la bannière après 8 secondes
+        setTimeout(() => setShowConfirmBanner(false), 8000);
       },
     });
   };
@@ -125,6 +131,27 @@ export default function UtilisateursPage() {
         </div>
         <Button onClick={() => setCreateModalOpen(true)}>+ Nouvel utilisateur</Button>
       </div>
+
+      {showConfirmBanner && (
+        <div className="mb-4 rounded-xl border border-green-200 bg-green-50 p-4 flex items-start gap-3">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-100">
+            <MailCheck className="h-4 w-4 text-green-600" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-green-800">Utilisateur créé avec succès</p>
+            <p className="text-xs text-green-700 mt-0.5">
+              Un email de confirmation a été envoyé à <strong>{createdEmail}</strong>.
+              L&apos;utilisateur doit cliquer sur le lien pour activer son compte.
+            </p>
+          </div>
+          <button
+            onClick={() => setShowConfirmBanner(false)}
+            className="text-green-500 hover:text-green-700 transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       <div className="mb-4">
         <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} />
