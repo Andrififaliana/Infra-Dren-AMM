@@ -31,9 +31,27 @@ export function EtablissementExportModal({
 
     setIsGenerating(true);
     try {
+      // Forcer le chargement de toutes les images avant la capture
+      const images = previewRef.current.querySelectorAll('img');
+      await Promise.all(
+        Array.from(images).map(
+          (img) =>
+            new Promise<void>((resolve) => {
+              if (img.complete && img.naturalWidth > 0) {
+                resolve();
+              } else {
+                img.addEventListener('load', () => resolve(), { once: true });
+                img.addEventListener('error', () => resolve(), { once: true });
+                if (!img.src) resolve();
+              }
+            }),
+        ),
+      );
+
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
-        useCORS: true,
+        useCORS: false,
+        allowTaint: true,
         logging: false,
         width: previewRef.current.scrollWidth,
         height: previewRef.current.scrollHeight,
