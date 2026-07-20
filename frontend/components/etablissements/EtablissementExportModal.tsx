@@ -41,20 +41,21 @@ export function EtablissementExportModal({
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const imgWidth = 210; // A4 width in mm
+      const margin = 10; // 10mm de chaque côté pour centrer dans A4
+      const imgWidth = 210 - 2 * margin; // 190mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       const pdf = new jsPDF('p', 'mm', 'a4');
       let heightLeft = imgHeight;
       let position = 0;
 
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
       heightLeft -= pdf.internal.pageSize.getHeight();
 
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
         heightLeft -= pdf.internal.pageSize.getHeight();
       }
 
@@ -119,7 +120,7 @@ export function EtablissementExportModal({
             </div>
           ) : (
             <div className="p-6">
-              <div ref={previewRef} className="mx-auto max-w-[210mm] bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+              <div ref={previewRef} className="mx-auto max-w-[190mm] bg-white">
                 <ExportPreview etablissement={etab} />
               </div>
             </div>
@@ -264,11 +265,6 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
                 {b.dispositifAc && <p className="text-[10px] text-slate-500 mt-0.5">AC : {b.dispositifAc}</p>}
               </div>
 
-              {/* Photos du bâtiment */}
-              {b.photos.length > 0 && (
-                <PhotoList photos={b.photos} label={`${b.photos.length} photo${b.photos.length > 1 ? 's' : ''}`} />
-              )}
-
               {/* Toilettes */}
               {b.toilettes.length > 0 && (
                 <div className="px-3 py-1.5 border-x border-slate-200 text-[10px] text-slate-500">
@@ -311,21 +307,6 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
                       ))}
                     </tbody>
                   </table>
-                  {/* Détail des photos par salle */}
-                  {b.salles.filter(s => s.photos.length > 0).length > 0 && (
-                    <div className="border-t border-slate-100 px-3 py-1.5 text-[9px] text-slate-400">
-                      {b.salles.filter(s => s.photos.length > 0).map(s => (
-                        <div key={s.idSalle} className="mb-0.5 last:mb-0">
-                          <span className="font-medium text-slate-500">{s.sigleSalle || `#${s.idSalle}`}</span> :{' '}
-                          {s.photos.map(p => (
-                            <span key={p.id} className="mr-1.5">
-                              {p.originalName || `Photo #${p.id}`}{p.estPrincipale ? ' ★' : ''}
-                            </span>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ) : (
                 <div className="px-3 py-2 border-x border-b border-slate-200 rounded-b text-[10px] text-slate-400">
@@ -337,10 +318,40 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
         </Section>
       )}
 
-      {/* Photos de l'établissement */}
-      {e.photos.length > 0 && (
-        <Section title={`Photos (${e.photos.length})`}>
-          <PhotoList photos={e.photos} />
+      {/* ─── Galerie photos ────────────────────────────── */}
+      {(e.photos.length > 0 || e.batiments.some(b => b.photos.length > 0) || e.batiments.some(b => b.salles.some(s => s.photos.length > 0))) && (
+        <Section title="Galerie photos">
+          {/* Photos de l'établissement */}
+          {e.photos.length > 0 && (
+            <div className="mb-3">
+              <h4 className="text-[10px] font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                Établissement ({e.photos.length} photo{e.photos.length > 1 ? 's' : ''})
+              </h4>
+              <PhotoGrid photos={e.photos} />
+            </div>
+          )}
+
+          {/* Photos des bâtiments et salles */}
+          {e.batiments.filter(b => b.photos.length > 0 || b.salles.some(s => s.photos.length > 0)).map(b => (
+            <div key={b.idBat} className="mb-3 last:mb-0">
+              <h4 className="text-[10px] font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                Bâtiment {b.sigleBat || `#${b.idBat}`}
+                {(b.photos.length > 0) && <span className="font-normal text-slate-400">({b.photos.length} photo{b.photos.length > 1 ? 's' : ''})</span>}
+              </h4>
+              {b.photos.length > 0 && <PhotoGrid photos={b.photos} />}
+              {b.salles.filter(s => s.photos.length > 0).map(s => (
+                <div key={s.idSalle} className="mt-2 ml-3">
+                  <h5 className="text-[9px] text-slate-500 mb-1 flex items-center gap-1">
+                    └ Salle {s.sigleSalle || `#${s.idSalle}`}
+                    <span className="text-slate-300">({s.photos.length} photo{s.photos.length > 1 ? 's' : ''})</span>
+                  </h5>
+                  <PhotoGrid photos={s.photos} />
+                </div>
+              ))}
+            </div>
+          ))}
         </Section>
       )}
 
@@ -385,40 +396,37 @@ function Row({
   );
 }
 
-// ─── Photo List Helper (miniatures) ──────────────────────
+// ─── Photo Grid (galerie miniatures 80×60) ──────────────
 
-function PhotoList({ photos, label }: { photos: Array<{ id: number; url: string; originalName?: string | null; estPrincipale: boolean }>; label?: string }) {
+function PhotoGrid({ photos }: { photos: Array<{ id: number; url: string; originalName?: string | null; estPrincipale: boolean }> }) {
   const [failedIds, setFailedIds] = useState<Set<number>>(new Set());
 
   return (
-    <div className="border-x border-slate-200 px-3 py-2 text-[10px]">
-      {label && <p className="text-slate-500 mb-1.5 font-medium">{label}</p>}
-      <div className="flex flex-wrap gap-2">
-        {photos.map(p => (
-          <div key={p.id} className="flex flex-col items-center gap-0.5">
-            {failedIds.has(p.id) ? (
-              <div className="w-[60px] h-[45px] flex items-center justify-center rounded border border-slate-200 bg-slate-50 text-slate-300">
-                <ImageIcon className="h-4 w-4" />
-              </div>
-            ) : (
-              <img
-                src={p.url}
-                alt={p.originalName || `Photo #${p.id}`}
-                className="w-[60px] h-[45px] object-cover rounded border border-slate-200"
-                crossOrigin="anonymous"
-                loading="lazy"
-                onError={() => setFailedIds(prev => new Set(prev).add(p.id))}
-              />
-            )}
-            <div className="flex items-center gap-0.5">
-              <span className="text-[8px] text-slate-400 truncate max-w-[60px]">
-                {p.originalName || `Photo #${p.id}`}
-              </span>
-              {p.estPrincipale && <span className="text-[9px] text-amber-600" title="Principale">★</span>}
+    <div className="flex flex-wrap gap-2">
+      {photos.map(p => (
+        <div key={p.id} className="flex flex-col items-center gap-0.5">
+          {failedIds.has(p.id) ? (
+            <div className="w-20 h-[60px] flex items-center justify-center rounded border border-slate-200 bg-slate-50 text-slate-300">
+              <ImageIcon className="h-5 w-5" />
             </div>
+          ) : (
+            <img
+              src={p.url}
+              alt={p.originalName || `Photo #${p.id}`}
+              className="w-20 h-[60px] object-cover rounded border border-slate-200"
+              crossOrigin="anonymous"
+              loading="lazy"
+              onError={() => setFailedIds(prev => new Set(prev).add(p.id))}
+            />
+          )}
+          <div className="flex items-center gap-0.5">
+            <span className="text-[8px] text-slate-400 truncate max-w-20">
+              {p.originalName || `#${p.id}`}
+            </span>
+            {p.estPrincipale && <span className="text-[10px] text-amber-600" title="Principale">★</span>}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }
