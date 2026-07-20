@@ -156,9 +156,9 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
   return (
     <div className="text-slate-800" style={{ fontFamily: 'system-ui, sans-serif', fontSize: '10px', lineHeight: '1.4' }}>
       {/* Header neutre */}
-      <div className="bg-slate-800 px-6 py-5 text-white">
-        <h1 className="text-lg font-bold tracking-tight">{e.nomEtab}</h1>
-        <div className="mt-1.5 flex flex-wrap gap-x-5 gap-y-0.5 text-[11px] text-slate-300">
+      <div className="bg-slate-800 px-5 py-4 text-white">
+        <h1 className="text-base font-bold tracking-tight">{e.nomEtab}</h1>
+        <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-[10px] text-slate-300">
           {e.dren && <span>DREN : {e.dren}</span>}
           {e.cisco && <span>CISCO : {e.cisco}</span>}
           {e.zap && <span>ZAP : {e.zap}</span>}
@@ -373,7 +373,7 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
       )}
 
       {/* Footer */}
-      <div className="border-t border-slate-200 px-6 py-3 text-center text-[9px] text-slate-400">
+      <div className="border-t border-slate-200 px-4 py-2.5 text-center text-[9px] text-slate-400">
         Fiche générée le {new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} · InfraDren AMM
       </div>
     </div>
@@ -390,8 +390,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-b border-slate-100 px-5 py-3 last:border-b-0">
-      <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">{title}</h3>
+    <div className="border-b border-slate-100 px-4 py-2.5 last:border-b-0">
+      <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">{title}</h3>
       <div className="space-y-0.5">{children}</div>
     </div>
   );
@@ -406,8 +406,8 @@ function Row({
 }) {
   if (value === undefined || value === null || value === '') return null;
   return (
-    <div className="flex items-start gap-3 text-xs py-0.5">
-      <span className="text-slate-500 w-28 shrink-0">{label}</span>
+    <div className="flex items-start gap-2 text-xs py-0.5">
+      <span className="text-slate-500 w-24 shrink-0">{label}</span>
       <span className="text-slate-800 font-medium">{value}</span>
     </div>
   );
