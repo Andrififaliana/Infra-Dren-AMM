@@ -35,28 +35,10 @@ export function EtablissementExportModal({
     const originalSrcs = new Map<HTMLImageElement, string>();
     try {
       const apiBase = API_BASE_URL;
-      const allImgs = previewRef.current.querySelectorAll('img');
+      let allImgs = previewRef.current.querySelectorAll<HTMLImageElement>('img');
 
-      // 1. Precharger les images via le proxy en arriere-plan (hors DOM)
-      //    pour les mettre dans le cache navigateur
-      await Promise.all(
-        Array.from(allImgs).map(
-          (img) =>
-            new Promise<void>((resolve) => {
-              const src = img.src;
-              if (!src || src.startsWith('data:') || src.startsWith('blob:')) {
-                resolve();
-                return;
-              }
-              const proxyImg = new Image();
-              proxyImg.onload = () => resolve();
-              proxyImg.onerror = () => resolve();
-              proxyImg.src = `${apiBase}/r2/proxy-image?url=${encodeURIComponent(src)}`;
-            }),
-        ),
-      );
-
-      // 2. Echanger les src (images deja en cache → instantane, pas de flash)
+      // 1. Echanger les src vers le proxy AVANT de precharger,
+      //    pour que html2canvas trouve deja les bonnes URLs CORS
       allImgs.forEach((img) => {
         const src = img.src;
         if (src && !src.startsWith('data:') && !src.startsWith('blob:')) {
@@ -65,22 +47,26 @@ export function EtablissementExportModal({
         }
       });
 
-      // 2b. Attendre que le navigateur ait decode toutes les images
-      await Promise.all(
+      // 2. Attendre que TOUTES les images du DOM soient decodees
+      //    (celles qui ont echoue afficheront un placeholder)
+      await Promise.allSettled(
         Array.from(allImgs).map(
           (img) =>
-            new Promise<void>((resolve) => {
+            new Promise<void>((resolve, reject) => {
               if (img.complete) {
-                resolve();
+                if (img.naturalWidth > 0) resolve(); else reject();
               } else {
                 img.addEventListener('load', () => resolve(), { once: true });
-                img.addEventListener('error', () => resolve(), { once: true });
+                img.addEventListener('error', () => reject(), { once: true });
               }
             }),
         ),
       );
 
-      // 3. Capturer (images fraichement decodees)
+      // 3. Attendre un cycle de rendu supplementaire pour que les placeholders s'affichent
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      // 4. Capturer (images fraichement decodees)
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         useCORS: true,
@@ -451,38 +437,63 @@ function Row({
 
 // ─── Photo Grid (grille 2 colonnes, grande taille) ──────
 
-function PhotoGrid({ photos }: { photos: Array<{ id: number; url: string; originalName?: string | null; estPrincipale: boolean }> }) {
-  const [failedIds, setFailedIds] = useState<Set<number>>(new Set());
+type PhotoGridPhoto = {
+  id: number;
+  key: string;
+  url: string;
+  originalName?: string | null;
+  estPrincipale: boolean;
+};
 
+function PhotoGrid({ photos }: { photos: PhotoGridPhoto[] }) {
   return (
     <div className="grid grid-cols-2 gap-3">
       {photos.map(p => (
-        <div key={p.id} className="flex flex-col gap-1">
-          {failedIds.has(p.id) ? (
-            <div className="w-full h-36 flex items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-300">
-              <ImageIcon className="h-8 w-8" />
-            </div>
-          ) : (
-            <img
-              src={p.url}
-              alt={p.originalName || `Photo #${p.id}`}
-              className="w-full h-36 object-cover rounded-lg border border-slate-200"
-              loading="lazy"
-              onError={() => setFailedIds(prev => new Set(prev).add(p.id))}
-            />
-          )}
-          <div className="flex items-center justify-between">
-            <span className="text-[9px] text-slate-400 truncate">
-              {p.originalName || `#${p.id}`}
-            </span>
-            {p.estPrincipale && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium">
-                ★ Principale
-              </span>
-            )}
-          </div>
-        </div>
+        <PhotoCard key={p.id} photo={p} />
       ))}
+    </div>
+  );
+}
+
+function PhotoCard({ photo }: { photo: PhotoGridPhoto }) {
+  const apiBase = API_BASE_URL;
+  const [src, setSrc] = useState(photo.url);
+  const [failed, setFailed] = useState(false);
+
+  const proxyUrl = `${apiBase}/r2/proxy-image?url=${encodeURIComponent(photo.url)}`;
+
+  const handleError = useCallback(() => {
+    if (src === photo.url) {
+      setSrc(proxyUrl);
+    } else {
+      setFailed(true);
+    }
+  }, [src, photo.url, proxyUrl]);
+
+  return (
+    <div className="flex flex-col gap-1">
+      {failed ? (
+        <div className="w-full h-36 flex items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-300">
+          <ImageIcon className="h-8 w-8" />
+        </div>
+      ) : (
+        <img
+          src={src}
+          alt={photo.originalName || `Photo #${photo.id}`}
+          className="w-full h-36 object-cover rounded-lg border border-slate-200"
+          onError={handleError}
+        />
+      )}
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] text-slate-400 truncate">
+          {photo.originalName || `#${photo.id}`}
+        </span>
+        {photo.estPrincipale && (
+          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium">
+            ★ Principale
+          </span>
+        )}
+      </div>
     </div>
   );
 }
