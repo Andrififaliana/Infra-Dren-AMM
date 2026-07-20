@@ -227,6 +227,64 @@ export class EtablissementsService {
     return etablissement;
   }
 
+  async findOneExport(id: number) {
+    const etablissement = await this.prisma.etablissement.findUnique({
+      where: { id },
+      include: {
+        directeur: true,
+        designations: true,
+        structures: true,
+        photos: { orderBy: { estPrincipale: 'desc' } },
+        batiments: {
+          include: {
+            photos: { orderBy: { estPrincipale: 'desc' } },
+            toilettes: true,
+            salles: {
+              include: {
+                equipements: true,
+                ouvertures: true,
+                photos: { orderBy: { estPrincipale: 'desc' } },
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            batiments: true,
+            designations: true,
+            structures: true,
+            photos: true,
+          },
+        },
+      },
+    });
+    if (!etablissement)
+      throw new NotFoundException(`Établissement #${id} non trouvé`);
+
+    // Signer les URLs des photos
+    if (etablissement.photos?.length) {
+      await this.signPhotoUrls(
+        etablissement.photos as Array<{ key: string; url: string }>,
+      );
+    }
+    for (const batiment of etablissement.batiments) {
+      if (batiment.photos?.length) {
+        await this.signPhotoUrls(
+          batiment.photos as Array<{ key: string; url: string }>,
+        );
+      }
+      for (const salle of batiment.salles) {
+        if (salle.photos?.length) {
+          await this.signPhotoUrls(
+            salle.photos as Array<{ key: string; url: string }>,
+          );
+        }
+      }
+    }
+
+    return etablissement;
+  }
+
   async remove(id: number) {
     const etablissement = await this.prisma.etablissement.findUnique({
       where: { id },

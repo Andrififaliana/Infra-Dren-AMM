@@ -74,6 +74,18 @@ export class EtablissementsController {
     return this.etablissementsService.findOne(id);
   }
 
+  @Get(':id/export')
+  @Public()
+  @ApiOperation({
+    summary: "Export complet d'un établissement pour génération PDF",
+    description: "Retourne toutes les données avec les relations imbriquées (salles, équipements, photos...)",
+  })
+  @ApiResponse({ status: 200, description: 'Données export' })
+  @ApiResponse({ status: 404, description: 'Non trouvé' })
+  findOneExport(@Param('id', ParseIntPipe) id: number) {
+    return this.etablissementsService.findOneExport(id);
+  }
+
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
