@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, LayoutDashboard, School, Building2, DoorOpen, Package, Bus, Waves, Users, ClipboardList, Save, User, Map as MapIcon, Bot } from 'lucide-react';
+import { X, LayoutDashboard, School, Building2, DoorOpen, Package, Bus, Waves, Users, ClipboardList, Save, User, Map as MapIcon, Bot, Activity } from 'lucide-react';
 
 interface NavItem {
   label: string;
@@ -79,6 +79,12 @@ const navItems: NavItem[] = [
     label: 'Journal d\'audit',
     href: '/admin/logs',
     icon: <ClipboardList className="h-5 w-5" />,
+    roles: ['ADMIN'],
+  },
+  {
+    label: 'Monitoring IA',
+    href: '/admin/ia-logs',
+    icon: <Activity className="h-5 w-5" />,
     roles: ['ADMIN'],
   },
   {

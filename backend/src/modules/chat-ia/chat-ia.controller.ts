@@ -4,6 +4,7 @@ import {
   Get,
   Delete,
   Body,
+  Query,
   UseGuards,
   HttpCode,
   HttpStatus,
@@ -13,8 +14,10 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { ChatIaService } from './chat-ia.service';
+import { IaMonitoringService } from './ia-monitoring.service';
 import {
   ChatMessageDto,
   ExecuteActionDto,
@@ -32,7 +35,10 @@ import { Role } from '../../common/constants';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('chat-ia')
 export class ChatIaController {
-  constructor(private readonly chatIaService: ChatIaService) {}
+  constructor(
+    private readonly chatIaService: ChatIaService,
+    private readonly iaMonitoring: IaMonitoringService,
+  ) {}
 
   @Post('message')
   @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
@@ -98,5 +104,39 @@ export class ChatIaController {
   async clearConversation(@CurrentUser() user: CurrentUserPayload) {
     this.chatIaService.clearConversation(user.id);
     return { message: 'Conversation effacée.' };
+  }
+
+  @Get('logs')
+  @Roles(Role.ADMIN)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Lister les logs de monitoring IA',
+    description:
+      'Retourne les logs paginés de toutes les requêtes IA. Accessible uniquement aux administrateurs.',
+  })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'success', required: false, description: 'Filtrer par succès (true/false)' })
+  async getLogs(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('success') success?: string,
+  ) {
+    return this.iaMonitoring.findAll({
+      page: page ? parseInt(page, 10) : 1,
+      limit: limit ? parseInt(limit, 10) : 50,
+      success,
+    });
+  }
+
+  @Get('logs/stats')
+  @Roles(Role.ADMIN)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Statistiques des logs IA',
+    description: 'Retourne les statistiques globales (total requêtes, tokens, temps moyen, etc.)',
+  })
+  async getLogsStats() {
+    return this.iaMonitoring.getStats();
   }
 }
