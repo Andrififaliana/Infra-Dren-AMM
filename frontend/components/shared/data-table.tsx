@@ -68,7 +68,7 @@ export function DataTable<T>({
   if (loading) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white">
-        <div className="p-8 text-center text-sm text-slate-500">Chargement...</div>
+        <div className="p-6 sm:p-8 text-center text-sm text-slate-500">Chargement...</div>
       </div>
     );
   }
@@ -76,15 +76,15 @@ export function DataTable<T>({
   if (data.length === 0) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white">
-        <div className="p-8 text-center text-sm text-slate-500">{emptyMessage}</div>
+        <div className="p-6 sm:p-8 text-center text-sm text-slate-500">{emptyMessage}</div>
       </div>
     );
   }
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-slate-200">
+      <div className="overflow-x-auto [-webkit-overflow-scrolling:touch]">
+        <table className="min-w-[650px] w-full divide-y divide-slate-200">
           <thead className="bg-slate-50">
             <tr>
               {selectable && (

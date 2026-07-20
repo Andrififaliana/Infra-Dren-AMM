@@ -25,21 +25,21 @@ export default function TableauDeBordPage() {
     <div>
       <Breadcrumb items={[{ label: 'Tableau de bord' }]} />
 
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Tableau de bord</h1>
-        <p className="mt-1 text-sm text-gray-500">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Tableau de bord</h1>
+        <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">
           Vue d&apos;ensemble des infrastructures scolaires
         </p>
       </div>
 
       {/* KPIs */}
       {isLoading ? (
-        <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-6 sm:mb-8 grid gap-3 sm:gap-6 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : globales ? (
         <>
-          <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-6 sm:mb-8 grid gap-3 sm:gap-6 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
             <StatCard title="Établissements" value={globales.totalEtablissements} icon={<School className="h-5 w-5" />} index={0} />
             <StatCard title="Bâtiments" value={globales.totalBatiments} icon={<Building2 className="h-5 w-5" />} index={1} />
             <StatCard title="Salles" value={globales.totalSalles} icon={<DoorOpen className="h-5 w-5" />} index={2} />
@@ -47,7 +47,7 @@ export default function TableauDeBordPage() {
           </div>
 
           {/* Graphiques */}
-          <div className="mb-8 grid gap-6 lg:grid-cols-2">
+          <div className="mb-6 sm:mb-8 grid gap-4 sm:gap-6 lg:grid-cols-2">
             {/* Bar Chart - Répartition par DREN */}
             {parDren && parDren.length > 0 && (
               <motion.div
@@ -61,7 +61,7 @@ export default function TableauDeBordPage() {
                   <CardTitle>Établissements par district</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-72">
+                  <div className="h-60 sm:h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={parDren} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -93,7 +93,7 @@ export default function TableauDeBordPage() {
                   <CardTitle>État des salles de classe</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-72">
+                  <div className="h-60 sm:h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -161,13 +161,12 @@ export default function TableauDeBordPage() {
           </div>
 
           {/* Tableau DREN */}
-          {parDren && parDren.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Répartition détaillée par district</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
+          {parDren && parDren.length > 0 && (              <Card>
+                <CardHeader>
+                  <CardTitle>Répartition détaillée par district</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto [-webkit-overflow-scrolling:touch]">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-gray-200">

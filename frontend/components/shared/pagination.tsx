@@ -13,34 +13,43 @@ export function Pagination({ page, totalPages, total, onPageChange }: Pagination
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-between border-t border-slate-200 pt-4">
-      <p className="text-sm text-slate-600">
-        Page {page} sur {totalPages} ({total} résultats)
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200 pt-4">
+      <p className="text-xs sm:text-sm text-slate-600 order-2 sm:order-1">
+        Page {page} sur {totalPages}
+        <span className="hidden sm:inline"> ({total} résultats)</span>
       </p>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
         <Button
           variant="outline"
           size="sm"
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
         >
-          Précédent
+          <span className="hidden sm:inline">Précédent</span>
+          <span className="sm:hidden">‹</span>
         </Button>
 
-        {generatePageNumbers(page, totalPages).map((p, i) =>
-          p === -1 ? (
-            <span key={`dots-${i}`} className="px-1 text-slate-400">...</span>
-          ) : (
-            <Button
-              key={p}
-              variant={p === page ? 'primary' : 'outline'}
-              size="sm"
-              onClick={() => onPageChange(p)}
-            >
-              {p}
-            </Button>
-          )
-        )}
+        <div className="hidden sm:flex items-center gap-1">
+          {generatePageNumbers(page, totalPages).map((p, i) =>
+            p === -1 ? (
+              <span key={`dots-${i}`} className="px-1 text-slate-400">...</span>
+            ) : (
+              <Button
+                key={p}
+                variant={p === page ? 'primary' : 'outline'}
+                size="sm"
+                onClick={() => onPageChange(p)}
+              >
+                {p}
+              </Button>
+            )
+          )}
+        </div>
+
+        {/* Mobile - page indicator */}
+        <span className="sm:hidden text-xs text-slate-500 font-medium px-1">
+          {page}/{totalPages}
+        </span>
 
         <Button
           variant="outline"
@@ -48,7 +57,8 @@ export function Pagination({ page, totalPages, total, onPageChange }: Pagination
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
         >
-          Suivant
+          <span className="hidden sm:inline">Suivant</span>
+          <span className="sm:hidden">›</span>
         </Button>
       </div>
     </div>
