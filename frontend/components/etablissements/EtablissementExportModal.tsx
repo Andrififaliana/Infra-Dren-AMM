@@ -4,7 +4,7 @@ import { useRef, useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
-import { X, Loader2, FileText, AlertTriangle, Download } from 'lucide-react';
+import { X, Loader2, FileText, AlertTriangle, Download, ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -264,6 +264,11 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
                 {b.dispositifAc && <p className="text-[10px] text-slate-500 mt-0.5">AC : {b.dispositifAc}</p>}
               </div>
 
+              {/* Photos du bâtiment */}
+              {b.photos.length > 0 && (
+                <PhotoList photos={b.photos} label={`${b.photos.length} photo${b.photos.length > 1 ? 's' : ''}`} />
+              )}
+
               {/* Toilettes */}
               {b.toilettes.length > 0 && (
                 <div className="px-3 py-1.5 border-x border-slate-200 text-[10px] text-slate-500">
@@ -285,6 +290,7 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
                         <th className="py-1 px-2 text-center text-slate-500 font-medium">Élèves</th>
                         <th className="py-1 px-2 text-center text-slate-500 font-medium">Équip.</th>
                         <th className="py-1 px-2 text-center text-slate-500 font-medium">Ouv.</th>
+                        <th className="py-1 px-2 text-center text-slate-500 font-medium">Ph.</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -300,10 +306,26 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
                           <td className="py-1 px-2 text-center text-slate-600">{s.nbEleveF + s.nbEleveG}</td>
                           <td className="py-1 px-2 text-center text-slate-600">{s.equipements?.length || 0}</td>
                           <td className="py-1 px-2 text-center text-slate-600">{s.ouvertures?.length || 0}</td>
+                          <td className="py-1 px-2 text-center text-slate-600">{s.photos?.length || 0}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
+                  {/* Détail des photos par salle */}
+                  {b.salles.filter(s => s.photos.length > 0).length > 0 && (
+                    <div className="border-t border-slate-100 px-3 py-1.5 text-[9px] text-slate-400">
+                      {b.salles.filter(s => s.photos.length > 0).map(s => (
+                        <div key={s.idSalle} className="mb-0.5 last:mb-0">
+                          <span className="font-medium text-slate-500">{s.sigleSalle || `#${s.idSalle}`}</span> :{' '}
+                          {s.photos.map(p => (
+                            <span key={p.id} className="mr-1.5">
+                              {p.originalName || `Photo #${p.id}`}{p.estPrincipale ? ' ★' : ''}
+                            </span>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="px-3 py-2 border-x border-b border-slate-200 rounded-b text-[10px] text-slate-400">
@@ -315,10 +337,10 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
         </Section>
       )}
 
-      {/* Photos */}
+      {/* Photos de l'établissement */}
       {e.photos.length > 0 && (
         <Section title={`Photos (${e.photos.length})`}>
-          <p className="text-[10px] text-slate-500">{e.photos.length} photo{e.photos.length > 1 ? 's' : ''}</p>
+          <PhotoList photos={e.photos} />
         </Section>
       )}
 
@@ -359,6 +381,25 @@ function Row({
     <div className="flex items-start gap-3 text-xs py-0.5">
       <span className="text-slate-500 w-28 shrink-0">{label}</span>
       <span className="text-slate-800 font-medium">{value}</span>
+    </div>
+  );
+}
+
+// ─── Photo List Helper ───────────────────────────────────
+
+function PhotoList({ photos, label }: { photos: Array<{ id: number; originalName?: string | null; estPrincipale: boolean }>; label?: string }) {
+  return (
+    <div className="border-x border-slate-200 px-3 py-1.5 text-[10px] text-slate-500 flex items-start gap-1.5">
+      <ImageIcon className="h-3 w-3 mt-0.5 shrink-0 text-slate-400" />
+      <div className="flex flex-wrap gap-x-3 gap-y-0.5">
+        {label && <span className="font-medium text-slate-600 mr-1">{label} :</span>}
+        {photos.map(p => (
+          <span key={p.id} className="inline-flex items-center gap-0.5">
+            {p.originalName || `Photo #${p.id}`}
+            {p.estPrincipale && <span className="text-amber-600" title="Principale">★</span>}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
