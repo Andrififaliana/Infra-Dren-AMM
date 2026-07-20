@@ -385,19 +385,38 @@ function Row({
   );
 }
 
-// ─── Photo List Helper ───────────────────────────────────
+// ─── Photo List Helper (miniatures) ──────────────────────
 
-function PhotoList({ photos, label }: { photos: Array<{ id: number; originalName?: string | null; estPrincipale: boolean }>; label?: string }) {
+function PhotoList({ photos, label }: { photos: Array<{ id: number; url: string; originalName?: string | null; estPrincipale: boolean }>; label?: string }) {
+  const [failedIds, setFailedIds] = useState<Set<number>>(new Set());
+
   return (
-    <div className="border-x border-slate-200 px-3 py-1.5 text-[10px] text-slate-500 flex items-start gap-1.5">
-      <ImageIcon className="h-3 w-3 mt-0.5 shrink-0 text-slate-400" />
-      <div className="flex flex-wrap gap-x-3 gap-y-0.5">
-        {label && <span className="font-medium text-slate-600 mr-1">{label} :</span>}
+    <div className="border-x border-slate-200 px-3 py-2 text-[10px]">
+      {label && <p className="text-slate-500 mb-1.5 font-medium">{label}</p>}
+      <div className="flex flex-wrap gap-2">
         {photos.map(p => (
-          <span key={p.id} className="inline-flex items-center gap-0.5">
-            {p.originalName || `Photo #${p.id}`}
-            {p.estPrincipale && <span className="text-amber-600" title="Principale">★</span>}
-          </span>
+          <div key={p.id} className="flex flex-col items-center gap-0.5">
+            {failedIds.has(p.id) ? (
+              <div className="w-[60px] h-[45px] flex items-center justify-center rounded border border-slate-200 bg-slate-50 text-slate-300">
+                <ImageIcon className="h-4 w-4" />
+              </div>
+            ) : (
+              <img
+                src={p.url}
+                alt={p.originalName || `Photo #${p.id}`}
+                className="w-[60px] h-[45px] object-cover rounded border border-slate-200"
+                crossOrigin="anonymous"
+                loading="lazy"
+                onError={() => setFailedIds(prev => new Set(prev).add(p.id))}
+              />
+            )}
+            <div className="flex items-center gap-0.5">
+              <span className="text-[8px] text-slate-400 truncate max-w-[60px]">
+                {p.originalName || `Photo #${p.id}`}
+              </span>
+              {p.estPrincipale && <span className="text-[9px] text-amber-600" title="Principale">★</span>}
+            </div>
+          </div>
         ))}
       </div>
     </div>
