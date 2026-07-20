@@ -1,8 +1,9 @@
 import {
   Controller, Get, Post, Body, Patch, Param, Delete, Query,
-  UseGuards, ParseIntPipe,
+  UseGuards, ParseIntPipe, UseInterceptors, UploadedFile, UploadedFiles,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiConsumes } from '@nestjs/swagger';
 import { SallesService } from './salles.service';
 import { CreateSalleDto } from './dto/create-salle.dto';
 import { UpdateSalleDto } from './dto/update-salle.dto';
@@ -83,5 +84,53 @@ export class SallesController {
     @Param('ouvertureId', ParseIntPipe) ouvertureId: number,
   ) {
     return this.sallesService.deleteOuverture(ouvertureId, id);
+  }
+
+  // ─── Photos ─────────────────────────────────────────────
+
+  @Post(':id/photos')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Uploader une photo pour une salle' })
+  @ApiConsumes('multipart/form-data')
+  @ApiResponse({ status: 201, description: 'Photo uploadée' })
+  uploadPhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.sallesService.uploadPhoto(id, file);
+  }
+
+  @Post(':id/photos/multiple')
+  @UseInterceptors(FilesInterceptor('files', 10))
+  @ApiOperation({ summary: 'Uploader plusieurs photos' })
+  @ApiConsumes('multipart/form-data')
+  uploadMultiplePhotos(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.sallesService.uploadMultiplePhotos(id, files);
+  }
+
+  @Patch(':id/photos/:photoId')
+  @ApiOperation({ summary: 'Définir une photo comme principale' })
+  setPhotoPrincipale(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('photoId', ParseIntPipe) photoId: number,
+    @Body() body: { estPrincipale: string },
+  ) {
+    if (body.estPrincipale === 'true') {
+      return this.sallesService.setPhotoPrincipale(id, photoId);
+    }
+    return { message: 'Rien à faire' };
+  }
+
+  @Delete(':id/photos/:photoId')
+  @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Supprimer une photo' })
+  deletePhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('photoId', ParseIntPipe) photoId: number,
+  ) {
+    return this.sallesService.deletePhoto(id, photoId);
   }
 }

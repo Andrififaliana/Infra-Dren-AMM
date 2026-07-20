@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { DoorOpen, Plus, Pencil, Trash2 } from 'lucide-react';
+import { DoorOpen, Plus, Pencil, Trash2, ImageIcon } from 'lucide-react';
 import { useSalle, useUpdateSalle } from '@/hooks/use-salles';
 import { useCreateOuverture, useUpdateOuverture, useDeleteOuverture } from '@/hooks/use-gestion-batiment-salle';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,8 @@ import { Select } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Modal } from '@/components/ui/modal';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { Ouverture } from '@/types/salle';
+import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
+import type { Ouverture, SallePhoto } from '@/types/salle';
 
 export default function EditSallePage() {
   const { id } = useParams<{ id: string }>();
@@ -112,6 +113,25 @@ export default function EditSallePage() {
               <Button type="submit" loading={isPending}>Enregistrer</Button>
             </div>
           </form>
+        </CardContent>
+      </Card>
+
+      {/* Section Photos */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ImageIcon className="h-5 w-5 text-gray-500" />
+            Photos
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <GenericPhotoUpload
+            entityId={salle.idSalle}
+            apiBasePath="/salles"
+            queryKey={['salles', salle.idSalle]}
+            photos={(salle as any).photos as SallePhoto[]}
+            entityName="cette salle"
+          />
         </CardContent>
       </Card>
 

@@ -133,6 +133,7 @@ model Salle {
 
   equipements Equipement[]
   ouvertures Ouverture[]
+  photos      SallePhoto[]
 
   @@map("salle")
 }
@@ -303,6 +304,23 @@ model BatimentPhoto {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("batiment_photo")
+}
+
+model SallePhoto {
+  id              Int      @id @default(autoincrement())
+  key             String   @map("key")
+  url             String   @map("url")
+  originalName    String?  @map("original_name")
+  mimeType        String?  @map("mime_type")
+  fileSize        Int?     @map("file_size")
+  estPrincipale   Boolean  @default(false) @map("est_principale")
+
+  salle   Salle @relation(fields: [salleId], references: [idSalle])
+  salleId Int   @map("salle_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("salle_photo")
 }
 
 model EffetAleat {

@@ -6,6 +6,17 @@ export interface EquipementSummary {
   quantite: number;
 }
 
+export interface SallePhoto {
+  id: number;
+  key: string;
+  url: string;
+  originalName?: string | null;
+  mimeType?: string | null;
+  fileSize?: number | null;
+  estPrincipale: boolean;
+  createdAt?: string;
+}
+
 export interface Salle {
   idSalle: number;
   sigleSalle?: string;
@@ -22,6 +33,7 @@ export interface Salle {
   batiment?: { idBat: number; sigleBat?: string };
   equipements?: EquipementSummary[];
   ouvertures?: Ouverture[];
+  photos?: SallePhoto[];
   _count?: { equipements: number; ouvertures: number };
 }
 
