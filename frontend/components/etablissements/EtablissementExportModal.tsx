@@ -3,15 +3,10 @@
 import { useRef, useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import {
-  X, Loader2, Building2, MapPin, Phone, Mail, User,
-  School, Users, DoorOpen, Lightbulb, Droplets, FileText,
-  ImageIcon, AlertTriangle, Star, Download,
-} from 'lucide-react';
+import html2canvas from 'html2canvas-pro';
+import { X, Loader2, FileText, AlertTriangle, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEtablissementExport } from '@/hooks/use-export-etablissement';
 import type { ExportEtablissement } from '@/types/etablissement-export';
@@ -141,14 +136,11 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
   const e = etablissement;
 
   return (
-    <div className="text-slate-800" style={{ fontFamily: 'system-ui, sans-serif' }}>
-      {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-emerald-700 px-8 py-6 text-white">
-        <div className="flex items-center gap-3 mb-1">
-          <School className="h-8 w-8 opacity-90" />
-          <h1 className="text-2xl font-bold tracking-tight">{e.nomEtab}</h1>
-        </div>
-        <div className="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-sm text-green-100">
+    <div className="text-slate-800" style={{ fontFamily: 'system-ui, sans-serif', fontSize: '10px', lineHeight: '1.4' }}>
+      {/* Header neutre */}
+      <div className="bg-slate-800 px-6 py-5 text-white">
+        <h1 className="text-lg font-bold tracking-tight">{e.nomEtab}</h1>
+        <div className="mt-1.5 flex flex-wrap gap-x-5 gap-y-0.5 text-[11px] text-slate-300">
           {e.dren && <span>DREN : {e.dren}</span>}
           {e.cisco && <span>CISCO : {e.cisco}</span>}
           {e.zap && <span>ZAP : {e.zap}</span>}
@@ -156,208 +148,182 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
       </div>
 
       {/* Infos générales */}
-      <Section title="Informations générales" icon={<MapPin className="h-5 w-5" />}>
+      <Section title="Informations générales">
         <Row label="Commune" value={e.commune} />
         <Row label="Fokontany" value={e.fokontany} />
         <Row label="Quartier" value={e.quartier} />
-        <Row label="Coordonnées" value={e.latitude && e.longitude ? `${e.latitude.toFixed(6)}, ${e.longitude.toFixed(6)}` : 'Non renseignées'} />
-        <Row label="Couverture téléphonique" value={e.couvTelephonique ? 'Oui' : 'Non'} />
-        <Row label="Couverture Internet" value={e.couvInternet ? 'Oui' : 'Non'} />
+        <Row label="Coordonnées GPS"
+          value={e.latitude && e.longitude ? `${e.latitude.toFixed(6)}, ${e.longitude.toFixed(6)}` : 'Non renseignées'} />
+        <Row label="Téléphone" value={e.couvTelephonique ? 'Oui' : 'Non'} />
+        <Row label="Internet" value={e.couvInternet ? 'Oui' : 'Non'} />
       </Section>
 
       {/* Effectifs */}
-      <Section title="Effectifs" icon={<Users className="h-5 w-5" />}>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-lg bg-blue-50 p-3 text-center">
-            <p className="text-2xl font-bold text-blue-700">{e.nbEnseignantG + e.nbEnseignantF}</p>
-            <p className="text-xs text-blue-600">Enseignants</p>
-            <p className="text-xs text-blue-400">({e.nbEnseignantG} H · {e.nbEnseignantF} F)</p>
-          </div>
-          <div className="rounded-lg bg-purple-50 p-3 text-center">
-            <p className="text-2xl font-bold text-purple-700">{e.nbSectionG + e.nbSectionF}</p>
-            <p className="text-xs text-purple-600">Sections</p>
-            <p className="text-xs text-purple-400">({e.nbSectionG} H · {e.nbSectionF} F)</p>
-          </div>
-        </div>
+      <Section title="Effectifs">
+        <table className="w-full text-xs">
+          <tbody>
+            <tr>
+              <td className="py-1 pr-4 text-slate-500 w-32 align-top">Enseignants</td>
+              <td className="py-1 font-medium">{e.nbEnseignantG + e.nbEnseignantF} ({e.nbEnseignantG} H · {e.nbEnseignantF} F)</td>
+            </tr>
+            <tr>
+              <td className="py-1 pr-4 text-slate-500 w-32 align-top">Sections</td>
+              <td className="py-1 font-medium">{e.nbSectionG + e.nbSectionF} ({e.nbSectionG} H · {e.nbSectionF} F)</td>
+            </tr>
+          </tbody>
+        </table>
       </Section>
 
       {/* Directeur */}
       {e.directeur && (
-        <Section title="Directeur" icon={<User className="h-5 w-5" />}>
-          <Row label="Nom" value={`${e.directeur.nomDirecteur} ${e.directeur.prenomDr || ''}`} />
-          {e.directeur.emailDr && <Row label="Email" value={e.directeur.emailDr} icon={<Mail className="h-3.5 w-3.5" />} />}
-          {e.directeur.telDr && <Row label="Téléphone" value={e.directeur.telDr} icon={<Phone className="h-3.5 w-3.5" />} />}
+        <Section title="Directeur">
+          <table className="w-full text-xs">
+            <tbody>
+              <tr><td className="py-0.5 pr-4 text-slate-500 w-32 align-top">Nom</td><td className="py-0.5 font-medium">{e.directeur.nomDirecteur} {e.directeur.prenomDr || ''}</td></tr>
+              {e.directeur.emailDr && <tr><td className="py-0.5 pr-4 text-slate-500 w-32 align-top">Email</td><td className="py-0.5">{e.directeur.emailDr}</td></tr>}
+              {e.directeur.telDr && <tr><td className="py-0.5 pr-4 text-slate-500 w-32 align-top">Téléphone</td><td className="py-0.5">{e.directeur.telDr}</td></tr>}
+            </tbody>
+          </table>
         </Section>
       )}
 
       {/* Désignations */}
       {e.designations.length > 0 && (
-        <Section title={`Désignations foncières (${e.designations.length})`} icon={<FileText className="h-5 w-5" />}>
-          {e.designations.map((d) => (
-            <div key={d.idDesign} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-              <p className="font-medium text-slate-800">{d.nomDesign}</p>
-              <div className="mt-1 flex flex-wrap gap-3 text-xs text-slate-500">
-                {d.typeDesignation && <span>Type : {d.typeDesignation}</span>}
-                {d.numCadastre && <span>N° Cadastre : {d.numCadastre}</span>}
-                {d.superficieDesign && <span>Surface : {d.superficieDesign} m²</span>}
-              </div>
-              <div className="mt-2 flex gap-1.5">
-                {d.estTitre && <Badge variant="success" className="text-[10px] px-1.5 py-0.5">Titre</Badge>}
-                {d.estEnceinteEtab && <Badge variant="info" className="text-[10px] px-1.5 py-0.5">Enceinte</Badge>}
-                {d.estLitigieux && <Badge variant="danger" className="text-[10px] px-1.5 py-0.5">Litigieux</Badge>}
-              </div>
-            </div>
-          ))}
+        <Section title={`Désignations foncières (${e.designations.length})`}>
+          <table className="w-full text-xs border-collapse">
+            <thead>
+              <tr className="border-b border-slate-200">
+                <th className="py-1 pr-3 text-left text-slate-500 font-medium">Nom</th>
+                <th className="py-1 pr-3 text-left text-slate-500 font-medium">Type</th>
+                <th className="py-1 pr-3 text-left text-slate-500 font-medium">Cadastre</th>
+                <th className="py-1 text-right text-slate-500 font-medium">Surface</th>
+              </tr>
+            </thead>
+            <tbody>
+              {e.designations.map((d) => (
+                <tr key={d.idDesign} className="border-b border-slate-100">
+                  <td className="py-1.5 pr-3">
+                    <span className="font-medium">{d.nomDesign}</span>
+                    <div className="flex gap-1 mt-0.5">
+                      {d.estTitre && <span className="text-[9px] px-1 py-0.5 rounded bg-slate-100 text-slate-600">Titre</span>}
+                      {d.estEnceinteEtab && <span className="text-[9px] px-1 py-0.5 rounded bg-slate-100 text-slate-600">Enceinte</span>}
+                      {d.estLitigieux && <span className="text-[9px] px-1 py-0.5 rounded bg-red-50 text-red-600">Litigieux</span>}
+                    </div>
+                  </td>
+                  <td className="py-1.5 pr-3 text-slate-600">{d.typeDesignation || '-'}</td>
+                  <td className="py-1.5 pr-3 text-slate-600">{d.numCadastre || '-'}</td>
+                  <td className="py-1.5 text-right text-slate-600">{d.superficieDesign ? `${d.superficieDesign} m²` : '-'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </Section>
       )}
 
       {/* Structures */}
       {e.structures.length > 0 && (
-        <Section title={`Structures (${e.structures.length})`} icon={<Building2 className="h-5 w-5" />}>
-          {e.structures.map((s) => (
-            <div key={s.idStruc} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-              <div className="flex items-center justify-between">
-                <p className="font-medium text-slate-800">{s.typeStruc || 'Structure'}</p>
-                <Badge variant={s.existenceStruc ? 'success' : 'danger'} className="text-[10px]">
-                  {s.existenceStruc ? 'Existant' : 'Inexistant'}
-                </Badge>
-              </div>
-              <div className="mt-1 flex gap-3 text-xs text-slate-500">
-                {s.materiauxStruc && <span>Matériaux : {s.materiauxStruc}</span>}
-                {s.etatStruc && <span>État : {s.etatStruc}</span>}
-              </div>
-            </div>
-          ))}
+        <Section title={`Structures (${e.structures.length})`}>
+          <table className="w-full text-xs border-collapse">
+            <thead>
+              <tr className="border-b border-slate-200">
+                <th className="py-1 pr-3 text-left text-slate-500 font-medium">Type</th>
+                <th className="py-1 pr-3 text-left text-slate-500 font-medium">Matériaux</th>
+                <th className="py-1 pr-3 text-left text-slate-500 font-medium">État</th>
+                <th className="py-1 text-right text-slate-500 font-medium">Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              {e.structures.map((s) => (
+                <tr key={s.idStruc} className="border-b border-slate-100">
+                  <td className="py-1.5 pr-3 font-medium">{s.typeStruc || 'Structure'}</td>
+                  <td className="py-1.5 pr-3 text-slate-600">{s.materiauxStruc || '-'}</td>
+                  <td className="py-1.5 pr-3 text-slate-600">{s.etatStruc || '-'}</td>
+                  <td className="py-1.5 text-right">
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded ${s.existenceStruc ? 'bg-slate-100 text-slate-700' : 'bg-red-50 text-red-600'}`}>
+                      {s.existenceStruc ? 'Existant' : 'Inexistant'}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </Section>
       )}
 
       {/* Bâtiments */}
       {e.batiments.length > 0 && (
-        <Section title={`Bâtiments (${e.batiments.length})`} icon={<Building2 className="h-5 w-5" />}>
-          {e.batiments.map((b) => {
-            const totalSallePhotos = b.salles.reduce((acc, s) => acc + s.photos.length, 0);
-            return (
-              <div key={b.idBat} className="rounded-xl border border-slate-200 overflow-hidden mb-4 last:mb-0">
-                {/* Batiment header */}
-                <div className="bg-slate-100 px-4 py-2.5 border-b border-slate-200">
-                  <div className="flex items-center justify-between">
-                    <p className="font-semibold text-slate-800">{b.sigleBat || `Bâtiment #${b.idBat}`}</p>
-                    <span className="text-xs text-slate-500">{b.nbNiveau} niveau{b.nbNiveau > 1 ? 'x' : ''}</span>
-                  </div>
-                  {b.dispositifAc && <p className="text-xs text-slate-500 mt-0.5">Dispositif AC : {b.dispositifAc}</p>}
+        <Section title={`Bâtiments (${e.batiments.length})`}>
+          {e.batiments.map((b) => (
+            <div key={b.idBat} className="mb-3 last:mb-0">
+              {/* En-tête bâtiment */}
+              <div className="bg-slate-100 px-3 py-1.5 rounded-t border-b border-slate-200">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-xs">{b.sigleBat || `Bâtiment #${b.idBat}`}</span>
+                  <span className="text-[10px] text-slate-500">{b.nbNiveau} niveau{b.nbNiveau > 1 ? 'x' : ''}</span>
                 </div>
-
-                {/* Photos */}
-                {b.photos.length > 0 && (
-                  <div className="flex gap-1.5 px-4 py-2 bg-slate-50/50 border-b border-slate-100">
-                    <ImageIcon className="h-3.5 w-3.5 text-slate-400 shrink-0 mt-0.5" />
-                    <span className="text-[11px] text-slate-400">{b.photos.length} photo{b.photos.length > 1 ? 's' : ''}</span>
-                    {b.photos.find(p => p.estPrincipale) && <Star className="h-3 w-3 text-amber-400 fill-amber-400 ml-1" />}
-                  </div>
-                )}
-
-                {/* Toilettes */}
-                {b.toilettes.length > 0 && (
-                  <div className="px-4 py-2 border-b border-slate-100">
-                    <p className="text-xs font-medium text-slate-600 mb-1 flex items-center gap-1">
-                      <Droplets className="h-3 w-3" /> Toilettes
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {b.toilettes.map((t) => (
-                        <span key={t.idToilette} className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] text-blue-700">
-                          {t.nbCompartiment} comp. {t.fonctionToilette || ''}
-                          {t.pointEau && ' 💧'}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Salles */}
-                {b.salles.length > 0 ? (
-                  <div className="divide-y divide-slate-100">
-                    {b.salles.map((s) => (
-                      <div key={s.idSalle} className="px-4 py-3">
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm font-medium text-slate-700">
-                            {s.sigleSalle || `Salle #${s.idSalle}`}
-                            {s.affectationSalle && (
-                              <span className="ml-2 text-xs text-slate-400 font-normal">({s.affectationSalle})</span>
-                            )}
-                          </p>
-                          <div className="flex items-center gap-2">
-                            <Badge variant={s.estOperationnel ? 'success' : 'danger'} className="text-[10px] px-1.5 py-0.5">
-                              {s.estOperationnel ? 'Op.' : 'Non op.'}
-                            </Badge>
-                            {s.estElectrifiee && (
-                              <Lightbulb className="h-3 w-3 text-amber-500 fill-amber-500" />
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-slate-500">
-                          <span>Niveau {s.niveauSalle}</span>
-                          <span>État : {s.etatSalle || 'N/R'}</span>
-                          {s.longueurInt && s.hauteurSP && (
-                            <span>Dim. : {s.longueurInt} × {s.hauteurSP} m</span>
-                          )}
-                          <span className="flex items-center gap-0.5">
-                            <Users className="h-3 w-3" /> {s.nbEleveF + s.nbEleveG} élèves ({s.nbEleveF} F · {s.nbEleveG} G)
-                          </span>
-                        </div>
-
-                        {/* Équipements */}
-                        {s.equipements.length > 0 && (
-                          <div className="mt-1.5 flex flex-wrap gap-1">
-                            {s.equipements.map((eq) => (
-                              <span key={eq.id} className="inline-flex items-center gap-0.5 rounded bg-green-50 px-1.5 py-0.5 text-[10px] text-green-700">
-                                {eq.nomEquip} ×{eq.quantite}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Ouvertures */}
-                        {s.ouvertures.length > 0 && (
-                          <div className="mt-1 flex flex-wrap gap-1">
-                            {s.ouvertures.map((o) => (
-                              <span key={o.idOuvert} className="inline-flex items-center gap-0.5 rounded bg-amber-50 px-1.5 py-0.5 text-[10px] text-amber-700">
-                                <DoorOpen className="h-2.5 w-2.5" />
-                                {o.nbOuvert} {o.typeOuvert || 'ouv.'}
-                                {o.surfaceOuvert && ` (${o.surfaceOuvert}m²)`}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Salle photos */}
-                        {s.photos.length > 0 && (
-                          <p className="mt-1 text-[10px] text-slate-400 flex items-center gap-1">
-                            <ImageIcon className="h-2.5 w-2.5" />
-                            {s.photos.length} photo{s.photos.length > 1 ? 's' : ''}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="px-4 py-3 text-xs text-slate-400">Aucune salle</p>
-                )}
+                {b.dispositifAc && <p className="text-[10px] text-slate-500 mt-0.5">AC : {b.dispositifAc}</p>}
               </div>
-            );
-          })}
+
+              {/* Toilettes */}
+              {b.toilettes.length > 0 && (
+                <div className="px-3 py-1.5 border-x border-slate-200 text-[10px] text-slate-500">
+                  Toilettes : {b.toilettes.map(t => `${t.nbCompartiment} comp.${t.fonctionToilette ? ` (${t.fonctionToilette})` : ''}${t.pointEau ? ' + point eau' : ''}`).join(' · ')}
+                </div>
+              )}
+
+              {/* Salles */}
+              {b.salles.length > 0 ? (
+                <div className="border-x border-b border-slate-200 rounded-b">
+                  <table className="w-full text-[10px] border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50">
+                        <th className="py-1 px-2 text-left text-slate-500 font-medium">Salle</th>
+                        <th className="py-1 px-2 text-left text-slate-500 font-medium">Niv.</th>
+                        <th className="py-1 px-2 text-left text-slate-500 font-medium">Affectation</th>
+                        <th className="py-1 px-2 text-left text-slate-500 font-medium">État</th>
+                        <th className="py-1 px-2 text-center text-slate-500 font-medium">Op.</th>
+                        <th className="py-1 px-2 text-center text-slate-500 font-medium">Élèves</th>
+                        <th className="py-1 px-2 text-center text-slate-500 font-medium">Équip.</th>
+                        <th className="py-1 px-2 text-center text-slate-500 font-medium">Ouv.</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {b.salles.map((s) => (
+                        <tr key={s.idSalle} className="border-t border-slate-100">
+                          <td className="py-1 px-2 font-medium">{s.sigleSalle || `#${s.idSalle}`}</td>
+                          <td className="py-1 px-2 text-slate-600">{s.niveauSalle}</td>
+                          <td className="py-1 px-2 text-slate-600">{s.affectationSalle || '-'}</td>
+                          <td className="py-1 px-2 text-slate-600">{s.etatSalle || '-'}</td>
+                          <td className="py-1 px-2 text-center">
+                            <span className={`inline-block w-2 h-2 rounded-full ${s.estOperationnel ? 'bg-green-500' : 'bg-red-400'}`} />
+                          </td>
+                          <td className="py-1 px-2 text-center text-slate-600">{s.nbEleveF + s.nbEleveG}</td>
+                          <td className="py-1 px-2 text-center text-slate-600">{s.equipements?.length || 0}</td>
+                          <td className="py-1 px-2 text-center text-slate-600">{s.ouvertures?.length || 0}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="px-3 py-2 border-x border-b border-slate-200 rounded-b text-[10px] text-slate-400">
+                  Aucune salle
+                </div>
+              )}
+            </div>
+          ))}
         </Section>
       )}
 
       {/* Photos */}
       {e.photos.length > 0 && (
-        <Section title={`Photos (${e.photos.length})`} icon={<ImageIcon className="h-5 w-5" />}>
-          <p className="text-sm text-slate-500">{e.photos.length} photo{e.photos.length > 1 ? 's' : ''} — {e.photos.filter(p => p.estPrincipale).length > 0 ? 'dont une photo principale' : 'aucune photo principale'}</p>
+        <Section title={`Photos (${e.photos.length})`}>
+          <p className="text-[10px] text-slate-500">{e.photos.length} photo{e.photos.length > 1 ? 's' : ''}</p>
         </Section>
       )}
 
       {/* Footer */}
-      <div className="border-t border-slate-200 px-8 py-4 text-center text-xs text-slate-400">
+      <div className="border-t border-slate-200 px-6 py-3 text-center text-[9px] text-slate-400">
         Fiche générée le {new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} · InfraDren AMM
       </div>
     </div>
@@ -368,20 +334,15 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
 
 function Section({
   title,
-  icon,
   children,
 }: {
   title: string;
-  icon: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-b border-slate-100 px-8 py-5 last:border-b-0">
-      <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-3">
-        <span className="text-green-600">{icon}</span>
-        {title}
-      </h3>
-      <div className="space-y-2">{children}</div>
+    <div className="border-b border-slate-100 px-5 py-3 last:border-b-0">
+      <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">{title}</h3>
+      <div className="space-y-0.5">{children}</div>
     </div>
   );
 }
@@ -389,20 +350,15 @@ function Section({
 function Row({
   label,
   value,
-  icon,
 }: {
   label: string;
   value?: string | number | null;
-  icon?: React.ReactNode;
 }) {
   if (value === undefined || value === null || value === '') return null;
   return (
-    <div className="flex items-center gap-2 text-sm">
-      <span className="min-w-[120px] text-slate-500">{label}</span>
-      <span className="flex items-center gap-1.5 text-slate-800 font-medium">
-        {icon && <span className="text-slate-400">{icon}</span>}
-        {value}
-      </span>
+    <div className="flex items-start gap-3 text-xs py-0.5">
+      <span className="text-slate-500 w-28 shrink-0">{label}</span>
+      <span className="text-slate-800 font-medium">{value}</span>
     </div>
   );
 }
