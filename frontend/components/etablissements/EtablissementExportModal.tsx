@@ -403,7 +403,9 @@ function PhotoCard({ photo }: { photo: PhotoGridPhoto }) {
   const [src, setSrc] = useState(photo.url);
   const [failed, setFailed] = useState(false);
 
-  const proxyUrl = `${apiBase}/r2/proxy-image?url=${encodeURIComponent(photo.url)}`;
+  const proxyUrl = photo.key
+    ? `${apiBase}/r2/proxy-by-key?key=${encodeURIComponent(photo.key)}`
+    : `${apiBase}/r2/proxy-image?url=${encodeURIComponent(photo.url)}`;
 
   const handleError = useCallback(() => {
     if (src === photo.url) {

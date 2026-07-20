@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { Public } from '../common/decorators/public.decorator';
+import { R2Service } from './r2.service';
 import https from 'node:https';
 import http from 'node:http';
 
@@ -18,7 +19,7 @@ export class R2Controller {
   private readonly allowedDomain: string;
   private readonly r2BucketName: string;
 
-  constructor() {
+  constructor(private readonly r2Service: R2Service) {
     this.allowedDomain = process.env.R2_PUBLIC_URL ?? '';
     this.r2BucketName = process.env.R2_BUCKET_NAME ?? 'infradrenphotos';
   }
@@ -96,6 +97,36 @@ export class R2Controller {
         'Failed to proxy image',
         HttpStatus.BAD_GATEWAY,
       );
+    }
+  }
+
+  @Get('proxy-by-key')
+  @Public()
+  async proxyByKey(
+    @Query('key') key: string,
+    @Res() res: Response,
+  ) {
+    if (!key || typeof key !== 'string') {
+      throw new HttpException('Missing key parameter', HttpStatus.BAD_REQUEST);
+    }
+
+    // Securite : valider le format de la clé pour éviter les traversées de répertoire
+    if (key.includes('..') || key.startsWith('/')) {
+      this.logger.warn(`Blocage proxy-by-key: clé invalide "${key.substring(0, 80)}"`);
+      throw new HttpException('Invalid key', HttpStatus.FORBIDDEN);
+    }
+
+    try {
+      const { body, contentType } = await this.r2Service.getFile(key);
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      res.send(Buffer.from(body));
+    } catch (error) {
+      this.logger.error(
+        `Erreur proxy-by-key pour "${key.substring(0, 80)}": ${error instanceof Error ? error.message : error}`,
+      );
+      throw new HttpException('Failed to fetch image', HttpStatus.BAD_GATEWAY);
     }
   }
 }

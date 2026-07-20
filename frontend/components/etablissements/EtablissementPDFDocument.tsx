@@ -159,10 +159,12 @@ const styles = StyleSheet.create({
 type AnyPhoto = ExportPhoto | ExportBatimentPhoto | ExportSallePhoto;
 
 function PhotoItem({ photo, apiBaseUrl }: { photo: AnyPhoto; apiBaseUrl: string }) {
-  const proxySrc = `${apiBaseUrl}/r2/proxy-image?url=${encodeURIComponent(photo.url)}`;
+  const imgSrc = photo.key
+    ? `${apiBaseUrl}/r2/proxy-by-key?key=${encodeURIComponent(photo.key)}`
+    : `${apiBaseUrl}/r2/proxy-image?url=${encodeURIComponent(photo.url)}`;
   return (
     <View style={styles.photoItem}>
-      <Image style={styles.photoImage} src={proxySrc} />
+      <Image style={styles.photoImage} src={imgSrc} />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Text style={styles.photoLabel}>{photo.originalName || `#${photo.id}`}</Text>
         {photo.estPrincipale && (

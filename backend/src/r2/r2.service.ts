@@ -62,6 +62,20 @@ export class R2Service {
     return getSignedUrl(this.s3, command, { expiresIn });
   }
 
+  /** Récupérer le contenu d'un fichier depuis R2 */
+  async getFile(key: string): Promise<{ body: Uint8Array; contentType: string }> {
+    const command = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+    const response = await this.s3.send(command);
+    const body = await response.Body!.transformToByteArray();
+    return {
+      body,
+      contentType: response.ContentType || 'image/jpeg',
+    };
+  }
+
   /** Supprimer un fichier de R2 */
   async deleteFile(key: string): Promise<void> {
     const command = new DeleteObjectCommand({
