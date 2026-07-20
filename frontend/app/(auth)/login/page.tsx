@@ -44,7 +44,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-green-50 via-white to-green-50/30 px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-green-50 via-white to-green-50/30 px-3 sm:px-4">
       <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-green-200/30 blur-3xl" />
       <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-green-100/20 blur-3xl" />
 
@@ -54,23 +54,23 @@ export default function LoginPage() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <div className="mb-8 text-center">
+        <div className="mb-6 sm:mb-8 text-center">
           <motion.div
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <img src="/logo_infra.png" alt="InfraDren AMM" className="mx-auto h-14 w-auto mb-4" />
+            <img src="/logo_infra.png" alt="InfraDren AMM" className="mx-auto h-12 sm:h-14 w-auto mb-3 sm:mb-4" />
           </motion.div>
-          <h1 className="text-3xl font-bold text-gray-900">InfraDren AMM</h1>
-          <p className="mt-2 text-gray-500">Connectez-vous à votre espace d'administration</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">InfraDren AMM</h1>
+          <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-500">Connectez-vous à votre espace d'administration</p>
         </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm"
+          className="rounded-2xl border border-gray-100 bg-white p-6 sm:p-8 shadow-sm"
         >
           <div className="mb-6 flex items-center gap-3">
             <div className="rounded-xl bg-green-100 p-2.5">

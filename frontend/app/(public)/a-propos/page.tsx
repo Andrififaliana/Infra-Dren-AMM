@@ -41,7 +41,7 @@ const stats = [
 
 export default function AProposPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:py-16 sm:px-6 lg:px-8">
       {/* ── Header ── */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -50,16 +50,16 @@ export default function AProposPage() {
         className="relative text-center"
       >
 
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900">
           À propos de notre plateforme
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-lg text-gray-500 leading-relaxed">
+        <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-base sm:text-lg text-gray-500 leading-relaxed px-4">
           Découvrez la mission, les remerciements et l&apos;équipe derrière
           la plateforme de suivi des infrastructures scolaires.
         </p>
-        <div className="mt-6 flex justify-center gap-2">
-          <span className="h-1 w-16 rounded-full bg-green-500" />
-          <span className="h-1 w-4 rounded-full bg-green-300" />
+        <div className="mt-4 sm:mt-6 flex justify-center gap-2">
+          <span className="h-1 w-12 sm:w-16 rounded-full bg-green-500" />
+          <span className="h-1 w-3 sm:w-4 rounded-full bg-green-300" />
         </div>
       </motion.div>
 
@@ -69,12 +69,12 @@ export default function AProposPage() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="mt-20"
+        className="mt-12 sm:mt-20"
       >
         <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
           <div className="grid md:grid-cols-5">
             {/* Left accent panel */}
-            <div className="relative flex items-center justify-center bg-green-600 p-10 md:col-span-2">
+            <div className="relative flex items-center justify-center bg-green-600 p-8 sm:p-10 md:col-span-2">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.12)_0%,transparent_60%)]" />
               <div className="relative text-center">
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm">
@@ -85,14 +85,14 @@ export default function AProposPage() {
               </div>
             </div>
             {/* Right content */}
-            <div className="flex flex-col justify-center p-8 md:col-span-3 md:p-10">
-              <p className="text-lg leading-relaxed text-gray-700">
+            <div className="flex flex-col justify-center p-6 sm:p-8 md:col-span-3 md:p-10">
+              <p className="text-sm sm:text-lg leading-relaxed text-gray-700">
                 Notre plateforme a été conçue dans le but de représenter de manière
                 précise les infrastructures scolaires au sein de la{' '}
                 <strong className="text-green-700">DREN Amoron&apos;i Mania</strong>.
               </p>
               <div className="mt-6 border-l-4 border-green-200 bg-green-50/50 pl-5 py-4 rounded-r-lg">
-                <p className="text-lg leading-relaxed text-gray-700">
+                <p className="text-sm sm:text-lg leading-relaxed text-gray-700">
                   L&apos;objectif est de fournir des données claires et détaillées sur
                   l&apos;état des bâtiments, des salles de classe et des ressources
                   disponibles, afin de faciliter la prise de décision et d&apos;améliorer
@@ -116,7 +116,7 @@ export default function AProposPage() {
           {/* Decorative top accent */}
           <div className="h-1.5 w-full bg-gradient-to-r from-green-400 via-green-500 to-green-600" />
 
-          <div className="p-8 md:p-10">
+          <div className="p-6 sm:p-8 md:p-10">
             <div className="flex items-start gap-5">
               {/* Icon */}
               <div className="hidden shrink-0 sm:flex">
@@ -137,7 +137,7 @@ export default function AProposPage() {
                 {/* Quote card */}
                 <div className="relative mt-6 rounded-xl bg-gradient-to-br from-green-50 to-white border border-green-100 p-6">
                   <Quote className="absolute -left-2 -top-2 h-8 w-8 text-green-200" />
-                  <p className="relative pl-4 text-lg leading-relaxed text-gray-700">
+                  <p className="relative pl-4 text-sm sm:text-lg leading-relaxed text-gray-700">
                     Nous tenons à exprimer notre profonde gratitude à la direction de la{' '}
                     <strong className="text-green-700">DREN Amoron&apos;i Mania</strong>,
                     et plus particulièrement à{' '}
@@ -169,7 +169,7 @@ export default function AProposPage() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="mt-12 grid gap-5 sm:grid-cols-3"
+        className="mt-8 sm:mt-12 grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-3"
       >
         {stats.map((item) => {
           const Icon = item.icon;
@@ -199,7 +199,7 @@ export default function AProposPage() {
         <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
           <div className="grid md:grid-cols-5">
             {/* Left panel */}
-            <div className="relative flex items-center justify-center bg-gray-900 p-8 md:col-span-2">
+            <div className="relative flex items-center justify-center bg-gray-900 p-6 sm:p-8 md:col-span-2">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.06)_0%,transparent_60%)]" />
               <div className="relative text-center">
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
@@ -214,7 +214,7 @@ export default function AProposPage() {
               </div>
             </div>
             {/* Right content */}
-            <div className="flex flex-col justify-center gap-4 p-8 md:col-span-3">
+            <div className="flex flex-col justify-center gap-3 sm:gap-4 p-6 sm:p-8 md:col-span-3">
               <a
                 href="mailto:miharimananirina@gmail.com"
                 className="group flex items-center gap-4 rounded-xl border border-gray-100 bg-gray-50/80 p-4 transition-all hover:border-green-200 hover:bg-green-50 hover:shadow-sm"

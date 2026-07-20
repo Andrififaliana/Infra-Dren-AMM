@@ -43,11 +43,11 @@ export default function EtablissementDetailPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <Button variant="ghost" onClick={() => router.push('/etablissements')} className="mb-6">
+      <Button variant="ghost" onClick={() => router.push('/etablissements')} className="mb-4 sm:mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" /> Retour
       </Button>
 
-      <div className="flex flex-col gap-6 lg:flex-row">
+      <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row">
         {/* Left - Photos & Identity */}
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="lg:w-2/5">
           {/* Photo principale + galerie */}
@@ -64,7 +64,7 @@ export default function EtablissementDetailPage() {
           </div>
 
           {/* Info card */}
-          <div className="mt-4 rounded-3xl bg-gradient-to-t from-black/60 to-transparent -mt-16 relative z-10 p-6 pt-12">
+          <div className="mt-4 rounded-3xl bg-gradient-to-t from-black/60 to-transparent -mt-12 sm:-mt-16 relative z-10 p-4 sm:p-6 pt-10 sm:pt-12">
             <h2 className="text-xl font-bold text-white">{etab.nomEtab}</h2>
             <p className="text-sm text-white/80">{etab.dren} - {etab.cisco}</p>
           </div>
@@ -90,15 +90,15 @@ export default function EtablissementDetailPage() {
           <Card>
             <CardHeader><CardTitle>Données clés</CardTitle></CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-3 sm:gap-4">
                 {[
                   { label: 'Enseignants', value: formatNumber(etab.nbEnseignantG + etab.nbEnseignantF) },
                   { label: 'Sections', value: formatNumber(etab.nbSectionG + etab.nbSectionF) },
                   { label: 'Salles', value: formatNumber(totalSalles) },
                 ].map((d) => (
-                  <div key={d.label} className="rounded-xl bg-gray-50 p-4 text-center">
-                    <p className="text-2xl font-bold text-gray-900">{d.value}</p>
-                    <p className="text-xs text-gray-500">{d.label}</p>
+                  <div key={d.label} className="rounded-xl bg-gray-50 p-3 sm:p-4 text-center">
+                    <p className="text-lg sm:text-2xl font-bold text-gray-900">{d.value}</p>
+                    <p className="text-[10px] sm:text-xs text-gray-500">{d.label}</p>
                   </div>
                 ))}
               </div>
