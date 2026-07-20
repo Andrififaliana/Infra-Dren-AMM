@@ -228,20 +228,44 @@ export class EtablissementsService {
   }
 
   async remove(id: number) {
-    const etablissement = await this.findOne(id);
+    const etablissement = await this.prisma.etablissement.findUnique({
+      where: { id },
+      include: {
+        photos: { select: { key: true } },
+        batiments: {
+          include: {
+            photos: { select: { key: true } },
+            salles: {
+              include: {
+                photos: { select: { key: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!etablissement)
+      throw new NotFoundException(`Établissement #${id} non trouvé`);
 
-    // Supprimer les photos du bucket R2
-    for (const photo of etablissement.photos) {
+    // Collecter toutes les clés de photos pour suppression R2
+    const photoKeys: string[] = [
+      ...etablissement.photos.map((p) => p.key),
+      ...etablissement.batiments.flatMap((b) => b.photos.map((p) => p.key)),
+      ...etablissement.batiments.flatMap((b) =>
+        b.salles.flatMap((s) => s.photos.map((p) => p.key)),
+      ),
+    ];
+
+    for (const key of photoKeys) {
       try {
-        await this.r2Service.deleteFile(photo.key);
+        await this.r2Service.deleteFile(key);
       } catch (error) {
-        this.logger.warn(
-          `Impossible de supprimer la photo R2: ${photo.key}`,
-          error,
-        );
+        this.logger.warn(`Impossible de supprimer la photo R2: ${key}`, error);
       }
     }
 
+    // La cascade Prisma (onDelete: Cascade) supprime automatiquement
+    // tous les enregistrements enfants (photos, batiments, salles, etc.)
     await this.prisma.etablissement.delete({ where: { id } });
     await this.auditService.suppression('ETABLISSEMENT', id);
   }
