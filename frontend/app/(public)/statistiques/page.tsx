@@ -32,11 +32,11 @@ export default function StatistiquesPage() {
       </motion.div>
 
       {/* Filter */}
-      <div className="mt-6 mb-8">
+      <div className="mt-4 sm:mt-6 mb-6 sm:mb-8">
         <select
           value={filtreDren}
           onChange={(e) => setFiltreDren(e.target.value)}
-          className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+          className="w-full sm:w-auto rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20"
         >
           <option value="">Tous les districts</option>
           {drens.map(d => <option key={d} value={d}>{d}</option>)}
@@ -53,7 +53,7 @@ export default function StatistiquesPage() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+          className="mb-6 sm:mb-8 grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4"
         >
           {[
             { icon: School, label: 'Établissements', value: globales.totalEtablissements, color: 'text-green-600 bg-green-50' },
@@ -76,7 +76,7 @@ export default function StatistiquesPage() {
         </motion.div>
       ) : null}
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
         {/* Couverture réseau */}
         <Card>
           <CardHeader><CardTitle>Couverture réseau</CardTitle></CardHeader>

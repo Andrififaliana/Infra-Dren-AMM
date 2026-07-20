@@ -70,47 +70,76 @@ export default function EtablissementsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-bold text-gray-900">Établissements scolaires</h1>
-        <p className="mt-2 text-gray-600">{meta ? `${formatNumber(meta.total)} établissements` : ''} recensés dans la région AMM</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Établissements scolaires</h1>
+        <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">{meta ? `${formatNumber(meta.total)} établissements` : ''} recensés dans la région AMM</p>
       </motion.div>
 
-      <div className="mt-8 mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-1 items-center gap-3">
-          <div className="relative flex-1 max-w-md">
+      {/* Mobile filters toggle */}
+      <div className="mt-6 mb-4 sm:mt-8 sm:mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+          <div className="relative flex-1 max-w-md w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              placeholder="Rechercher un établissement..."
+              placeholder="Rechercher..."
               className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20" />
           </div>
-          <select value={filtreDren} onChange={(e) => { setFiltreDren(e.target.value); setPage(1); }}
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
-            <option value="">Tous districts</option>
-            {drens.map((d) => <option key={d} value={d}>{d}</option>)}
-          </select>
-          <select value={filtreCisco} onChange={(e) => { setFiltreCisco(e.target.value); setFiltreZap(''); setPage(1); }}
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
-            <option value="">Tous CISCO</option>
-            {ciscos.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
-          <select value={filtreZap} onChange={(e) => { setFiltreZap(e.target.value); setPage(1); }}
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
-            <option value="">Toutes ZAP</option>
-            {zaps.map((z) => <option key={z} value={z}>{z}</option>)}
-          </select>
+
+          {/* Desktop filters */}
+          <div className="hidden sm:flex items-center gap-3">
+            <select value={filtreDren} onChange={(e) => { setFiltreDren(e.target.value); setPage(1); }}
+              className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
+              <option value="">Tous districts</option>
+              {drens.map((d) => <option key={d} value={d}>{d}</option>)}
+            </select>
+            <select value={filtreCisco} onChange={(e) => { setFiltreCisco(e.target.value); setFiltreZap(''); setPage(1); }}
+              className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
+              <option value="">Tous CISCO</option>
+              {ciscos.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <select value={filtreZap} onChange={(e) => { setFiltreZap(e.target.value); setPage(1); }}
+              className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
+              <option value="">Toutes ZAP</option>
+              {zaps.map((z) => <option key={z} value={z}>{z}</option>)}
+            </select>
+          </div>
+
+          {/* Mobile filter chips */}
+          <div className="flex sm:hidden gap-2 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-1">
+            <select value={filtreDren} onChange={(e) => { setFiltreDren(e.target.value); setPage(1); }}
+              className="flex-shrink-0 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
+              <option value="">District</option>
+              {drens.map((d) => <option key={d} value={d}>{d}</option>)}
+            </select>
+            <select value={filtreCisco} onChange={(e) => { setFiltreCisco(e.target.value); setFiltreZap(''); setPage(1); }}
+              className="flex-shrink-0 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
+              <option value="">CISCO</option>
+              {ciscos.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <select value={filtreZap} onChange={(e) => { setFiltreZap(e.target.value); setPage(1); }}
+              className="flex-shrink-0 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20">
+              <option value="">ZAP</option>
+              {zaps.map((z) => <option key={z} value={z}>{z}</option>)}
+            </select>
+          </div>
         </div>
-        <div className="flex items-center gap-2 rounded-xl border border-gray-200 p-1">
-          <button onClick={() => setViewMode('list')}
-            className={`rounded-lg p-2 transition-colors ${viewMode === 'list' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
-            <List className="h-4 w-4" />
-          </button>
-          <button onClick={() => setViewMode('gallery')}
-            className={`rounded-lg p-2 transition-colors ${viewMode === 'gallery' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
-            <LayoutGrid className="h-4 w-4" />
-          </button>
-          <button onClick={() => setViewMode('map')}
-            className={`rounded-lg p-2 transition-colors ${viewMode === 'map' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
-            <Map className="h-4 w-4" />
-          </button>
+
+        {/* View mode toggle */}
+        <div className="mt-3 flex items-center justify-between">
+          <p className="text-xs text-gray-400">{meta ? `${formatNumber(meta.total)} établissements` : ''}</p>
+          <div className="flex items-center gap-1.5 rounded-xl border border-gray-200 p-0.5">
+            <button onClick={() => setViewMode('list')}
+              className={`rounded-lg p-2 transition-colors ${viewMode === 'list' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
+              <List className="h-4 w-4" />
+            </button>
+            <button onClick={() => setViewMode('gallery')}
+              className={`rounded-lg p-2 transition-colors ${viewMode === 'gallery' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
+              <LayoutGrid className="h-4 w-4" />
+            </button>
+            <button onClick={() => setViewMode('map')}
+              className={`rounded-lg p-2 transition-colors ${viewMode === 'map' ? 'bg-green-100 text-green-700' : 'text-gray-400 hover:text-gray-600'}`}>
+              <Map className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
 
