@@ -2,13 +2,13 @@
 
 import { useRef, useState, useCallback } from 'react';
 import { toast } from 'sonner';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas-pro';
+import { pdf } from '@react-pdf/renderer';
 import { X, Loader2, FileText, AlertTriangle, Download, ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEtablissementExport } from '@/hooks/use-export-etablissement';
+import { EtablissementPDFDocument } from './EtablissementPDFDocument';
 import type { ExportEtablissement } from '@/types/etablissement-export';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
@@ -29,83 +29,26 @@ export function EtablissementExportModal({
   const previewRef = useRef<HTMLDivElement>(null);
 
   const generatePDF = useCallback(async () => {
-    if (!previewRef.current) return;
+    if (!etab) return;
 
     setIsGenerating(true);
-    const originalSrcs = new Map<HTMLImageElement, string>();
     try {
-      const apiBase = API_BASE_URL;
-      let allImgs = previewRef.current.querySelectorAll<HTMLImageElement>('img');
+      const blob = await pdf(<EtablissementPDFDocument etablissement={etab} apiBaseUrl={API_BASE_URL} />).toBlob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Fiche_${etab.nomEtab?.replace(/[^a-zA-Z0-9]/g, '_') || 'Etablissement'}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
-      // 1. Echanger les src vers le proxy AVANT de precharger,
-      //    pour que html2canvas trouve deja les bonnes URLs CORS
-      allImgs.forEach((img) => {
-        const src = img.src;
-        if (src && !src.startsWith('data:') && !src.startsWith('blob:')) {
-          originalSrcs.set(img, src);
-          img.src = `${apiBase}/r2/proxy-image?url=${encodeURIComponent(src)}`;
-        }
-      });
-
-      // 2. Attendre que TOUTES les images du DOM soient decodees
-      //    (celles qui ont echoue afficheront un placeholder)
-      await Promise.allSettled(
-        Array.from(allImgs).map(
-          (img) =>
-            new Promise<void>((resolve, reject) => {
-              if (img.complete) {
-                if (img.naturalWidth > 0) resolve(); else reject();
-              } else {
-                img.addEventListener('load', () => resolve(), { once: true });
-                img.addEventListener('error', () => reject(), { once: true });
-              }
-            }),
-        ),
-      );
-
-      // 3. Attendre un cycle de rendu supplementaire pour que les placeholders s'affichent
-      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-
-      // 4. Capturer (images fraichement decodees)
-      const canvas = await html2canvas(previewRef.current, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        width: previewRef.current.scrollWidth,
-        height: previewRef.current.scrollHeight,
-        windowWidth: previewRef.current.scrollWidth,
-      });
-
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const margin = 12; // 12mm de chaque côté pour centrer dans A4
-      const imgWidth = 210 - 2 * margin; // 186mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
-      heightLeft -= pdf.internal.pageSize.getHeight();
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
-        heightLeft -= pdf.internal.pageSize.getHeight();
-      }
-
-      pdf.save(`Fiche_${etab?.nomEtab?.replace(/[^a-zA-Z0-9]/g, '_') || 'Etablissement'}.pdf`);
       toast.success('PDF généré avec succès');
       onClose();
     } catch (err) {
       console.error('Erreur génération PDF:', err);
       toast.error('Erreur lors de la génération du PDF');
     } finally {
-      // Restaurer les URLs originales meme en cas d'erreur
-      originalSrcs.forEach((originalSrc, img) => {
-        img.src = originalSrc;
-      });
       setIsGenerating(false);
     }
   }, [etab, onClose]);
