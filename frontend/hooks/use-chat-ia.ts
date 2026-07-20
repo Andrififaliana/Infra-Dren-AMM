@@ -16,7 +16,6 @@ export function useChatIa() {
   const [error, setError] = useState<string | null>(null);
   const [pendingAction, setPendingAction] = useState<ProposedAction | null>(null);
   const [isExecuting, setIsExecuting] = useState(false);
-  const [confirmInput, setConfirmInput] = useState('');
   const [schemaInfo, setSchemaInfo] = useState<SchemaInfo | null>(null);
   const idCounter = useRef(0);
 
@@ -41,7 +40,6 @@ export function useChatIa() {
 
       setError(null);
       setPendingAction(null);
-      setConfirmInput('');
       addMessage('user', text);
       setIsLoading(true);
 
@@ -101,7 +99,6 @@ export function useChatIa() {
         fetchSchemaInfo();
 
         setPendingAction(null);
-        setConfirmInput('');
       } catch (err: any) {
         const errorMsg =
           err?.response?.data?.message ||
@@ -117,7 +114,6 @@ export function useChatIa() {
 
   const cancelAction = useCallback(() => {
     setPendingAction(null);
-    setConfirmInput('');
     addMessage('system', '⛔ Action annulée par l\'utilisateur.');
   }, [addMessage]);
 
@@ -129,7 +125,6 @@ export function useChatIa() {
     }
     setMessages([]);
     setPendingAction(null);
-    setConfirmInput('');
     setError(null);
     addMessage('system', '💬 Conversation réinitialisée.');
   }, [addMessage]);
@@ -149,9 +144,7 @@ export function useChatIa() {
     error,
     pendingAction,
     isExecuting,
-    confirmInput,
     schemaInfo,
-    setConfirmInput,
     sendMessage,
     executeAction,
     cancelAction,

@@ -6,7 +6,6 @@ import { Send, Trash2, Bot, Sparkles, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useChatIa } from '@/hooks/use-chat-ia';
 import { ChatMessage, ActionPreviewCard } from './chat-message';
-import { ConfirmationModal } from './confirmation-modal';
 
 const suggestedQuestions = [
   'Combien d\'établissements sont enregistrés ?',
@@ -19,15 +18,12 @@ export function ChatIaWidget() {
   const {
     messages,
     isLoading,
-    pendingAction,
     isExecuting,
-    confirmInput,
     sendMessage,
     executeAction,
     cancelAction,
     clearConversation,
     fetchSchemaInfo,
-    setConfirmInput,
   } = useChatIa();
 
   const [input, setInput] = useState('');
@@ -149,7 +145,12 @@ export function ChatIaWidget() {
                   <ChatMessage message={msg} />
                   {msg.proposedAction && (
                     <div className="flex justify-start pl-11 pb-2">
-                      <ActionPreviewCard action={msg.proposedAction} />
+                      <ActionPreviewCard
+                        action={msg.proposedAction}
+                        onExecute={executeAction}
+                        onCancel={cancelAction}
+                        isExecuting={isExecuting}
+                      />
                     </div>
                   )}
                 </motion.div>
@@ -201,19 +202,6 @@ export function ChatIaWidget() {
         </div>
       </div>
 
-      {/* Confirmation modal */}
-      <AnimatePresence>
-        {pendingAction && (
-          <ConfirmationModal
-            action={pendingAction}
-            confirmInput={confirmInput}
-            onConfirmInputChange={setConfirmInput}
-            onConfirm={executeAction}
-            onCancel={cancelAction}
-            isExecuting={isExecuting}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }
