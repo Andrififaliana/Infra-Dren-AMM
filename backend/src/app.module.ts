@@ -13,6 +13,7 @@ import { AleasModule } from './modules/aleas/aleas.module';
 import { StatistiquesModule } from './modules/statistiques/statistiques.module';
 import { LogsModule } from './modules/logs/logs.module';
 import { BackupModule } from './modules/backup/backup.module';
+import { ChatIaModule } from './modules/chat-ia/chat-ia.module';
 import config from './config';
 
 @Module({
@@ -34,6 +35,7 @@ import config from './config';
     StatistiquesModule,
     LogsModule,
     BackupModule,
+    ChatIaModule,
   ],
 })
 export class AppModule {}
