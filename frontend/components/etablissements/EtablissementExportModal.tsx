@@ -50,8 +50,7 @@ export function EtablissementExportModal({
 
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
-        useCORS: false,
-        allowTaint: true,
+        useCORS: true,
         logging: false,
         width: previewRef.current.scrollWidth,
         height: previewRef.current.scrollHeight,
