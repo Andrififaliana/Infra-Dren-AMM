@@ -11,8 +11,10 @@ import { Modal } from '@/components/ui/modal';
 import { Badge } from '@/components/ui/badge';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { toast } from 'sonner';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, AlertTriangle, Calendar, Info } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
+import { GridView, ViewToggle } from '@/components/shared/grid-view';
+import { Card, CardContent } from '@/components/ui/card';
 import type { Alea } from '@/types/alea';
 
 export default function AleasPage() {
@@ -23,6 +25,7 @@ export default function AleasPage() {
   const [selectedAlea, setSelectedAlea] = useState<Alea | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const perPage = 10;
 
   const { data: aleas, isLoading } = useAleas();
@@ -102,25 +105,103 @@ export default function AleasPage() {
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Aléas</h1>
           <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des aléas naturels ({filtered.length})</p>
         </div>
-        <Button onClick={() => router.push('/responsable/aleas/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
-          + Nouvel aléa
-        </Button>
+        <div className="flex items-center gap-2">
+          <ViewToggle viewMode={viewMode} onChange={setViewMode} />
+          <Button onClick={() => router.push('/responsable/aleas/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
+            + Nouvel aléa
+          </Button>
+        </div>
       </div>
 
       <div className="mb-4">
         <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher un aléa..." />
       </div>
 
-      <DataTable
-        columns={columns}
-        data={paginated}
-        keyExtractor={(item) => item.idAleat}
-        loading={isLoading}
-        emptyMessage="Aucun aléa"
-        selectable
-        selectedIds={selectedIds}
-        onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
-      />
+      {viewMode === 'list' ? (
+        <DataTable
+          columns={columns}
+          data={paginated}
+          keyExtractor={(item) => item.idAleat}
+          loading={isLoading}
+          emptyMessage="Aucun aléa"
+          selectable
+          selectedIds={selectedIds}
+          onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
+        />
+      ) : (
+        <GridView
+          data={paginated}
+          keyExtractor={(item) => item.idAleat}
+          loading={isLoading}
+          emptyMessage="Aucun aléa"
+          renderCard={(item) => {
+            const typeColors: Record<string, string> = {
+              'INONDATION': 'bg-blue-50 border-blue-200 text-blue-700',
+              'CYCLONE': 'bg-amber-50 border-amber-200 text-amber-700',
+              'SECHERESSE': 'bg-orange-50 border-orange-200 text-orange-700',
+              'GLISSEMENT': 'bg-red-50 border-red-200 text-red-700',
+              'INCENDIE': 'bg-red-50 border-red-200 text-red-700',
+            };
+            const colorClass = item.typeAleat ? typeColors[item.typeAleat.toUpperCase()] || 'bg-slate-50 border-slate-200 text-slate-700' : 'bg-slate-50 border-slate-200 text-slate-700';
+            return (
+              <Card
+                className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-green-300 hover:-translate-y-0.5"
+                onClick={() => router.push(`/responsable/aleas/${item.idAleat}`)}
+              >
+                <CardContent className="p-4 space-y-2.5">
+                  <div className="flex items-start gap-3">
+                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 ${colorClass}`}>
+                      <AlertTriangle className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-slate-800 text-sm truncate">{item.nomAleat || `Aléa #${item.idAleat}`}</h3>
+                      {item.typeAleat && (
+                        <span className={`inline-block mt-0.5 rounded-full px-2 py-0.5 text-[10px] font-medium border ${colorClass}`}>
+                          {item.typeAleat}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs text-slate-500">
+                    {item.dateAleat && (
+                      <span className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        {new Date(item.dateAleat).toLocaleDateString('fr-FR')}
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1">
+                      <Info className="h-3 w-3" />
+                      {item.effets?.length ?? 0} trajet(s) impacté(s)
+                    </span>
+                  </div>
+
+                  {item.explication && (
+                    <p className="text-xs text-slate-500 line-clamp-2">{item.explication}</p>
+                  )}
+
+                  <div className="flex items-center justify-end pt-1 border-t border-slate-100" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => router.push(`/responsable/aleas/${item.idAleat}`)}
+                        className="rounded-lg p-1.5 text-slate-400 hover:bg-green-100 hover:text-green-600 transition-colors"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={() => { setSelectedAlea(item); setDeleteModalOpen(true); }}
+                        className="rounded-lg p-1.5 text-slate-400 hover:bg-red-100 hover:text-red-600 transition-colors"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          }}
+        />
+      )}
 
       <div className="mt-4">
         <Pagination page={page} totalPages={totalPages} total={filtered.length} onPageChange={setPage} />
