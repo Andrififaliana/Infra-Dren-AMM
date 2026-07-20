@@ -30,20 +30,24 @@ export class EtablissementsService {
   /**
    * Remplace les URLs directes R2 par des URLs présignées (valides 1h)
    * pour un tableau de photos. Les objets sont mutés sur place.
+   * Conserve l'URL directe en fallback si la génération échoue.
    */
   private async signPhotoUrls(
     photos: Array<{ key: string; url: string }>,
   ): Promise<void> {
     await Promise.all(
       photos.map(async (photo) => {
+        if (!photo.key) {
+          this.logger.warn(`Photo sans clé R2, conservation de l'URL directe: ${photo.url?.substring(0, 60)}`);
+          return;
+        }
         try {
           photo.url = await this.r2Service.getPresignedUrl(photo.key);
         } catch (error) {
           this.logger.warn(
-            `Impossible de générer une URL présignée pour ${photo.key}`,
-            error,
+            `Impossible de générer une URL présignée pour ${photo.key}, garde l'URL directe en fallback`,
+            error instanceof Error ? error.message : error,
           );
-          // Garder l'URL directe en fallback
         }
       }),
     );

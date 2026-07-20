@@ -24,6 +24,7 @@ export interface ExportEquipement {
 
 export interface ExportSallePhoto {
   id: number;
+  key: string;
   url: string;
   originalName?: string | null;
   estPrincipale: boolean;
@@ -48,6 +49,7 @@ export interface ExportSalle {
 
 export interface ExportBatimentPhoto {
   id: number;
+  key: string;
   url: string;
   originalName?: string | null;
   estPrincipale: boolean;
@@ -94,6 +96,7 @@ export interface ExportStructure {
 
 export interface ExportPhoto {
   id: number;
+  key: string;
   url: string;
   originalName?: string | null;
   estPrincipale: boolean;
