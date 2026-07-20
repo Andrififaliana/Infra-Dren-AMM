@@ -40,26 +40,14 @@ export class R2Controller {
     }
 
     // Securite : valider que l'URL provient de notre bucket R2
-    if (
-      this.allowedDomain &&
-      !url.startsWith(this.allowedDomain)
-    ) {
-      this.logger.warn(
-        `Blocage proxy vers domaine non autorise: ${url.substring(0, 80)}`,
-      );
-      throw new HttpException(
-        'Invalid image source',
-        HttpStatus.FORBIDDEN,
-      );
-    }
+    // Accepte soit le domaine public (R2_PUBLIC_URL) soit une URL présignée
+    // (r2.cloudflarestorage.com) contenant le nom du bucket
+    const isAllowedDomain = this.allowedDomain && url.startsWith(this.allowedDomain);
+    const isPresignedUrl = url.includes(this.r2BucketName);
 
-    // Si allowedDomain n'est pas configuré, vérifier au moins le nom du bucket
-    if (
-      !this.allowedDomain &&
-      !url.includes(this.r2BucketName)
-    ) {
+    if (!isAllowedDomain && !isPresignedUrl) {
       this.logger.warn(
-        `Blocage proxy: URL ne contient pas le bucket "${this.r2BucketName}": ${url.substring(0, 80)}`,
+        `Blocage proxy: URL non autorisée (ni ${this.allowedDomain} ni bucket ${this.r2BucketName}): ${url.substring(0, 80)}`,
       );
       throw new HttpException(
         'Invalid image source',
@@ -70,23 +58,34 @@ export class R2Controller {
     try {
       const client = url.startsWith('https') ? https : http;
 
-      client.get(
-        url,
-        (response) => {
-          const contentType =
-            response.headers['content-type'] || 'image/jpeg';
-          res.setHeader('Content-Type', contentType);
-          res.setHeader(
-            'Access-Control-Allow-Origin',
-            '*',
+      const request = client.get(url, (response) => {
+        if (!response.statusCode || response.statusCode >= 400) {
+          this.logger.warn(
+            `Proxy upstream ${response.statusCode} pour: ${url.substring(0, 80)}`,
           );
-          res.setHeader(
-            'Cache-Control',
-            'public, max-age=31536000, immutable',
-          );
-          response.pipe(res);
-        },
-      ).on('error', (err) => {
+          res.status(HttpStatus.BAD_GATEWAY).end();
+          response.resume();
+          return;
+        }
+        const contentType =
+          response.headers['content-type'] || 'image/jpeg';
+        res.setHeader('Content-Type', contentType);
+        res.setHeader(
+          'Access-Control-Allow-Origin',
+          '*',
+        );
+        res.setHeader(
+          'Cache-Control',
+          'public, max-age=31536000, immutable',
+        );
+        response.pipe(res);
+      });
+
+      request.setTimeout(15000, () => {
+        request.destroy(new Error('Proxy timeout'));
+      });
+
+      request.on('error', (err) => {
         this.logger.error(
           `Erreur proxy image: ${err.message}`,
         );
