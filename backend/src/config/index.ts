@@ -20,7 +20,9 @@ export default () => ({
   cors: {
     origin: process.env.CORS_ORIGIN ?? '*',
   },
-  openai: {
-    apiKey: process.env.OPENAI_API_KEY ?? '',
+  ia: {
+    apiKey: process.env.OPEN_API_KEY ?? '',
+    baseUrl: process.env.IA_API_URL ?? 'https://api.groq.com/openai/v1',
+    model: process.env.IA_MODEL ?? 'llama-3.3-70b-versatile',
   },
 });
