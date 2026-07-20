@@ -18,7 +18,8 @@ import { Select } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
-import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight } from 'lucide-react';
+import { EtablissementExportModal } from '@/components/etablissements/EtablissementExportModal';
+import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight, Download } from 'lucide-react';
 import type { Directeur, Designation, Structure } from '@/types/etablissement';
 
 export default function EditEtablissementPage() {
@@ -211,6 +212,8 @@ export default function EditEtablissementPage() {
     });
   };
 
+  const [exportModalOpen, setExportModalOpen] = useState(false);
+
   // ─── Render ──────────────────────────────────────
 
   if (isLoading) {
@@ -237,6 +240,20 @@ export default function EditEtablissementPage() {
         { label: 'Établissements', href: '/responsable/etablissements' },
         { label: etablissement.nomEtab },
       ]} />
+
+      {/* Barre d'actions */}
+      <div className="mb-6 flex items-center justify-between">
+        <div />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setExportModalOpen(true)}
+          className="gap-2 border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300"
+        >
+          <Download className="h-4 w-4" />
+          Exporter en PDF
+        </Button>
+      </div>
 
       {/* ─── Formulaire principal ─────────────────── */}
       <Card>
@@ -635,6 +652,13 @@ export default function EditEtablissementPage() {
           <Button variant="danger" onClick={handleDeleteStructure} loading={strDelLoading}>Supprimer</Button>
         </div>
       </Modal>
+
+      {/* Modal Export PDF */}
+      <EtablissementExportModal
+        etablissementId={etablissementId}
+        open={exportModalOpen}
+        onClose={() => setExportModalOpen(false)}
+      />
     </div>
   );
 }
