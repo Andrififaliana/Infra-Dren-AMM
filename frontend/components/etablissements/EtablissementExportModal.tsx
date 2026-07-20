@@ -392,10 +392,10 @@ function Row({
   icon,
 }: {
   label: string;
-  value?: string | null;
+  value?: string | number | null;
   icon?: React.ReactNode;
 }) {
-  if (!value) return null;
+  if (value === undefined || value === null || value === '') return null;
   return (
     <div className="flex items-center gap-2 text-sm">
       <span className="min-w-[120px] text-slate-500">{label}</span>
