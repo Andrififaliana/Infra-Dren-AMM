@@ -223,6 +223,7 @@ model User {
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   logs Log[]
+  iaLogs IaLog[]
 
   @@map("utilisateur")
 }
@@ -241,6 +242,26 @@ model Equipement {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("equipement")
+}
+
+model IaLog {
+  id               Int      @id @default(autoincrement())
+  userId           Int?     @map("utilisateur_id")
+  userEmail        String?  @map("email_utilisateur")
+  model            String   @map("modele")
+  promptTokens     Int?     @map("tokens_prompt")
+  completionTokens Int?     @map("tokens_completion")
+  totalTokens      Int?     @map("tokens_total")
+  responseTimeMs   Int      @map("temps_reponse_ms")
+  promptLength     Int      @default(0) @map("longueur_prompt")
+  responseLength   Int      @default(0) @map("longueur_reponse")
+  success          Boolean  @default(true) @map("succes")
+  errorMessage     String?  @map("message_erreur")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("ia_log")
 }
 
 model Log {

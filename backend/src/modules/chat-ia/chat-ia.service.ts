@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AuditService } from '../../common/services/audit.service';
+import { IaMonitoringService } from './ia-monitoring.service';
 import { ChatMessageDto, ChatHistoryEntry, ChatResponseDto } from './dto/chat-message.dto';
 import { CurrentUserPayload } from '../../common/decorators/current-user.decorator';
 
@@ -25,6 +26,7 @@ export class ChatIaService {
     private readonly configService: ConfigService,
     private readonly prisma: PrismaService,
     private readonly auditService: AuditService,
+    private readonly iaMonitoring: IaMonitoringService,
   ) {
     const apiKey = this.configService.get<string>('ia.apiKey');
     const baseUrl = this.configService.get<string>('ia.baseUrl');
@@ -134,6 +136,11 @@ Voici les entités principales que tu peux consulter via la base de données :
       conversation.push(systemPrompt, ...historyMessages, { role: 'user', content: dto.message });
     }
 
+    const startTime = Date.now();
+    let promptTokens = 0;
+    let completionTokens = 0;
+    const promptLength = dto.message.length;
+
     try {
       const completion = await this.openai.chat.completions.create({
         model: this.iaModel,
@@ -146,6 +153,27 @@ Voici les entités principales que tu peux consulter via la base de données :
       });
 
       const responseText = completion.choices[0]?.message?.content || 'Désolé, je n\'ai pas pu traiter votre demande.';
+
+      // Capturer les métriques
+      const responseTimeMs = Date.now() - startTime;
+      promptTokens = completion.usage?.prompt_tokens ?? 0;
+      completionTokens = completion.usage?.completion_tokens ?? 0;
+      const totalTokens = completion.usage?.total_tokens ?? 0;
+      const responseLength = responseText.length;
+
+      // Logger la requête IA
+      this.iaMonitoring.log({
+        userId: user.id,
+        userEmail: user.email,
+        model: this.iaModel,
+        promptTokens,
+        completionTokens,
+        totalTokens,
+        responseTimeMs,
+        promptLength,
+        responseLength,
+        success: true,
+      });
 
       // Ajouter la réponse à la conversation en mémoire
       conversation.push({ role: 'assistant', content: responseText });
@@ -167,6 +195,20 @@ Voici les entités principales que tu peux consulter via la base de données :
         proposedAction,
       };
     } catch (error) {
+      const responseTimeMs = Date.now() - startTime;
+
+      // Logger l'erreur IA
+      this.iaMonitoring.log({
+        userId: user.id,
+        userEmail: user.email,
+        model: this.iaModel,
+        responseTimeMs,
+        promptLength,
+        responseLength: 0,
+        success: false,
+        errorMessage: error instanceof Error ? error.message : 'Erreur inconnue',
+      });
+
       this.logger.error('Erreur OpenAI:', error);
       throw new BadRequestException(
         'Erreur lors de la communication avec l\'IA. Veuillez réessayer.',
