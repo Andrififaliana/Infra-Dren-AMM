@@ -412,32 +412,37 @@ function Row({
   );
 }
 
-// ─── Photo Grid (galerie miniatures 80×60) ──────────────
+// ─── Photo Grid (grille 2 colonnes, grande taille) ──────
 
 function PhotoGrid({ photos }: { photos: Array<{ id: number; url: string; originalName?: string | null; estPrincipale: boolean }> }) {
   const [failedIds, setFailedIds] = useState<Set<number>>(new Set());
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-2 gap-3">
       {photos.map(p => (
-        <div key={p.id} className="flex flex-col items-center gap-0.5">
+        <div key={p.id} className="flex flex-col gap-1">
           {failedIds.has(p.id) ? (
-            <div className="w-20 h-[60px] flex items-center justify-center rounded border border-slate-200 bg-slate-50 text-slate-300">
-              <ImageIcon className="h-5 w-5" />
-            </div>            ) : (
-              <img
-                src={p.url}
-                alt={p.originalName || `Photo #${p.id}`}
-                className="w-20 h-[60px] object-cover rounded border border-slate-200"
-                loading="lazy"
-                onError={() => setFailedIds(prev => new Set(prev).add(p.id))}
-              />
+            <div className="w-full h-36 flex items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-300">
+              <ImageIcon className="h-8 w-8" />
+            </div>
+          ) : (
+            <img
+              src={p.url}
+              alt={p.originalName || `Photo #${p.id}`}
+              className="w-full h-36 object-cover rounded-lg border border-slate-200"
+              loading="lazy"
+              onError={() => setFailedIds(prev => new Set(prev).add(p.id))}
+            />
           )}
-          <div className="flex items-center gap-0.5">
-            <span className="text-[8px] text-slate-400 truncate max-w-20">
+          <div className="flex items-center justify-between">
+            <span className="text-[9px] text-slate-400 truncate">
               {p.originalName || `#${p.id}`}
             </span>
-            {p.estPrincipale && <span className="text-[10px] text-amber-600" title="Principale">★</span>}
+            {p.estPrincipale && (
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 font-medium">
+                ★ Principale
+              </span>
+            )}
           </div>
         </div>
       ))}
