@@ -11,6 +11,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useEtablissementExport } from '@/hooks/use-export-etablissement';
 import type { ExportEtablissement } from '@/types/etablissement-export';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+
 interface EtablissementExportModalProps {
   etablissementId: number;
   open: boolean;
