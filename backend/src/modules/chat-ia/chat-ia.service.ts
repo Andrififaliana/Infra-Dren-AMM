@@ -15,6 +15,7 @@ import { CurrentUserPayload } from '../../common/decorators/current-user.decorat
 export class ChatIaService {
   private readonly logger = new Logger(ChatIaService.name);
   private openai: OpenAI;
+  private iaModel: string;
   private readonly systemPrompt: string;
 
   // Stockage en mémoire des conversations (pas de DB)
@@ -25,11 +26,18 @@ export class ChatIaService {
     private readonly prisma: PrismaService,
     private readonly auditService: AuditService,
   ) {
-    const apiKey = this.configService.get<string>('openai.apiKey');
+    const apiKey = this.configService.get<string>('ia.apiKey');
+    const baseUrl = this.configService.get<string>('ia.baseUrl');
+    const model = this.configService.get<string>('ia.model');
+    this.iaModel = model ?? 'llama-3.3-70b-versatile';
     if (!apiKey) {
-      this.logger.warn('OPENAI_API_KEY non configurée — le chat IA ne fonctionnera pas');
+      this.logger.warn('OPEN_API_KEY non configurée — le chat IA ne fonctionnera pas');
     } else {
-      this.openai = new OpenAI({ apiKey });
+      this.openai = new OpenAI({
+        apiKey,
+        baseURL: baseUrl,
+      });
+      this.logger.log(`Chat IA configuré avec l\'API à ${baseUrl}, modèle: ${this.iaModel}`);
     }
 
     this.systemPrompt = `Tu es un assistant IA spécialisé dans la gestion des infrastructures scolaires de la région Amoron'i Mania (AMM) à Madagascar.
@@ -128,7 +136,7 @@ Voici les entités principales que tu peux consulter via la base de données :
 
     try {
       const completion = await this.openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: this.iaModel,
         messages: conversation.map((msg) => ({
           role: msg.role as 'user' | 'assistant' | 'system',
           content: msg.content,

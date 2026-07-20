@@ -118,7 +118,7 @@ export function Sidebar({ collapsed, onToggle, mobileOpen = false, onMobileClose
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          'hidden lg:fixed lg:left-0 lg:top-0 lg:z-40 lg:h-screen lg:bg-white lg:border-r lg:border-slate-200 lg:transition-all lg:duration-300',
+          'hidden lg:block lg:fixed lg:left-0 lg:top-0 lg:z-40 lg:h-screen lg:bg-white lg:border-r lg:border-slate-200 lg:transition-all lg:duration-300',
           collapsed ? 'lg:w-16' : 'lg:w-64'
         )}
       >
