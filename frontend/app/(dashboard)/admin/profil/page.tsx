@@ -1,8 +1,8 @@
 'use client';
 
 import { toast } from 'sonner';
-import { User, Mail, Shield, KeyRound } from 'lucide-react';
-import { useProfile } from '@/hooks/use-auth';
+import { User, Mail, Shield, KeyRound, Loader2 } from 'lucide-react';
+import { useProfile, useForgotPassword } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
@@ -15,6 +15,7 @@ const ROLE_LABELS: Record<string, string> = {
 
 export default function AdminProfilPage() {
   const { data: user, isLoading } = useProfile();
+  const { mutate: sendReset, isPending: isSending } = useForgotPassword();
 
   if (isLoading) {
     return (
@@ -121,12 +122,24 @@ export default function AdminProfilPage() {
           </p>
           <Button
             variant="outline"
+            disabled={isSending}
             onClick={() => {
-              toast.success('Un email de réinitialisation vous sera envoyé.');
+              sendReset(user.email, {
+                onSuccess: () => {
+                  toast.success('Un email de réinitialisation vous a été envoyé.');
+                },
+                onError: () => {
+                  toast.error('Erreur lors de l\'envoi de l\'email.');
+                },
+              });
             }}
           >
-            <KeyRound className="mr-2 h-4 w-4" />
-            Demander la réinitialisation du mot de passe
+            {isSending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <KeyRound className="mr-2 h-4 w-4" />
+            )}
+            {isSending ? 'Envoi en cours...' : 'Demander la réinitialisation du mot de passe'}
           </Button>
         </CardContent>
       </Card>
