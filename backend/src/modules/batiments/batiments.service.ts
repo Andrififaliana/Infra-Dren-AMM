@@ -57,17 +57,36 @@ export class BatimentsService {
   }
 
   async remove(id: number) {
-    const batiment = await this.findOne(id);
+    const batiment = await this.prisma.batiment.findUnique({
+      where: { idBat: id },
+      include: {
+        photos: { select: { key: true } },
+        salles: {
+          include: {
+            photos: { select: { key: true } },
+          },
+        },
+      },
+    });
+    if (!batiment)
+      throw new NotFoundException(`Bâtiment #${id} non trouvé`);
 
-    // Supprimer les photos du bucket R2
-    for (const photo of batiment.photos) {
+    // Collecter toutes les clés de photos pour suppression R2
+    const photoKeys: string[] = [
+      ...batiment.photos.map((p) => p.key),
+      ...batiment.salles.flatMap((s) => s.photos.map((p) => p.key)),
+    ];
+
+    for (const key of photoKeys) {
       try {
-        await this.r2Service.deleteFile(photo.key);
+        await this.r2Service.deleteFile(key);
       } catch (error) {
-        this.logger.warn(`Impossible de supprimer la photo R2: ${photo.key}`, error);
+        this.logger.warn(`Impossible de supprimer la photo R2: ${key}`, error);
       }
     }
 
+    // La cascade Prisma (onDelete: Cascade) supprime automatiquement
+    // les salles, toilettes, photos associées en base
     await this.prisma.batiment.delete({ where: { idBat: id } });
     await this.auditService.suppression('BATIMENT', id);
   }
