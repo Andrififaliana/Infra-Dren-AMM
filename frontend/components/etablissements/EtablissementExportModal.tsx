@@ -59,8 +59,8 @@ export function EtablissementExportModal({
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const margin = 10; // 10mm de chaque côté pour centrer dans A4
-      const imgWidth = 210 - 2 * margin; // 190mm
+      const margin = 12; // 12mm de chaque côté pour centrer dans A4
+      const imgWidth = 210 - 2 * margin; // 186mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       const pdf = new jsPDF('p', 'mm', 'a4');
@@ -135,10 +135,9 @@ export function EtablissementExportModal({
               <AlertTriangle className="h-12 w-12 text-red-400 mb-4" />
               <p className="text-lg font-medium text-slate-700">Impossible de charger les données</p>
               <p className="text-sm text-slate-500 mt-1">Veuillez réessayer</p>
-            </div>
-          ) : (
+            </div>            ) : (
             <div className="p-6">
-              <div ref={previewRef} className="mx-auto max-w-[190mm] bg-white">
+              <div ref={previewRef} className="mx-auto max-w-[186mm] bg-white">
                 <ExportPreview etablissement={etab} />
               </div>
             </div>
