@@ -32,40 +32,13 @@ export function EtablissementExportModal({
     if (!previewRef.current) return;
 
     setIsGenerating(true);
-    const originalSrcs = new Map<HTMLImageElement, string>();
     try {
-      // Remplacer les URLs R2 par le proxy backend pour contourner CORS
-      const apiBase = API_BASE_URL;
-      const allImgs = previewRef.current.querySelectorAll('img');
-
-      allImgs.forEach((img) => {
-        const src = img.src;
-        if (src && !src.startsWith('data:') && !src.startsWith('blob:')) {
-          originalSrcs.set(img, src);
-          img.loading = 'eager';
-          img.src = `${apiBase}/r2/proxy-image?url=${encodeURIComponent(src)}`;
-        }
-      });
-
-      // Attendre le chargement des images via le proxy
-      await Promise.all(
-        Array.from(allImgs).map(
-          (img) =>
-            new Promise<void>((resolve) => {
-              if (img.complete && img.naturalWidth > 0) {
-                resolve();
-              } else {
-                img.addEventListener('load', () => resolve(), { once: true });
-                img.addEventListener('error', () => resolve(), { once: true });
-                if (!img.src || img.src.startsWith('data:')) resolve();
-              }
-            }),
-        ),
-      );
-
+      // html2canvas utilise l'option 'proxy' pour charger les images R2
+      // via le backend (contourne CORS) sans toucher au DOM
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         useCORS: true,
+        proxy: `${API_BASE_URL}/r2/proxy-image`,
         logging: false,
         width: previewRef.current.scrollWidth,
         height: previewRef.current.scrollHeight,
@@ -98,10 +71,6 @@ export function EtablissementExportModal({
       console.error('Erreur génération PDF:', err);
       toast.error('Erreur lors de la génération du PDF');
     } finally {
-      // Restaurer les URLs originales des images meme en cas d'erreur
-      originalSrcs.forEach((originalSrc, img) => {
-        img.src = originalSrc;
-      });
       setIsGenerating(false);
     }
   }, [etab, onClose]);
