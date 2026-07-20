@@ -408,16 +408,14 @@ function PhotoGrid({ photos }: { photos: Array<{ id: number; url: string; origin
           {failedIds.has(p.id) ? (
             <div className="w-20 h-[60px] flex items-center justify-center rounded border border-slate-200 bg-slate-50 text-slate-300">
               <ImageIcon className="h-5 w-5" />
-            </div>
-          ) : (
-            <img
-              src={p.url}
-              alt={p.originalName || `Photo #${p.id}`}
-              className="w-20 h-[60px] object-cover rounded border border-slate-200"
-              crossOrigin="anonymous"
-              loading="lazy"
-              onError={() => setFailedIds(prev => new Set(prev).add(p.id))}
-            />
+            </div>            ) : (
+              <img
+                src={p.url}
+                alt={p.originalName || `Photo #${p.id}`}
+                className="w-20 h-[60px] object-cover rounded border border-slate-200"
+                loading="lazy"
+                onError={() => setFailedIds(prev => new Set(prev).add(p.id))}
+              />
           )}
           <div className="flex items-center gap-0.5">
             <span className="text-[8px] text-slate-400 truncate max-w-20">
