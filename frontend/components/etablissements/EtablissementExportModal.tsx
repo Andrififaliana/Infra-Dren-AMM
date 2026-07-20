@@ -30,11 +30,24 @@ export function EtablissementExportModal({
     if (!previewRef.current) return;
 
     setIsGenerating(true);
+    const originalSrcs = new Map<HTMLImageElement, string>();
     try {
-      // Forcer le chargement de toutes les images avant la capture
-      const images = previewRef.current.querySelectorAll('img');
+      // Remplacer les URLs R2 par le proxy backend pour contourner CORS
+      const apiBase = API_BASE_URL;
+      const allImgs = previewRef.current.querySelectorAll('img');
+
+      allImgs.forEach((img) => {
+        const src = img.src;
+        if (src && !src.startsWith('data:') && !src.startsWith('blob:')) {
+          originalSrcs.set(img, src);
+          img.loading = 'eager';
+          img.src = `${apiBase}/r2/proxy-image?url=${encodeURIComponent(src)}`;
+        }
+      });
+
+      // Attendre le chargement des images via le proxy
       await Promise.all(
-        Array.from(images).map(
+        Array.from(allImgs).map(
           (img) =>
             new Promise<void>((resolve) => {
               if (img.complete && img.naturalWidth > 0) {
@@ -42,7 +55,7 @@ export function EtablissementExportModal({
               } else {
                 img.addEventListener('load', () => resolve(), { once: true });
                 img.addEventListener('error', () => resolve(), { once: true });
-                if (!img.src) resolve();
+                if (!img.src || img.src.startsWith('data:')) resolve();
               }
             }),
         ),
@@ -83,6 +96,10 @@ export function EtablissementExportModal({
       console.error('Erreur génération PDF:', err);
       toast.error('Erreur lors de la génération du PDF');
     } finally {
+      // Restaurer les URLs originales des images meme en cas d'erreur
+      originalSrcs.forEach((originalSrc, img) => {
+        img.src = originalSrc;
+      });
       setIsGenerating(false);
     }
   }, [etab, onClose]);
@@ -131,7 +148,7 @@ export function EtablissementExportModal({
             </div>
           ) : isError || !etab ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <AlertTriangle className="h-12 w-12 text-red-400 mb-4" />
+              <AlertTriangle className="h-12 w-12 text-slate-400 mb-4" />
               <p className="text-lg font-medium text-slate-700">Impossible de charger les données</p>
               <p className="text-sm text-slate-500 mt-1">Veuillez réessayer</p>
             </div>            ) : (
@@ -153,7 +170,7 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
   const e = etablissement;
 
   return (
-    <div className="text-slate-800" style={{ fontFamily: 'system-ui, sans-serif', fontSize: '10px', lineHeight: '1.4' }}>
+    <div className="text-slate-800" style={{ fontFamily: 'system-ui, sans-serif', fontSize: '12px', lineHeight: '1.4' }}>
       {/* Header neutre */}
       <div className="bg-slate-800 px-5 py-4 text-white">
         <h1 className="text-base font-bold tracking-tight">{e.nomEtab}</h1>
@@ -224,7 +241,7 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
                     <div className="flex gap-1 mt-0.5">
                       {d.estTitre && <span className="text-[9px] px-1 py-0.5 rounded bg-slate-100 text-slate-600">Titre</span>}
                       {d.estEnceinteEtab && <span className="text-[9px] px-1 py-0.5 rounded bg-slate-100 text-slate-600">Enceinte</span>}
-                      {d.estLitigieux && <span className="text-[9px] px-1 py-0.5 rounded bg-red-50 text-red-600">Litigieux</span>}
+                      {d.estLitigieux && <span className="text-[9px] px-1 py-0.5 rounded bg-slate-50 text-slate-600">Litigieux</span>}
                     </div>
                   </td>
                   <td className="py-1.5 pr-3 text-slate-600">{d.typeDesignation || '-'}</td>
@@ -256,7 +273,7 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
                   <td className="py-1.5 pr-3 text-slate-600">{s.materiauxStruc || '-'}</td>
                   <td className="py-1.5 pr-3 text-slate-600">{s.etatStruc || '-'}</td>
                   <td className="py-1.5 text-right">
-                    <span className={`text-[9px] px-1.5 py-0.5 rounded ${s.existenceStruc ? 'bg-slate-100 text-slate-700' : 'bg-red-50 text-red-600'}`}>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded ${s.existenceStruc ? 'bg-slate-100 text-slate-700' : 'bg-slate-100 text-slate-600'}`}>
                       {s.existenceStruc ? 'Existant' : 'Inexistant'}
                     </span>
                   </td>
@@ -313,7 +330,7 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
                           <td className="py-1 px-2 text-slate-600">{s.affectationSalle || '-'}</td>
                           <td className="py-1 px-2 text-slate-600">{s.etatSalle || '-'}</td>
                           <td className="py-1 px-2 text-center">
-                            <span className={`inline-block w-2 h-2 rounded-full ${s.estOperationnel ? 'bg-green-500' : 'bg-red-400'}`} />
+                            <span className={`inline-block w-2 h-2 rounded-full ${s.estOperationnel ? 'bg-slate-500' : 'bg-slate-300'}`} />
                           </td>
                           <td className="py-1 px-2 text-center text-slate-600">{s.nbEleveF + s.nbEleveG}</td>
                           <td className="py-1 px-2 text-center text-slate-600">{s.equipements?.length || 0}</td>
@@ -352,7 +369,7 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
           {e.batiments.filter(b => b.photos.length > 0 || b.salles.some(s => s.photos.length > 0)).map(b => (
             <div key={b.idBat} className="mb-3 last:mb-0">
               <h4 className="text-[10px] font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-600" />
                 Bâtiment {b.sigleBat || `#${b.idBat}`}
                 {(b.photos.length > 0) && <span className="font-normal text-slate-400">({b.photos.length} photo{b.photos.length > 1 ? 's' : ''})</span>}
               </h4>
@@ -439,7 +456,7 @@ function PhotoGrid({ photos }: { photos: Array<{ id: number; url: string; origin
               {p.originalName || `#${p.id}`}
             </span>
             {p.estPrincipale && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 font-medium">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium">
                 ★ Principale
               </span>
             )}
