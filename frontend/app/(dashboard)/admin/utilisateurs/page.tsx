@@ -10,8 +10,10 @@ import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Modal } from '@/components/ui/modal';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, MailCheck } from 'lucide-react';
+import { Trash2, MailCheck, UserCircle, Shield, Clock } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
+import { GridView, ViewToggle } from '@/components/shared/grid-view';
+import { Card, CardContent } from '@/components/ui/card';
 import { formatDateShort } from '@/lib/utils';
 import type { User, Role } from '@/types/user';
 
@@ -30,6 +32,7 @@ export default function UtilisateursPage() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [formData, setFormData] = useState<UserFormData>({ email: '', nom: '', password: '', role: 'RESPONSABLE_INFRASTRUCTURE' });
   const [showConfirmBanner, setShowConfirmBanner] = useState(false);
   const [createdEmail, setCreatedEmail] = useState('');
@@ -129,7 +132,10 @@ export default function UtilisateursPage() {
           <h1 className="text-2xl font-bold text-gray-900">Utilisateurs</h1>
           <p className="mt-1 text-sm text-gray-500">Gérer les accès à l&apos;application</p>
         </div>
-        <Button onClick={() => setCreateModalOpen(true)}>+ Nouvel utilisateur</Button>
+        <div className="flex items-center gap-2">
+          <ViewToggle viewMode={viewMode} onChange={setViewMode} />
+          <Button onClick={() => setCreateModalOpen(true)}>+ Nouvel utilisateur</Button>
+        </div>
       </div>
 
       {showConfirmBanner && (
@@ -157,16 +163,63 @@ export default function UtilisateursPage() {
         <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} />
       </div>
 
-      <DataTable
-        columns={columns}
-        data={users}
-        keyExtractor={(item) => item.id}
-        loading={isLoading}
-        emptyMessage="Aucun utilisateur"
-        selectable
-        selectedIds={selectedIds}
-        onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
-      />
+      {viewMode === 'list' ? (
+        <DataTable
+          columns={columns}
+          data={users}
+          keyExtractor={(item) => item.id}
+          loading={isLoading}
+          emptyMessage="Aucun utilisateur"
+          selectable
+          selectedIds={selectedIds}
+          onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
+        />
+      ) : (
+        <GridView
+          data={users}
+          keyExtractor={(item) => item.id}
+          loading={isLoading}
+          emptyMessage="Aucun utilisateur"
+          renderCard={(item) => (
+            <Card className="transition-all duration-200 hover:shadow-md hover:border-green-300 hover:-translate-y-0.5">
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-100 to-slate-200">
+                    <UserCircle className={`h-6 w-6 ${item.actif ? 'text-slate-600' : 'text-slate-300'}`} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-slate-800 text-sm truncate">{item.nom}</h3>
+                    <p className="text-xs text-slate-400 truncate">{item.email}</p>
+                  </div>
+                  <div className={`h-2.5 w-2.5 rounded-full mt-1.5 ${item.actif ? 'bg-green-500' : 'bg-red-400'}`} />
+                </div>
+
+                <div className="flex items-center gap-3 text-xs">
+                  <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-slate-600">
+                    <Shield className="h-3 w-3" />
+                    {item.role === 'ADMIN' ? 'Admin' : 'Responsable'}
+                  </span>
+                  <span className="flex items-center gap-1 text-slate-400">
+                    <Clock className="h-3 w-3" />
+                    {formatDateShort(item.createdAt)}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-end pt-1 border-t border-slate-100" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => { setSelectedUser(item); setDeleteModalOpen(true); }}
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-red-100 hover:text-red-600 transition-colors"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        />
+      )}
 
       {meta && (
         <div className="mt-4">
