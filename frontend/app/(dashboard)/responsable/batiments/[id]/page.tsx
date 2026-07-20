@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Bath, Plus, Pencil, Trash2, Venus, Mars, GraduationCap, Droplets, DoorOpen, ChevronRight } from 'lucide-react';
+import { Bath, Plus, Pencil, Trash2, Venus, Mars, GraduationCap, Droplets, DoorOpen, ChevronRight, Image } from 'lucide-react';
 import { useBatiment, useUpdateBatiment } from '@/hooks/use-batiments';
 import { useCreateToilette, useUpdateToilette, useDeleteToilette } from '@/hooks/use-gestion-batiment-salle';
+import { BatimentPhotoUpload } from '@/components/batiments/BatimentPhotoUpload';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
@@ -146,6 +147,19 @@ export default function EditBatimentPage() {
               ))}
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Section Photos */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Image className="h-5 w-5 text-green-500" />
+            Photos ({batiment.photos?.length ?? 0})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <BatimentPhotoUpload batimentId={batiment.idBat} photos={(batiment as any).photos ?? []} />
         </CardContent>
       </Card>
 

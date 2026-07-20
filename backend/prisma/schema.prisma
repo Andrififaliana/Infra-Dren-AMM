@@ -108,8 +108,9 @@ model Batiment {
   etablissement   Etablissement @relation(fields: [etablissementId], references: [id])
   etablissementId Int           @map("etablissement_id")
 
-  salles    Salle[]
-  toilettes Toilette[]
+  salles     Salle[]
+  toilettes  Toilette[]
+  photos     BatimentPhoto[]
 
   @@map("batiment")
 }
@@ -287,6 +288,23 @@ enum Role {
 }
 
 // Table d'association
+model BatimentPhoto {
+  id              Int      @id @default(autoincrement())
+  key             String   @map("key")
+  url             String   @map("url")
+  originalName    String?  @map("original_name")
+  mimeType        String?  @map("mime_type")
+  fileSize        Int?     @map("file_size")
+  estPrincipale   Boolean  @default(false) @map("est_principale")
+
+  batiment   Batiment @relation(fields: [batimentId], references: [idBat])
+  batimentId Int      @map("batiment_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("batiment_photo")
+}
+
 model EffetAleat {
   alea   Alea @relation(fields: [aleaId], references: [idAleat]) // CORRIGÉ ici
   aleaId Int  @map("alea_id")

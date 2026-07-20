@@ -1,8 +1,12 @@
 import {
   Controller, Get, Post, Body, Patch, Param, Delete, Query,
-  UseGuards, ParseIntPipe,
+  UseGuards, ParseIntPipe, UseInterceptors, UploadedFile, UploadedFiles,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import {
+  ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery,
+  ApiConsumes, ApiBody,
+} from '@nestjs/swagger';
 import { BatimentsService } from './batiments.service';
 import { CreateBatimentDto } from './dto/create-batiment.dto';
 import { UpdateBatimentDto } from './dto/update-batiment.dto';
@@ -54,6 +58,55 @@ export class BatimentsController {
   @ApiOperation({ summary: 'Supprimer un bâtiment' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.batimentsService.remove(id);
+  }
+
+  // ─── Photos ────────────────────────────────────────
+
+  @Post(':id/photos')
+  @ApiOperation({ summary: 'Uploader une photo pour un bâtiment' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' }, estPrincipale: { type: 'string' } } } })
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadPhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('estPrincipale') estPrincipale?: string,
+  ) {
+    return this.batimentsService.uploadPhoto(id, file, estPrincipale === 'true');
+  }
+
+  @Post(':id/photos/multiple')
+  @ApiOperation({ summary: 'Uploader plusieurs photos pour un bâtiment (max 10)' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ schema: { type: 'object', properties: { files: { type: 'array', items: { type: 'string', format: 'binary' } }, estPrincipale: { type: 'string' } } } })
+  @UseInterceptors(FilesInterceptor('files', 10, { limits: { fileSize: 10 * 1024 * 1024 } }))
+  async uploadMultiplePhotos(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body('estPrincipale') estPrincipale?: string,
+  ) {
+    const principaleIndex = estPrincipale !== undefined ? (isNaN(parseInt(estPrincipale, 10)) ? 0 : parseInt(estPrincipale, 10)) : 0;
+    return this.batimentsService.uploadMultiplePhotos(id, files, principaleIndex);
+  }
+
+  @Patch(':id/photos/:photoId')
+  @ApiOperation({ summary: 'Définir une photo comme principale' })
+  setPhotoPrincipale(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('photoId', ParseIntPipe) photoId: number,
+    @Body('estPrincipale') estPrincipale?: string,
+  ) {
+    return this.batimentsService.setPhotoPrincipale(id, photoId, estPrincipale !== 'false');
+  }
+
+  @Delete(':id/photos/:photoId')
+  @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Supprimer une photo d\'un bâtiment' })
+  deletePhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('photoId', ParseIntPipe) photoId: number,
+  ) {
+    return this.batimentsService.deletePhoto(id, photoId);
   }
 
   // ─── Toilettes ──────────────────────────────────────

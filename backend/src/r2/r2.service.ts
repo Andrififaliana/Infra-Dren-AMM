@@ -82,4 +82,14 @@ export class R2Service {
     const sanitizedName = originalName.replace(/[^a-zA-Z0-9._-]/g, '_');
     return `etablissements/${etablissementId}/${timestamp}-${sanitizedName}`;
   }
+
+  /** Générer une clé unique pour une photo de bâtiment */
+  static generateBatimentPhotoKey(
+    batimentId: number,
+    originalName: string,
+  ): string {
+    const timestamp = Date.now();
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9._-]/g, '_');
+    return `batiments/${batimentId}/${timestamp}-${sanitizedName}`;
+  }
 }

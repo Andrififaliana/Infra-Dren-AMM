@@ -9,6 +9,18 @@ export interface SalleSummary {
   _count?: { equipements: number; ouvertures: number };
 }
 
+export interface BatimentPhoto {
+  id: number;
+  key: string;
+  url: string;
+  originalName?: string;
+  mimeType?: string;
+  fileSize?: number;
+  estPrincipale: boolean;
+  batimentId: number;
+  createdAt: string;
+}
+
 export interface Batiment {
   idBat: number;
   sigleBat?: string;
@@ -24,6 +36,7 @@ export interface Batiment {
   etablissementId: number;
   salles?: SalleSummary[];
   toilettes?: Toilette[];
+  photos?: BatimentPhoto[];
 }
 
 export interface BatimentSummary {
