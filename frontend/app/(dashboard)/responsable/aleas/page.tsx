@@ -97,12 +97,12 @@ export default function AleasPage() {
     <div>
       <Breadcrumb items={[{ label: 'Aléas' }]} />
 
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Aléas</h1>
-          <p className="mt-1 text-sm text-gray-500">Gestion des aléas naturels ({filtered.length})</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Aléas</h1>
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des aléas naturels ({filtered.length})</p>
         </div>
-        <Button onClick={() => router.push('/responsable/aleas/nouveau')}>
+        <Button onClick={() => router.push('/responsable/aleas/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
           + Nouvel aléa
         </Button>
       </div>

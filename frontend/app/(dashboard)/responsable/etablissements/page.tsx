@@ -160,33 +160,35 @@ export default function GestionEtablissementsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Établissements</h1>
-          <p className="mt-1 text-sm text-gray-500">Gérer les établissements scolaires</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Établissements</h1>
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gérer les établissements scolaires</p>
         </div>
-        <Button onClick={() => router.push('/responsable/etablissements/nouveau')}>
+        <Button onClick={() => router.push('/responsable/etablissements/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
           + Nouvel établissement
         </Button>
       </div>
 
-      <div className="mb-4 flex flex-wrap items-center gap-3">
-        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} className="flex-1" />
-        <Filter className="h-4 w-4 text-gray-400" />
-        <Select
-          value={ciscoFilter}
-          onChange={(e) => { setCiscoFilter(e.target.value); setZapFilter(''); setPage(1); }}
-          options={ciscoOptions}
-          placeholder="Tous les CISCO"
-          className="w-56"
-        />
-        <Select
-          value={zapFilter}
-          onChange={(e) => { setZapFilter(e.target.value); setPage(1); }}
-          options={zapOptions}
-          placeholder="Toutes les ZAP"
-          className="w-56"
-        />
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
+        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} className="w-full sm:flex-1" />
+        <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-1">
+          <Filter className="h-4 w-4 text-gray-400 shrink-0" />
+          <Select
+            value={ciscoFilter}
+            onChange={(e) => { setCiscoFilter(e.target.value); setZapFilter(''); setPage(1); }}
+            options={ciscoOptions}
+            placeholder="Tous les CISCO"
+            className="w-44 sm:w-56 shrink-0"
+          />
+          <Select
+            value={zapFilter}
+            onChange={(e) => { setZapFilter(e.target.value); setPage(1); }}
+            options={zapOptions}
+            placeholder="Toutes les ZAP"
+            className="w-44 sm:w-56 shrink-0"
+          />
+        </div>
       </div>
 
       <DataTable

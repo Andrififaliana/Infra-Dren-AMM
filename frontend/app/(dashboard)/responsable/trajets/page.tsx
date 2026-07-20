@@ -92,12 +92,12 @@ export default function TrajetsPage() {
     <div>
       <Breadcrumb items={[{ label: 'Trajets' }]} />
 
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Trajets</h1>
-          <p className="mt-1 text-sm text-gray-500">Gestion des trajets d&apos;accès ({filtered.length})</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Trajets</h1>
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des trajets d&apos;accès ({filtered.length})</p>
         </div>
-        <Button onClick={() => router.push('/responsable/trajets/nouveau')}>
+        <Button onClick={() => router.push('/responsable/trajets/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
           + Nouveau trajet
         </Button>
       </div>

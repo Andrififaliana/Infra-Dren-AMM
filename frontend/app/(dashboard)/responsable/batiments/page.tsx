@@ -108,26 +108,28 @@ export default function BatimentsPage() {
     <div>
       <Breadcrumb items={[{ label: 'Bâtiments' }]} />
 
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Bâtiments</h1>
-          <p className="mt-1 text-sm text-gray-500">Gestion des bâtiments ({filtered.length})</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Bâtiments</h1>
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des bâtiments ({filtered.length})</p>
         </div>
-        <Button onClick={() => router.push('/responsable/batiments/nouveau')}>
+        <Button onClick={() => router.push('/responsable/batiments/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
           + Nouveau bâtiment
         </Button>
       </div>
 
-      <div className="mb-4 flex flex-wrap items-center gap-3">
-        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher un bâtiment..." className="flex-1" />
-        <Filter className="h-4 w-4 text-gray-400" />
-        <Select
-          value={etablissementFilter}
-          onChange={(e) => { setEtablissementFilter(e.target.value); setPage(1); }}
-          options={etablissementOptions}
-          placeholder="Tous les établissements"
-          className="w-64"
-        />
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
+        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher un bâtiment..." className="w-full sm:flex-1" />
+        <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-1">
+          <Filter className="h-4 w-4 text-gray-400 shrink-0" />
+          <Select
+            value={etablissementFilter}
+            onChange={(e) => { setEtablissementFilter(e.target.value); setPage(1); }}
+            options={etablissementOptions}
+            placeholder="Tous les établissements"
+            className="w-52 sm:w-64 shrink-0"
+          />
+        </div>
       </div>
 
       <DataTable

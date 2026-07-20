@@ -104,26 +104,28 @@ export default function SallesPage() {
     <div>
       <Breadcrumb items={[{ label: 'Salles' }]} />
 
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Salles</h1>
-          <p className="mt-1 text-sm text-gray-500">Gestion des salles de classe ({filtered.length})</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Salles</h1>
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des salles de classe ({filtered.length})</p>
         </div>
-        <Button onClick={() => router.push('/responsable/salles/nouveau')}>
+        <Button onClick={() => router.push('/responsable/salles/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
           + Nouvelle salle
         </Button>
       </div>
 
-      <div className="mb-4 flex flex-wrap items-center gap-3">
-        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher une salle..." className="flex-1" />
-        <Filter className="h-4 w-4 text-gray-400" />
-        <Select
-          value={batimentFilter}
-          onChange={(e) => { setBatimentFilter(e.target.value); setPage(1); }}
-          options={batimentOptions}
-          placeholder="Tous les bâtiments"
-          className="w-56"
-        />
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
+        <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher une salle..." className="w-full sm:flex-1" />
+        <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-1">
+          <Filter className="h-4 w-4 text-gray-400 shrink-0" />
+          <Select
+            value={batimentFilter}
+            onChange={(e) => { setBatimentFilter(e.target.value); setPage(1); }}
+            options={batimentOptions}
+            placeholder="Tous les bâtiments"
+            className="w-52 sm:w-56 shrink-0"
+          />
+        </div>
       </div>
 
       <DataTable
