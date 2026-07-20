@@ -10,8 +10,11 @@ import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { toast } from 'sonner';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Wrench, Package, Tag } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
+import { GridView, ViewToggle } from '@/components/shared/grid-view';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import type { Equipement } from '@/types/equipement';
 
 export default function EquipementsPage() {
@@ -22,6 +25,7 @@ export default function EquipementsPage() {
   const [selectedEquip, setSelectedEquip] = useState<Equipement | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const perPage = 10;
 
   const { data: equipements, isLoading } = useEquipements();
@@ -93,25 +97,90 @@ export default function EquipementsPage() {
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Équipements</h1>
           <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des équipements ({filtered.length})</p>
         </div>
-        <Button onClick={() => router.push('/responsable/equipements/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
-          + Nouvel équipement
-        </Button>
+        <div className="flex items-center gap-2">
+          <ViewToggle viewMode={viewMode} onChange={setViewMode} />
+          <Button onClick={() => router.push('/responsable/equipements/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
+            + Nouvel équipement
+          </Button>
+        </div>
       </div>
 
       <div className="mb-4">
         <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher un équipement..." />
       </div>
 
-      <DataTable
-        columns={columns}
-        data={paginated}
-        keyExtractor={(item) => item.id}
-        loading={isLoading}
-        emptyMessage="Aucun équipement"
-        selectable
-        selectedIds={selectedIds}
-        onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
-      />
+      {viewMode === 'list' ? (
+        <DataTable
+          columns={columns}
+          data={paginated}
+          keyExtractor={(item) => item.id}
+          loading={isLoading}
+          emptyMessage="Aucun équipement"
+          selectable
+          selectedIds={selectedIds}
+          onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
+        />
+      ) : (
+        <GridView
+          data={paginated}
+          keyExtractor={(item) => item.id}
+          loading={isLoading}
+          emptyMessage="Aucun équipement"
+          renderCard={(item) => (
+            <Card
+              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-green-300 hover:-translate-y-0.5"
+              onClick={() => router.push(`/responsable/equipements/${item.id}`)}
+            >
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-100 to-cyan-50">
+                    <Wrench className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-slate-800 text-sm truncate">{item.nomEquip}</h3>
+                    {item.typeEquip && (
+                      <p className="text-xs text-slate-400">{item.typeEquip}</p>
+                    )}
+                  </div>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50">
+                    <span className="text-sm font-bold text-blue-700">{item.quantite}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-xs">
+                  {item.etat ? (
+                    <Badge
+                      variant={item.etat === 'BON' ? 'success' : item.etat === 'MOYEN' ? 'warning' : 'danger'}
+                      className="text-[10px] px-1.5 py-0.5"
+                    >
+                      {item.etat}
+                    </Badge>
+                  ) : (
+                    <span className="text-slate-400">État non renseigné</span>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-end pt-1 border-t border-slate-100" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => router.push(`/responsable/equipements/${item.id}`)}
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-green-100 hover:text-green-600 transition-colors"
+                    >
+                      <Pencil className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      onClick={() => { setSelectedEquip(item); setDeleteModalOpen(true); }}
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-red-100 hover:text-red-600 transition-colors"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        />
+      )}
 
       <div className="mt-4">
         <Pagination page={page} totalPages={totalPages} total={filtered.length} onPageChange={setPage} />

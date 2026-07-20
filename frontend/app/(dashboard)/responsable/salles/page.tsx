@@ -12,8 +12,11 @@ import { Select } from '@/components/ui/select';
 import { Modal } from '@/components/ui/modal';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { toast } from 'sonner';
-import { Pencil, Trash2, Filter } from 'lucide-react';
+import { Pencil, Trash2, Filter, DoorOpen, Lightbulb, Users } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
+import { GridView, ViewToggle } from '@/components/shared/grid-view';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import type { Salle } from '@/types/salle';
 
 export default function SallesPage() {
@@ -25,6 +28,7 @@ export default function SallesPage() {
   const [selectedSalle, setSelectedSalle] = useState<Salle | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const perPage = 10;
 
   const { data: batiments } = useBatiments();
@@ -109,9 +113,12 @@ export default function SallesPage() {
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Salles</h1>
           <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des salles de classe ({filtered.length})</p>
         </div>
-        <Button onClick={() => router.push('/responsable/salles/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
-          + Nouvelle salle
-        </Button>
+        <div className="flex items-center gap-2">
+          <ViewToggle viewMode={viewMode} onChange={setViewMode} />
+          <Button onClick={() => router.push('/responsable/salles/nouveau')} size="sm" className="sm:size-md w-full sm:w-auto">
+            + Nouvelle salle
+          </Button>
+        </div>
       </div>
 
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
@@ -128,16 +135,92 @@ export default function SallesPage() {
         </div>
       </div>
 
-      <DataTable
-        columns={columns}
-        data={paginated}
-        keyExtractor={(item) => item.idSalle}
-        loading={isLoading}
-        emptyMessage="Aucune salle"
-        selectable
-        selectedIds={selectedIds}
-        onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
-      />
+      {viewMode === 'list' ? (
+        <DataTable
+          columns={columns}
+          data={paginated}
+          keyExtractor={(item) => item.idSalle}
+          loading={isLoading}
+          emptyMessage="Aucune salle"
+          selectable
+          selectedIds={selectedIds}
+          onSelectionChange={(ids) => setSelectedIds(ids as Set<number>)}
+        />
+      ) : (
+        <GridView
+          data={paginated}
+          keyExtractor={(item) => item.idSalle}
+          loading={isLoading}
+          emptyMessage="Aucune salle"
+          renderCard={(item) => (
+            <Card
+              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-green-300 hover:-translate-y-0.5"
+              onClick={() => router.push(`/responsable/salles/${item.idSalle}`)}
+            >
+              {/* Status color bar */}
+              <div className={`h-1.5 rounded-t-xl ${item.estOperationnel ? 'bg-green-500' : 'bg-red-400'}`} />
+              <CardContent className="p-4 space-y-2.5">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-semibold text-slate-800 text-sm">{item.sigleSalle || `Salle #${item.idSalle}`}</h3>
+                    <p className="text-xs text-slate-400">
+                      {item.affectationSalle || 'Non affectée'} · Niveau {item.niveauSalle}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {item.estElectrifiee && (
+                      <span className="rounded-full bg-amber-100 p-1" title="Électrifiée">
+                        <Lightbulb className="h-3 w-3 text-amber-600 fill-amber-600" />
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 text-xs text-slate-500">
+                  <span className="flex items-center gap-1">
+                    <DoorOpen className="h-3.5 w-3.5" />
+                    {item.batiment?.sigleBat ?? `#${item.batimentId}`}
+                  </span>
+                  {item.etatSalle && (
+                    <Badge variant={item.etatSalle === 'BON' ? 'success' : item.etatSalle === 'MOYEN' ? 'warning' : 'danger'} className="text-[10px] px-1.5 py-0">
+                      {item.etatSalle}
+                    </Badge>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between text-xs text-slate-400">
+                  <span className="flex items-center gap-1">
+                    <Users className="h-3 w-3" />
+                    {item.nbEleveF + item.nbEleveG} élèves ({item.nbEleveF}F · {item.nbEleveG}G)
+                  </span>
+                  {item._count && (
+                    <span className="text-slate-400">
+                      {item._count.equipements} équip. · {item._count.ouvertures} ouv.
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-end pt-1 border-t border-slate-100" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => router.push(`/responsable/salles/${item.idSalle}`)}
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-green-100 hover:text-green-600 transition-colors"
+                    >
+                      <Pencil className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      onClick={() => { setSelectedSalle(item); setDeleteModalOpen(true); }}
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-red-100 hover:text-red-600 transition-colors"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        />
+      )}
 
       <div className="mt-4">
         <Pagination page={page} totalPages={totalPages} total={filtered.length} onPageChange={setPage} />
