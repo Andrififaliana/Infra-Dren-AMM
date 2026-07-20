@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, LayoutDashboard, School, Building2, DoorOpen, Package, Bus, Waves, Users, ClipboardList, Save, User, Map as MapIcon } from 'lucide-react';
+import { X, LayoutDashboard, School, Building2, DoorOpen, Package, Bus, Waves, Users, ClipboardList, Save, User, Map as MapIcon, Bot } from 'lucide-react';
 
 interface NavItem {
   label: string;
@@ -25,6 +25,12 @@ const navItems: NavItem[] = [
     label: 'Carte',
     href: '/responsable/carte',
     icon: <MapIcon className="h-5 w-5" />,
+    roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
+  },
+  {
+    label: 'Assistant IA',
+    href: '/responsable/chat-ia',
+    icon: <Bot className="h-5 w-5" />,
     roles: ['ADMIN', 'RESPONSABLE_INFRASTRUCTURE'],
   },
   {
