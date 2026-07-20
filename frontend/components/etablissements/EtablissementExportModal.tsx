@@ -32,13 +32,58 @@ export function EtablissementExportModal({
     if (!previewRef.current) return;
 
     setIsGenerating(true);
+    const originalSrcs = new Map<HTMLImageElement, string>();
     try {
-      // html2canvas utilise l'option 'proxy' pour charger les images R2
-      // via le backend (contourne CORS) sans toucher au DOM
+      const apiBase = API_BASE_URL;
+      const allImgs = previewRef.current.querySelectorAll('img');
+
+      // 1. Precharger les images via le proxy en arriere-plan (hors DOM)
+      //    pour les mettre dans le cache navigateur
+      await Promise.all(
+        Array.from(allImgs).map(
+          (img) =>
+            new Promise<void>((resolve) => {
+              const src = img.src;
+              if (!src || src.startsWith('data:') || src.startsWith('blob:')) {
+                resolve();
+                return;
+              }
+              const proxyImg = new Image();
+              proxyImg.onload = () => resolve();
+              proxyImg.onerror = () => resolve();
+              proxyImg.src = `${apiBase}/r2/proxy-image?url=${encodeURIComponent(src)}`;
+            }),
+        ),
+      );
+
+      // 2. Echanger les src (images deja en cache → instantane, pas de flash)
+      allImgs.forEach((img) => {
+        const src = img.src;
+        if (src && !src.startsWith('data:') && !src.startsWith('blob:')) {
+          originalSrcs.set(img, src);
+          img.src = `${apiBase}/r2/proxy-image?url=${encodeURIComponent(src)}`;
+        }
+      });
+
+      // 2b. Attendre que le navigateur ait decode toutes les images
+      await Promise.all(
+        Array.from(allImgs).map(
+          (img) =>
+            new Promise<void>((resolve) => {
+              if (img.complete) {
+                resolve();
+              } else {
+                img.addEventListener('load', () => resolve(), { once: true });
+                img.addEventListener('error', () => resolve(), { once: true });
+              }
+            }),
+        ),
+      );
+
+      // 3. Capturer (images fraichement decodees)
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         useCORS: true,
-        proxy: `${API_BASE_URL}/r2/proxy-image`,
         logging: false,
         width: previewRef.current.scrollWidth,
         height: previewRef.current.scrollHeight,
@@ -71,6 +116,10 @@ export function EtablissementExportModal({
       console.error('Erreur génération PDF:', err);
       toast.error('Erreur lors de la génération du PDF');
     } finally {
+      // Restaurer les URLs originales meme en cas d'erreur
+      originalSrcs.forEach((originalSrc, img) => {
+        img.src = originalSrc;
+      });
       setIsGenerating(false);
     }
   }, [etab, onClose]);
