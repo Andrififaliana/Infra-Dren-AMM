@@ -49,3 +49,33 @@ export function useVerifyToken() {
     retry: false,
   });
 }
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: async (email: string) => {
+      const { data } = await apiClient.post<ApiResponse<{ success: boolean; message: string }>>(
+        '/auth/forgot-password',
+        { email },
+      );
+      return data.data;
+    },
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: async ({
+      accessToken,
+      newPassword,
+    }: {
+      accessToken: string;
+      newPassword: string;
+    }) => {
+      const { data } = await apiClient.post<ApiResponse<{ success: boolean; message: string }>>(
+        '/auth/reset-password',
+        { accessToken, newPassword },
+      );
+      return data.data;
+    },
+  });
+}

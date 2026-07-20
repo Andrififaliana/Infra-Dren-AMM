@@ -18,6 +18,8 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ForgotPasswordDto, ForgotPasswordResponseDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto, ResetPasswordResponseDto } from './dto/reset-password.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -90,5 +92,44 @@ export class AuthController {
   async verifyToken(@Headers('authorization') authHeader: string) {
     const token = authHeader?.replace('Bearer ', '');
     return this.authService.verifyToken(token ?? '');
+  }
+
+  @Post('forgot-password')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Demander la réinitialisation du mot de passe',
+    description:
+      'Vérifie si l\'email existe dans la base locale, puis envoie un email de réinitialisation via Supabase Auth. ' +
+      'Pour des raisons de sécurité, le message de réponse est identique que l\'email existe ou non.',
+  })
+  @ApiBody({ type: ForgotPasswordDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Email envoyé si le compte existe',
+    type: ForgotPasswordResponseDto,
+  })
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @Post('reset-password')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Réinitialiser le mot de passe',
+    description:
+      'Réinitialise le mot de passe avec le token reçu par email et le nouveau mot de passe. ' +
+      'Le token est extrait du hash de l\'URL de redirection après le clic sur le lien dans l\'email.',
+  })
+  @ApiBody({ type: ResetPasswordDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Mot de passe réinitialisé',
+    type: ResetPasswordResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Token invalide ou expiré' })
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto);
   }
 }
