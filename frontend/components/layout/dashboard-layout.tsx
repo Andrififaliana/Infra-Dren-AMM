@@ -18,17 +18,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
       />
 
       <div
         className={cn(
           'transition-all duration-300',
-          sidebarCollapsed ? 'ml-16' : 'ml-64'
+          'lg:ml-64',
+          sidebarCollapsed && 'lg:ml-16'
         )}
       >
         <Navbar onMenuToggle={() => setMobileSidebarOpen(!mobileSidebarOpen)} />
 
-        <main className="p-6 lg:p-8">
+        <main className="p-4 sm:p-6 lg:p-8">
           {children}
         </main>
       </div>

@@ -73,27 +73,30 @@ export default function HomePage() {
     <div>
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="relative mx-auto max-w-4xl px-4 py-24 sm:px-6 lg:px-8">
+        <div className="relative mx-auto max-w-4xl px-4 py-16 sm:py-24 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-slate-800 sm:text-5xl lg:text-6xl">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-slate-800 px-2">
               Gestion des{' '}
               <span className="text-green-700">
                 infrastructures scolaires
               </span>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600">
+            <p className="mx-auto mt-4 sm:mt-6 max-w-2xl text-base sm:text-lg leading-relaxed text-slate-600 px-4">
               Plateforme de suivi et de gestion des établissements scolaires de la
               Direction Régionale de l&apos;Éducation Nationale AMM.
             </p>
-            <div className="mt-8 flex justify-center">
-              <Button size="lg" onClick={() => router.push('/etablissements')}>
+            <div className="mt-6 sm:mt-8 flex justify-center">
+              <Button size="md" onClick={() => router.push('/etablissements')} className="sm:hidden">
+                Explorer <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+              <Button size="lg" onClick={() => router.push('/etablissements')} className="hidden sm:inline-flex">
                 Explorer les établissements <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
-            <div className="mt-8 flex flex-wrap justify-center gap-6">
+            <div className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-3 sm:gap-6">
               {['Données sécurisées', 'Suivi en temps réel', 'Transparence'].map((item) => (
-                <span key={item} className="inline-flex items-center gap-1.5 text-sm text-slate-500">
-                  <CheckCircle className="h-4 w-4 text-green-500" />{item}
+                <span key={item} className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-500">
+                  <CheckCircle className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-green-500" />{item}
                 </span>
               ))}
             </div>
@@ -103,17 +106,17 @@ export default function HomePage() {
 
       {/* Stats Section */}
       {stats && (
-        <section className="mx-auto max-w-7xl px-4 -mt-8 sm:px-6 lg:px-8 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mx-auto max-w-7xl px-4 -mt-6 sm:-mt-8 sm:px-6 lg:px-8 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {[
               { label: 'Établissements', value: stats.totalEtablissements },
               { label: 'Bâtiments', value: stats.totalBatiments },
               { label: 'Salles de classe', value: stats.totalSalles },
               { label: 'Équipements', value: stats.totalEquipements },
             ].map((kpi) => (
-              <div key={kpi.label} className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                <p className="text-sm font-medium text-slate-500">{kpi.label}</p>
-                <p className="mt-1 text-3xl font-bold text-slate-800">{formatNumber(kpi.value)}</p>
+              <div key={kpi.label} className="rounded-xl sm:rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
+                <p className="text-xs sm:text-sm font-medium text-slate-500">{kpi.label}</p>
+                <p className="mt-1 text-xl sm:text-3xl font-bold text-slate-800">{formatNumber(kpi.value)}</p>
               </div>
             ))}
           </motion.div>
@@ -121,12 +124,12 @@ export default function HomePage() {
       )}
 
       {/* Features */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-slate-800">Fonctionnalités de la plateforme</h2>
-          <p className="mt-4 text-slate-600 max-w-2xl mx-auto">Un outil complet pour la gestion et le suivi des infrastructures scolaires</p>
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:py-24 sm:px-6 lg:px-8">
+        <div className="mb-8 sm:mb-12 text-center px-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-800">Fonctionnalités de la plateforme</h2>
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto px-2">Un outil complet pour la gestion et le suivi des infrastructures scolaires</p>
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {features.map((feature, idx) => {
             const Icon = feature.icon;
             return (
@@ -150,18 +153,18 @@ export default function HomePage() {
 
       {/* How it works */}
       <section className="bg-slate-100 border-t border-slate-200">
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-slate-800">Comment ça fonctionne</h2>
-            <p className="mt-4 text-slate-600 max-w-2xl mx-auto">Un processus simple et transparent pour la gestion des données</p>
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:py-24 sm:px-6 lg:px-8">
+          <div className="mb-8 sm:mb-12 text-center px-2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800">Comment ça fonctionne</h2>
+            <p className="mt-3 sm:mt-4 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">Un processus simple et transparent pour la gestion des données</p>
           </div>
-          <div className="grid gap-8 md:grid-cols-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {steps.map((step, idx) => (
               <motion.div key={step.num} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="text-center">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 text-lg font-bold text-green-700">{step.num}</div>
+                <div className="mx-auto mb-3 sm:mb-4 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-xl sm:rounded-2xl bg-green-100 text-base sm:text-lg font-bold text-green-700">{step.num}</div>
                 <h3 className="font-semibold text-slate-800">{step.title}</h3>
-                <p className="mt-1 text-sm text-slate-500">{step.desc}</p>
+                <p className="mt-1 text-xs sm:text-sm text-slate-500">{step.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -172,24 +175,26 @@ export default function HomePage() {
       <section className="border-t border-slate-200">
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="mb-12 text-center">
-              <div className="mb-4 inline-flex rounded-xl bg-green-100 p-3 text-green-600">
-                <Map className="h-6 w-6" />
+            <div className="mb-8 sm:mb-12 text-center px-2">
+              <div className="mb-3 sm:mb-4 inline-flex rounded-xl bg-green-100 p-2.5 sm:p-3 text-green-600">
+                <Map className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <h2 className="text-3xl font-bold text-slate-800">Carte interactive</h2>
-              <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-800">Carte interactive</h2>
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-2">
                 Visualisez l&apos;emplacement de tous les établissements scolaires de la r&eacute;gion AMM.
                 {schoolsWithCoords.length > 0 && (
                   <span> <strong>{schoolsWithCoords.length}</strong> &eacute;tablissements g&eacute;olocalis&eacute;s.</span>
                 )}
               </p>
             </div>
-            <EtablissementsMap
-              schools={etablissements}
-              showAleas={false}
-              showTrajets={false}
-              onSchoolClick={(id) => router.push(`/etablissements/${id}`)}
-            />
+            <div className="h-[350px] sm:h-[500px] rounded-2xl overflow-hidden">
+              <EtablissementsMap
+                schools={etablissements}
+                showAleas={false}
+                showTrajets={false}
+                onSchoolClick={(id) => router.push(`/etablissements/${id}`)}
+              />
+            </div>
           </motion.div>
         </div>
       </section>
