@@ -40,6 +40,8 @@ export function useChatIa() {
       if (!text.trim() || isLoading) return;
 
       setError(null);
+      setPendingAction(null);
+      setConfirmInput('');
       addMessage('user', text);
       setIsLoading(true);
 
