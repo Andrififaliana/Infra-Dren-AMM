@@ -26,7 +26,6 @@ export interface StatsParCisco {
 export interface CouvertureReseau {
   type: 'telephone' | 'internet';
   couvert: number;
-  nonCouvert: number;
 }
 
 export interface RepartitionSalles {
