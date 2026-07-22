@@ -6,11 +6,12 @@ import { StatCard } from '@/components/shared/stat-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CardSkeleton } from '@/components/shared/loading-skeleton';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
+import { Separator } from '@/components/ui/separator';
 import { formatNumber } from '@/lib/utils';
-import { School, Building2, DoorOpen, Package, Phone, Globe } from 'lucide-react';
+import { School, Building2, DoorOpen, Package, Phone, Globe, TrendingUp, BarChart3, PieChart, Signal } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend,
+  PieChart as RePieChart, Pie, Cell, Legend,
 } from 'recharts';
 
 const COLORS = ['#16a34a', '#22c55e', '#4ade80', '#86efac', '#15803d', '#166534', '#14532d'];
@@ -25,21 +26,21 @@ export default function TableauDeBordPage() {
     <div>
       <Breadcrumb items={[{ label: 'Tableau de bord' }]} />
 
-      <div className="mb-6 sm:mb-8">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Tableau de bord</h1>
-        <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-foreground">Tableau de bord</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Vue d&apos;ensemble des infrastructures scolaires
         </p>
       </div>
 
       {/* KPIs */}
       {isLoading ? (
-        <div className="mb-6 sm:mb-8 grid gap-3 sm:gap-6 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-8 grid gap-4 grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : globales ? (
         <>
-          <div className="mb-6 sm:mb-8 grid gap-3 sm:gap-6 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-8 grid gap-4 grid-cols-2 lg:grid-cols-4">
             <StatCard title="Établissements" value={globales.totalEtablissements} icon={<School className="h-5 w-5" />} index={0} />
             <StatCard title="Bâtiments" value={globales.totalBatiments} icon={<Building2 className="h-5 w-5" />} index={1} />
             <StatCard title="Salles" value={globales.totalSalles} icon={<DoorOpen className="h-5 w-5" />} index={2} />
@@ -47,80 +48,67 @@ export default function TableauDeBordPage() {
           </div>
 
           {/* Graphiques */}
-          <div className="mb-6 sm:mb-8 grid gap-4 sm:gap-6 lg:grid-cols-2">
-            {/* Bar Chart - Répartition par DREN */}
+          <div className="mb-8 grid gap-6 lg:grid-cols-2">
+            {/* Bar Chart */}
             {parDren && parDren.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-              >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Établissements par district</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-60 sm:h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={parDren} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                        <XAxis dataKey="dren" tick={{ fontSize: 11 }} />
-                        <YAxis tick={{ fontSize: 11 }} />
-                        <Tooltip
-                          contentStyle={{ borderRadius: 12, border: '1px solid #e5e7eb', fontSize: 12 }}
-                        />
-                        <Bar dataKey="nbEtablissements" name="Établissements" fill="#16a34a" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="nbSalles" name="Salles" fill="#22c55e" radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
+              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.3, duration: 0.5 }}>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <BarChart3 className="h-5 w-5 text-primary" />
+                      Établissements par district
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-72">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={parDren} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                          <XAxis dataKey="dren" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+                          <YAxis tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+                          <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid hsl(var(--border))', fontSize: 12, background: 'hsl(var(--background))' }} />
+                          <Bar dataKey="nbEtablissements" name="Établissements" fill="hsl(142.1 76.2% 36.3%)" radius={[6, 6, 0, 0]} />
+                          <Bar dataKey="nbSalles" name="Salles" fill="hsl(142.1 60% 50%)" radius={[6, 6, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             )}
 
-            {/* Pie Chart - État des salles */}
+            {/* Pie Chart */}
             {repartition && repartition.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-              >
-              <Card>
-                <CardHeader>
-                  <CardTitle>État des salles de classe</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-60 sm:h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={repartition}
-                          cx="50%"
-                          cy="45%"
-                          innerRadius={60}
-                          outerRadius={95}
-                          paddingAngle={3}
-                          dataKey="count"
-                          nameKey="etat"
-                          label={({ payload }: any) => `${payload.etat} (${payload.count})`}
-                          labelLine={false}
-                        >
-                          {repartition.map((_, idx) => (
-                            <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip
-                          contentStyle={{ borderRadius: 12, border: '1px solid #e5e7eb', fontSize: 12 }}
-                        />
-                        <Legend verticalAlign="bottom" height={30} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
+              <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.4, duration: 0.5 }}>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <PieChart className="h-5 w-5 text-primary" />
+                      État des salles de classe
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-72">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <RePieChart>
+                          <Pie
+                            data={repartition}
+                            cx="50%" cy="45%"
+                            innerRadius={60} outerRadius={95}
+                            paddingAngle={3}
+                            dataKey="count" nameKey="etat"
+                            label={({ payload }: any) => `${payload.etat} (${payload.count})`}
+                            labelLine={false}
+                          >
+                            {repartition.map((_, idx) => <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />)}
+                          </Pie>
+                          <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid hsl(var(--border))', fontSize: 12, background: 'hsl(var(--background))' }} />
+                          <Legend verticalAlign="bottom" height={30} />
+                        </RePieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             )}
 
@@ -133,56 +121,67 @@ export default function TableauDeBordPage() {
                 transition={{ delay: 0.5, duration: 0.5 }}
                 className="lg:col-span-2"
               >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Couverture réseau</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {couverture.map((c) => (
-                    <div key={c.type}>
-                      <div className="mb-2 flex items-center justify-between text-sm">
-                        <span className="font-medium">
-                          <span className="inline-flex items-center gap-1.5">{c.type === 'telephone' ? <><Phone className="h-4 w-4" /> Couverture téléphonique</> : <><Globe className="h-4 w-4" /> Couverture Internet</>}</span>
-                        </span>
-                        <span className="font-semibold text-gray-900">{c.couvert}%</span>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Signal className="h-5 w-5 text-primary" />
+                      Couverture réseau
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {couverture.map((c) => (
+                      <div key={c.type}>
+                        <div className="mb-2 flex items-center justify-between text-sm">
+                          <span className="flex items-center gap-2 font-medium text-foreground">
+                            {c.type === 'telephone' ? <Phone className="h-4 w-4 text-primary" /> : <Globe className="h-4 w-4 text-primary" />}
+                            {c.type === 'telephone' ? 'Couverture téléphonique' : 'Couverture Internet'}
+                          </span>
+                          <span className="font-semibold text-foreground">{c.couvert}%</span>
+                        </div>
+                        <div className="h-3 rounded-full bg-muted">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${c.couvert}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: 'easeOut' }}
+                            className="h-3 rounded-full bg-gradient-to-r from-primary/60 to-primary"
+                          />
+                        </div>
                       </div>
-                      <div className="h-3 rounded-full bg-gray-100">
-                        <div
-                          className="h-3 rounded-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-1000"
-                          style={{ width: `${c.couvert}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+                    ))}
+                  </CardContent>
+                </Card>
               </motion.div>
             )}
           </div>
 
           {/* Tableau DREN */}
-          {parDren && parDren.length > 0 && (              <Card>
-                <CardHeader>
-                  <CardTitle>Répartition détaillée par district</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="overflow-x-auto [-webkit-overflow-scrolling:touch]">
+          {parDren && parDren.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  Répartition détaillée par district
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="px-4 py-3 text-left font-medium text-gray-500">District</th>
-                        <th className="px-4 py-3 text-right font-medium text-gray-500">Établissements</th>
-                        <th className="px-4 py-3 text-right font-medium text-gray-500">Bâtiments</th>
-                        <th className="px-4 py-3 text-right font-medium text-gray-500">Salles</th>
+                      <tr className="border-b">
+                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">District</th>
+                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Établissements</th>
+                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Bâtiments</th>
+                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Salles</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y">
                       {parDren.map((d) => (
-                        <tr key={d.dren} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-4 py-3 font-medium">{d.dren}</td>
-                          <td className="px-4 py-3 text-right">{formatNumber(d.nbEtablissements)}</td>
-                          <td className="px-4 py-3 text-right">{formatNumber(d.nbBatiments)}</td>
-                          <td className="px-4 py-3 text-right">{formatNumber(d.nbSalles)}</td>
+                        <tr key={d.dren} className="hover:bg-muted/50 transition-colors">
+                          <td className="px-4 py-3 font-medium text-foreground">{d.dren}</td>
+                          <td className="px-4 py-3 text-right tabular-nums text-foreground">{formatNumber(d.nbEtablissements)}</td>
+                          <td className="px-4 py-3 text-right tabular-nums text-foreground">{formatNumber(d.nbBatiments)}</td>
+                          <td className="px-4 py-3 text-right tabular-nums text-foreground">{formatNumber(d.nbSalles)}</td>
                         </tr>
                       ))}
                     </tbody>
