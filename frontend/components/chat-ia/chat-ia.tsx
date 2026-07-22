@@ -72,7 +72,7 @@ export function ChatIaWidget() {
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col rounded-2xl border bg-background shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-primary/5 to-primary/10 px-5 py-3.5">
+      <div className="flex items-center justify-between border-b bg-gradient-to-r from-primary/5 to-primary/10 px-5 py-3.5">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 shadow-sm">
             <Bot className="h-5 w-5 text-white" />
@@ -167,7 +167,7 @@ export function ChatIaWidget() {
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 shadow-sm">
                   <Bot className="h-4 w-4 text-white" />
                 </div>
-                <div className="flex items-center gap-2 rounded-2xl bg-background px-4 py-3 shadow-sm">
+                <div className="flex items-center gap-2 rounded-2xl bg-background px-4 py-3 shadow-sm border">
                   <Loader2 className="h-4 w-4 animate-spin text-primary" />
                   <span className="text-sm text-muted-foreground">Réflexion en cours...</span>
                 </div>
@@ -179,7 +179,7 @@ export function ChatIaWidget() {
       </div>
 
       {/* Input area */}
-      <div className="bg-background px-4 py-3 sm:px-6 shadow-sm">
+      <div className="border-t bg-background px-4 py-3 sm:px-6">
         <div className="flex items-center gap-2">
           <input
             ref={inputRef}
