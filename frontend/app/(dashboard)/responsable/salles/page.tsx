@@ -157,8 +157,6 @@ export default function SallesPage() {
               className="cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
               onClick={() => router.push(`/responsable/salles/${item.idSalle}`)}
             >
-              {/* Status color bar */}
-              <div className={`h-1.5 rounded-t-xl ${item.estOperationnel ? 'bg-primary' : 'bg-destructive/50'}`} />
               <CardContent className="p-4 space-y-2.5">
                 <div className="flex items-start justify-between">
                   <div>
