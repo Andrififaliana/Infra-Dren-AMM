@@ -107,7 +107,7 @@ export default function IALogsPage() {
                     ) : '...'}
                   </p>
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-warning/10">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
                   <BarChart3 className="h-5 w-5 text-amber-600" />
                 </div>
               </div>
