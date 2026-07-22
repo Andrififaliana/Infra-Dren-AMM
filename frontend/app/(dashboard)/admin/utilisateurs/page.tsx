@@ -181,35 +181,35 @@ export default function UtilisateursPage() {
           loading={isLoading}
           emptyMessage="Aucun utilisateur"
           renderCard={(item) => (
-            <Card className="transition-all duration-200 hover:shadow-md hover:border-green-300 hover:-translate-y-0.5">
+            <Card className="transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-100 to-slate-200">
-                    <UserCircle className={`h-6 w-6 ${item.actif ? 'text-slate-600' : 'text-slate-300'}`} />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
+                    <UserCircle className={`h-6 w-6 ${item.actif ? 'text-foreground' : 'text-muted-foreground/50'}`} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-slate-800 text-sm truncate">{item.nom}</h3>
-                    <p className="text-xs text-slate-400 truncate">{item.email}</p>
+                    <h3 className="font-semibold text-foreground text-sm truncate">{item.nom}</h3>
+                    <p className="text-xs text-muted-foreground truncate">{item.email}</p>
                   </div>
-                  <div className={`h-2.5 w-2.5 rounded-full mt-1.5 ${item.actif ? 'bg-primary/50' : 'bg-red-400'}`} />
+                  <div className={`h-2.5 w-2.5 rounded-full mt-1.5 ${item.actif ? 'bg-primary/50' : 'bg-destructive/50'}`} />
                 </div>
 
                 <div className="flex items-center gap-3 text-xs">
-                  <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-slate-600">
+                  <span className="flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-muted-foreground">
                     <Shield className="h-3 w-3" />
                     {item.role === 'ADMIN' ? 'Admin' : 'Responsable'}
                   </span>
-                  <span className="flex items-center gap-1 text-slate-400">
+                  <span className="flex items-center gap-1 text-muted-foreground">
                     <Clock className="h-3 w-3" />
                     {formatDateShort(item.createdAt)}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-end pt-1 border-t border-slate-100" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-end pt-1 border-t" onClick={(e) => e.stopPropagation()}>
                   <div className="flex gap-1">
                     <button
                       onClick={() => { setSelectedUser(item); setDeleteModalOpen(true); }}
-                      className="rounded-lg p-1.5 text-slate-400 hover:bg-red-100 hover:text-red-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
