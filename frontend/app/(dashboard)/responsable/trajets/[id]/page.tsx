@@ -29,7 +29,7 @@ export default function EditTrajetPage() {
   };
 
   if (isLoading) return <div className="mx-auto max-w-2xl"><Skeleton className="h-96" /></div>;
-  if (!trajet) return <div className="py-16 text-center"><p className="text-gray-500">Trajet non trouvé</p></div>;
+  if (!trajet) return <div className="py-16 text-center"><p className="text-muted-foreground">Trajet non trouvé</p></div>;
 
   return (
     <div className="mx-auto max-w-2xl">

@@ -30,7 +30,7 @@ export default function EditAleaPage() {
   };
 
   if (isLoading) return <div className="mx-auto max-w-2xl"><Skeleton className="h-96" /></div>;
-  if (!alea) return <div className="py-16 text-center"><p className="text-gray-500">Aléa non trouvé</p></div>;
+  if (!alea) return <div className="py-16 text-center"><p className="text-muted-foreground">Aléa non trouvé</p></div>;
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -45,9 +45,9 @@ export default function EditAleaPage() {
               <Input id="dateAleat" name="dateAleat" label="Date" type="date" defaultValue={alea.dateAleat ? new Date(alea.dateAleat).toISOString().split('T')[0] : ''} />
             </div>
             <div>
-              <label htmlFor="explication" className="mb-1.5 block text-sm font-medium text-gray-700">Explication</label>
+              <label htmlFor="explication" className="mb-1.5 block text-sm font-medium text-foreground">Explication</label>
               <textarea id="explication" name="explication" rows={3} defaultValue={alea.explication ?? ''}
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20"
               />
             </div>
             <div className="flex justify-end gap-3">

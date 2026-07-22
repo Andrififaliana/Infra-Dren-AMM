@@ -228,7 +228,7 @@ export default function EditEtablissementPage() {
   if (!etablissement) {
     return (
       <div className="py-16 text-center">
-        <p className="text-gray-500">Établissement non trouvé</p>
+        <p className="text-muted-foreground">Établissement non trouvé</p>
         <Button onClick={() => router.push('/responsable/etablissements')} className="mt-4">Retour</Button>
       </div>
     );
@@ -248,7 +248,7 @@ export default function EditEtablissementPage() {
           variant="outline"
           size="sm"
           onClick={() => setExportModalOpen(true)}
-          className="gap-2 border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300"
+          className="gap-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50"
         >
           <Download className="h-4 w-4" />
           Exporter en PDF
@@ -290,7 +290,7 @@ export default function EditEtablissementPage() {
               <Input id="nbSectionG" name="nbSectionG" label="Sections (H)" type="number" defaultValue={etablissement.nbSectionG} />
               <Input id="nbSectionF" name="nbSectionF" label="Sections (F)" type="number" defaultValue={etablissement.nbSectionF} />
             </div>
-            {error && <p className="text-sm text-red-600">{error instanceof Error ? error.message : 'Erreur'}</p>}
+            {error && <p className="text-sm text-destructive">{error instanceof Error ? error.message : 'Erreur'}</p>}
             <div className="flex justify-end gap-3">
               <Button variant="outline" type="button" onClick={() => router.back()}>Annuler</Button>
               <Button type="submit" loading={isPending}>Enregistrer</Button>
@@ -318,7 +318,7 @@ export default function EditEtablissementPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-green-500" /> Bâtiments ({etablissement.batiments?.length ?? 0})
+              <Building2 className="h-5 w-5 text-primary" /> Bâtiments ({etablissement.batiments?.length ?? 0})
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => router.push('/responsable/batiments/nouveau')}>
               <Plus className="mr-1 h-4 w-4" /> Ajouter
@@ -331,13 +331,13 @@ export default function EditEtablissementPage() {
               {etablissement.batiments.map((b) => (
                 <div
                   key={b.idBat}
-                  className="group cursor-pointer rounded-xl border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-green-200 hover:bg-green-50/50"
+                  className="group cursor-pointer rounded-xl border bg-muted/50 p-4 transition-colors hover:border-primary/20 hover:bg-primary/5"
                   onClick={() => router.push(`/responsable/batiments/${b.idBat}`)}
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="font-medium text-gray-900">{b.sigleBat || `Bâtiment #${b.idBat}`}</p>
-                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-gray-500">
+                      <p className="font-medium text-foreground">{b.sigleBat || `Bâtiment #${b.idBat}`}</p>
+                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-muted-foreground">
                         <span>{b.nbNiveau} niveau{b.nbNiveau > 1 ? 'x' : ''}</span>
                         {b._count && (
                           <>
@@ -347,14 +347,14 @@ export default function EditEtablissementPage() {
                         )}
                       </div>
                     </div>
-                    <ChevronRight className="h-5 w-5 text-gray-300 transition-colors group-hover:text-green-500" />
+                    <ChevronRight className="h-5 w-5 text-muted-foreground/30 transition-colors group-hover:text-primary" />
                   </div>
                 </div>
               ))}
             </div>
           ) : (
             <div className="text-center">
-              <p className="text-sm text-gray-400">Aucun bâtiment</p>
+              <p className="text-sm text-muted-foreground">Aucun bâtiment</p>
               <Button variant="ghost" size="sm" onClick={() => router.push('/responsable/batiments/nouveau')} className="mt-2">
                 <Plus className="mr-1 h-4 w-4" /> Ajouter un bâtiment
               </Button>
@@ -368,7 +368,7 @@ export default function EditEtablissementPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5 text-green-500" /> Directeur
+              <User className="h-5 w-5 text-primary" /> Directeur
             </CardTitle>
             <div className="flex gap-2">
               <Button variant="ghost" size="sm" onClick={openDirModal}>
@@ -384,11 +384,11 @@ export default function EditEtablissementPage() {
         </CardHeader>
         <CardContent>
           {etablissement.directeur ? (
-            <div className="rounded-xl bg-gray-50 p-4">
-              <p className="font-medium text-gray-900">
+            <div className="rounded-xl bg-muted/50 p-4">
+              <p className="font-medium text-foreground">
                 {etablissement.directeur.nomDirecteur} {etablissement.directeur.prenomDr || ''}
               </p>
-              <div className="mt-1 flex flex-wrap gap-3 text-sm text-gray-500">
+              <div className="mt-1 flex flex-wrap gap-3 text-sm text-muted-foreground">
                 {etablissement.directeur.emailDr && (
                   <span className="flex items-center gap-1"><Mail className="h-3.5 w-3.5" /> {etablissement.directeur.emailDr}</span>
                 )}
@@ -398,7 +398,7 @@ export default function EditEtablissementPage() {
               </div>
             </div>
           ) : (
-            <p className="text-sm text-gray-400">Aucun directeur renseigné</p>
+            <p className="text-sm text-muted-foreground">Aucun directeur renseigné</p>
           )}
         </CardContent>
       </Card>
@@ -408,7 +408,7 @@ export default function EditEtablissementPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-green-500" /> Désignations ({etablissement.designations?.length ?? 0})
+              <FileText className="h-5 w-5 text-primary" /> Désignations ({etablissement.designations?.length ?? 0})
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => openDesModal()}>
               <Plus className="mr-1 h-4 w-4" /> Ajouter
@@ -419,11 +419,11 @@ export default function EditEtablissementPage() {
           {etablissement.designations && etablissement.designations.length > 0 ? (
             <div className="space-y-3">
               {etablissement.designations.map((d) => (
-                <div key={d.idDesign} className="group rounded-xl border border-gray-100 bg-gray-50 p-4">
+                <div key={d.idDesign} className="group rounded-xl border bg-muted/50 p-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="font-medium text-gray-900">{d.nomDesign}</p>
-                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-gray-500">
+                      <p className="font-medium text-foreground">{d.nomDesign}</p>
+                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-muted-foreground">
                         {d.typeDesignation && <span>Type: {d.typeDesignation}</span>}
                         {d.numCadastre && (
                           <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {d.numCadastre}</span>
@@ -450,7 +450,7 @@ export default function EditEtablissementPage() {
             </div>
           ) : (
             <div className="text-center">
-              <p className="text-sm text-gray-400">Aucune désignation</p>
+              <p className="text-sm text-muted-foreground">Aucune désignation</p>
               <Button variant="ghost" size="sm" onClick={() => openDesModal()} className="mt-2">
                 <Plus className="mr-1 h-4 w-4" /> Ajouter une désignation
               </Button>
@@ -464,7 +464,7 @@ export default function EditEtablissementPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-green-500" /> Structures ({etablissement.structures?.length ?? 0})
+              <Building2 className="h-5 w-5 text-primary" /> Structures ({etablissement.structures?.length ?? 0})
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => openStrModal()}>
               <Plus className="mr-1 h-4 w-4" /> Ajouter
@@ -475,11 +475,11 @@ export default function EditEtablissementPage() {
           {etablissement.structures && etablissement.structures.length > 0 ? (
             <div className="space-y-3">
               {etablissement.structures.map((s) => (
-                <div key={s.idStruc} className="group rounded-xl border border-gray-100 bg-gray-50 p-4">
+                <div key={s.idStruc} className="group rounded-xl border bg-muted/50 p-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="font-medium text-gray-900">{s.typeStruc || 'Structure'}</p>
-                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-gray-500">
+                      <p className="font-medium text-foreground">{s.typeStruc || 'Structure'}</p>
+                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-muted-foreground">
                         {s.materiauxStruc && <span>Matériaux: {s.materiauxStruc}</span>}
                         {s.etatStruc && <span>État: {s.etatStruc}</span>}
                       </div>
@@ -501,7 +501,7 @@ export default function EditEtablissementPage() {
             </div>
           ) : (
             <div className="text-center">
-              <p className="text-sm text-gray-400">Aucune structure</p>
+              <p className="text-sm text-muted-foreground">Aucune structure</p>
               <Button variant="ghost" size="sm" onClick={() => openStrModal()} className="mt-2">
                 <Plus className="mr-1 h-4 w-4" /> Ajouter une structure
               </Button>
@@ -549,9 +549,8 @@ export default function EditEtablissementPage() {
               onChange={(e) => setDesForm({ ...desForm, numCadastre: e.target.value })} />
           </div>
           <Input id="des_superficie" label="Superficie (m²)" type="number" min="0" step="0.01" value={desForm.superficieDesign}
-            onChange={(e) => setDesForm({ ...desForm, superficieDesign: e.target.value })} />
-          <fieldset className="rounded-lg border border-gray-200 p-4">
-            <legend className="text-sm font-medium text-gray-700 px-1">Options</legend>
+            onChange={(e) => setDesForm({ ...desForm, superficieDesign: e.target.value })} />            <fieldset className="rounded-lg border border-input p-4">
+            <legend className="text-sm font-medium text-foreground px-1">Options</legend>
             <div className="grid grid-cols-3 gap-4">
               <label className="flex items-center gap-2 text-sm cursor-pointer">
                 <input type="checkbox" checked={desForm.estTitre}
@@ -622,7 +621,7 @@ export default function EditEtablissementPage() {
 
       {/* Confirmation suppression Directeur */}
       <Modal open={dirDelModalOpen} onClose={() => setDirDelModalOpen(false)} title="Confirmer la suppression">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer le directeur <strong>{etablissement.directeur?.nomDirecteur}</strong> de cet établissement ?
         </p>
         <div className="mt-6 flex justify-end gap-3">
@@ -633,7 +632,7 @@ export default function EditEtablissementPage() {
 
       {/* Confirmation suppression Désignation */}
       <Modal open={!!desDelTarget} onClose={() => setDesDelTarget(null)} title="Confirmer la suppression">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer la désignation <strong>{desDelTarget?.nomDesign}</strong> ?
         </p>
         <div className="mt-6 flex justify-end gap-3">
@@ -644,7 +643,7 @@ export default function EditEtablissementPage() {
 
       {/* Confirmation suppression Structure */}
       <Modal open={!!strDelTarget} onClose={() => setStrDelTarget(null)} title="Confirmer la suppression">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer cette structure{strDelTarget?.typeStruc ? <> (<strong>{strDelTarget.typeStruc}</strong>)</> : ''} ?
         </p>
         <div className="mt-6 flex justify-end gap-3">

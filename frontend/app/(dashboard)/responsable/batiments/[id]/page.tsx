@@ -16,8 +16,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { Toilette } from '@/types/batiment';
 
 function getToiletteIcon(fonction?: string) {
-  if (fonction === 'FILLES') return <Venus className="h-4 w-4 text-green-500" />;
-  if (fonction === 'GARCONS') return <Mars className="h-4 w-4 text-green-600" />;
+  if (fonction === 'FILLES') return <Venus className="h-4 w-4 text-primary" />;
+  if (fonction === 'GARCONS') return <Mars className="h-4 w-4 text-primary" />;
   if (fonction === 'ENSEIGNANTS') return <GraduationCap className="h-4 w-4 text-primary" />;
   if (fonction === 'LATRINES') return <Bath className="h-4 w-4 text-muted-foreground" />;
   return null;
@@ -142,7 +142,7 @@ export default function EditBatimentPage() {
                       </p>
                     </div>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-300 transition-colors group-hover:text-green-500" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground/30 transition-colors group-hover:text-primary" />
                 </div>
               ))}
             </div>
@@ -154,7 +154,7 @@ export default function EditBatimentPage() {
       <Card className="mt-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Image className="h-5 w-5 text-green-500" />
+            <Image className="h-5 w-5 text-primary" />
             Photos ({batiment.photos?.length ?? 0})
           </CardTitle>
         </CardHeader>
@@ -202,16 +202,16 @@ export default function EditBatimentPage() {
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {toil.nbCompartiment} compartiment{toil.nbCompartiment > 1 ? 's' : ''}
-                         ·                        {toil.pointEau ? <Droplets className="h-3.5 w-3.5 text-green-400 inline mr-1" /> : null}
+                         ·                        {toil.pointEau ? <Droplets className="h-3.5 w-3.5 text-primary inline mr-1" /> : null}
                         {toil.pointEau ? "Point d'eau" : "Sans point d'eau"}
                       </p>
                     </div>
                   </div>
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => openToilModal(toil)} className="rounded-lg p-2 text-muted-foreground hover:bg-primary/10 hover:text-green-600 transition-colors">
+                    <button onClick={() => openToilModal(toil)} className="rounded-lg p-2 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors">
                       <Pencil className="h-4 w-4" />
                     </button>
-                    <button onClick={() => { setDelToilTarget(toil); setDelToilModalOpen(true); }} className="rounded-lg p-2 text-muted-foreground hover:bg-red-100 hover:text-red-600 transition-colors">
+                    <button onClick={() => { setDelToilTarget(toil); setDelToilModalOpen(true); }} className="rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
