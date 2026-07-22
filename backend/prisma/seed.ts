@@ -308,10 +308,10 @@ const ecoles: {
 ];
 
 async function main() {
-  console.log('🌱 Début du seed DREN Amoron\'i Mania...\n');
+  console.log('Début du seed DREN Amoron\'i Mania...\n');
 
   // 1. Utilisateurs
-  console.log('👤 Création des utilisateurs...');
+  console.log('Création des utilisateurs...');
   await prisma.user.upsert({
     where: { email: 'admin@amm.mg' },
     update: {},
@@ -334,7 +334,7 @@ async function main() {
   });
 
   // 2. Nettoyage des données existantes (ordre inverse des dépendances)
-  console.log('🧹 Nettoyage des données existantes...');
+  console.log('Nettoyage des données existantes...');
   await prisma.effetAleat.deleteMany();
   await prisma.log.deleteMany();
   await prisma.ouverture.deleteMany();
@@ -353,15 +353,15 @@ async function main() {
   await prisma.alea.deleteMany();
 
   // 3. Création des établissements
-  console.log(`🏫 Création de ${ecoles.length} établissements...`);
+  console.log(`Création de ${ecoles.length} établissements...`);
   for (const ecole of ecoles) {
     const data = makeEtablissement(ecole.nom, ecole.cisco, ecole.commune, ecole.fokontany, ecole.quartier);
     await prisma.etablissement.create({ data: data as any });
   }
-  console.log(`   ✅ ${ecoles.length} établissements créés`);
+  console.log(`   ${ecoles.length} établissements créés`);
 
   // 4. Trajets
-  console.log('🚗 Création des trajets...');
+  console.log('Création des trajets...');
   const trajetsData = [
     {
       nomTrajet: 'Ambositra → Fandriana',
@@ -417,10 +417,10 @@ async function main() {
     });
     trajets.push(trajet);
   }
-  console.log(`   ✅ ${trajets.length} trajets créés`);
+  console.log(`   ${trajets.length} trajets créés`);
 
   // 5. Aléas
-  console.log('🌧️ Création des aléas...');
+  console.log('Création des aléas...');
   const aleasData = [
     {
       typeAleat: 'INONDATION',
@@ -483,10 +483,10 @@ async function main() {
       },
     });
   }
-  console.log(`   ✅ ${aleasData.length} aléas créés`);
+  console.log(`   ${aleasData.length} aléas créés`);
 
   // 6. Log initial
-  console.log('📝 Création du log...');
+  console.log('Création du log...');
   await prisma.log.create({
     data: {
       action: 'CREATE',
@@ -508,23 +508,23 @@ async function main() {
   };
 
   console.log('\n═══════════════════════════════════════════');
-  console.log('✅ Seed DREN Amoron\'i Mania terminé !');
+  console.log('Seed DREN Amoron\'i Mania terminé !');
   console.log('═══════════════════════════════════════════');
-  console.log(`   📊 Résumé :`);
-  console.log(`   🏫 Établissements  : ${stats.etablissements}`);
-  console.log(`   🏢 Bâtiments       : ${stats.batiments}`);
-  console.log(`   🚪 Salles          : ${stats.salles}`);
-  console.log(`   📦 Équipements     : ${stats.equipements}`);
-  console.log(`   🚽 Toilettes       : ${stats.toilettes}`);
-  console.log(`   🚗 Trajets         : ${stats.trajets}`);
-  console.log(`   🌧️ Aléas           : ${stats.aleas}`);
-  console.log(`   👤 Utilisateurs    : ${stats.users}`);
+  console.log(`   Résumé :`);
+  console.log(`   Établissements    : ${stats.etablissements}`);
+  console.log(`   Bâtiments         : ${stats.batiments}`);
+  console.log(`   Salles            : ${stats.salles}`);
+  console.log(`   Équipements       : ${stats.equipements}`);
+  console.log(`   Toilettes         : ${stats.toilettes}`);
+  console.log(`   Trajets           : ${stats.trajets}`);
+  console.log(`   Aléas             : ${stats.aleas}`);
+  console.log(`   Utilisateurs      : ${stats.users}`);
   console.log('═══════════════════════════════════════════');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Erreur lors du seed :', e);
+    console.error('Erreur lors du seed :', e);
     process.exit(1);
   })
   .finally(async () => {

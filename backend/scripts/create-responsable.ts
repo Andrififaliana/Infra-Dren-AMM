@@ -13,7 +13,7 @@ const DATABASE_URL = process.env.DATABASE_URL;
 
 async function main() {
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    console.error('❌ Variables SUPABASE_URL et SUPABASE_SERVICE_KEY requises dans .env');
+    console.error('Variables SUPABASE_URL et SUPABASE_SERVICE_KEY requises dans .env');
     process.exit(1);
   }
 
@@ -22,7 +22,7 @@ async function main() {
   const nom = 'Randrianasolo Marie';
   const role = 'RESPONSABLE_INFRASTRUCTURE';
 
-  console.log('🔐 Création de l\'utilisateur RESPONSABLE dans Supabase Auth...');
+  console.log('Création de l\'utilisateur RESPONSABLE dans Supabase Auth...');
   console.log(`   Email: ${email}`);
   console.log(`   Mot de passe: ${password}`);
   console.log(`   Rôle: ${role}\n`);
@@ -47,7 +47,7 @@ async function main() {
     const error = await response.json();
     // Si l'utilisateur existe déjà (code 422), on récupère son ID
     if (response.status === 422) {
-      console.log('⚠️  L\'utilisateur existe déjà dans Supabase Auth. Récupération de l\'ID...');
+      console.log('L\'utilisateur existe déjà dans Supabase Auth. Récupération de l\'ID...');
       const listResponse = await fetch(
         `${SUPABASE_URL}/auth/v1/admin/users?filter%5Bemail%5D=${encodeURIComponent(email)}`,
         {
@@ -60,23 +60,23 @@ async function main() {
       const users = await listResponse.json();
       const existingUser = users.users?.find((u: any) => u.email === email);
       if (!existingUser) {
-        console.error('❌ Impossible de trouver l\'utilisateur existant dans Supabase');
+        console.error('Impossible de trouver l\'utilisateur existant dans Supabase');
         process.exit(1);
       }
       await updatePrismaUser(existingUser.id, email, role);
-      console.log(`\n🎉 Utilisateur déjà existant dans Supabase, lien mis à jour.\n   Email: ${email}\n`);
+      console.log(`\nUtilisateur déjà existant dans Supabase, lien mis à jour.\n   Email: ${email}\n`);
       return;
     }
-    console.error('❌ Erreur Supabase :', JSON.stringify(error, null, 2));
+    console.error('Erreur Supabase :', JSON.stringify(error, null, 2));
     process.exit(1);
   }
 
   const supabaseUser = await response.json();
-  console.log(`✅ Utilisateur créé dans Supabase Auth (ID: ${supabaseUser.id})`);
+  console.log(`Utilisateur créé dans Supabase Auth (ID: ${supabaseUser.id})`);
 
   await updatePrismaUser(supabaseUser.id, email, role);
 
-  console.log(`\n🎉 Connexion possible avec :
+  console.log(`\nConnexion possible avec :
    Email: ${email}
    Mot de passe: ${password}
    Rôle: ${role}
@@ -85,7 +85,7 @@ async function main() {
 
 async function updatePrismaUser(supabaseUserId: string, email: string, role: string) {
   if (!DATABASE_URL) {
-    console.error('❌ DATABASE_URL manquante dans .env');
+    console.error('DATABASE_URL manquante dans .env');
     process.exit(1);
   }
 
@@ -103,13 +103,13 @@ async function updatePrismaUser(supabaseUserId: string, email: string, role: str
         `UPDATE "utilisateur" SET supabase_user_id = $1, role = $2, actif = true WHERE email = $3`,
         [supabaseUserId, role, email],
       );
-      console.log(`✅ Utilisateur local mis à jour (ID: ${existing.rows[0].id})`);
+      console.log(`Utilisateur local mis à jour (ID: ${existing.rows[0].id})`);
     } else {
       await pool.query(
         `INSERT INTO "utilisateur" (email, nom, role, supabase_user_id, actif) VALUES ($1, $2, $3, $4, true)`,
         [email, 'Randrianasolo Marie', role, supabaseUserId],
       );
-      console.log('✅ Utilisateur local créé');
+      console.log('Utilisateur local créé');
     }
   } finally {
     await pool.end();
