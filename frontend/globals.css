@@ -3,28 +3,29 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-background: hsl(0 0% 100%);     /* #FFFFFF - Blanc */
-  --color-foreground: hsl(215.4 25% 26.7%); /* #334155 - Gris foncé */
-  --color-card: hsl(0 0% 100%);             /* #FFFFFF - Blanc */
-  --color-card-foreground: hsl(215.4 25% 26.7%); /* #334155 - Gris foncé */
-  --color-popover: hsl(0 0% 100%);          /* #FFFFFF - Blanc */
-  --color-popover-foreground: hsl(215.4 25% 26.7%); /* #334155 - Gris foncé */
-  --color-primary: hsl(142.1 70.6% 45.3%); /* #22C55E - Vert */
-  --color-primary-foreground: hsl(0 0% 100%); /* #FFFFFF - Blanc */
-  --color-secondary: hsl(210 40% 96.1%);   /* #F1F5F9 - Gris clair */
-  --color-secondary-foreground: hsl(215.4 25% 26.7%); /* #334155 */
-  --color-muted: hsl(210 40% 96.1%);        /* #F1F5F9 - Gris clair */
-  --color-muted-foreground: hsl(215.4 15% 46.9%); /* Gris moyen pour hiérarchie */
-  --color-accent: hsl(210 40% 96.1%);       /* #F1F5F9 - Gris clair */
-  --color-accent-foreground: hsl(215.4 25% 26.7%); /* #334155 */
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(215.4 30% 18%);
+  --color-card: hsl(0 0% 98%);
+  --color-card-foreground: hsl(215.4 30% 18%);
+  --color-popover: hsl(0 0% 98%);
+  --color-popover-foreground: hsl(215.4 30% 18%);
+  --color-primary: hsl(142.1 70.6% 45.3%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-link: hsl(199.2 88.9% 48.4%);
+  --color-secondary: hsl(210 40% 96.1%);
+  --color-secondary-foreground: hsl(215.4 30% 18%);
+  --color-muted: hsl(210 40% 96.1%);
+  --color-muted-foreground: hsl(215.4 15% 38%);
+  --color-accent: hsl(210 40% 96.1%);
+  --color-accent-foreground: hsl(215.4 30% 18%);
   --color-destructive: hsl(24.6 95% 53.1%);
   --color-destructive-foreground: hsl(0 0% 100%);
-  --color-border: hsl(210 40% 93%);
+  --color-border: hsl(210 30% 90%);
   --color-input: hsl(210 40% 91%);
-  --color-ring: hsl(142.1 70.6% 45.3%); /* #22C55E - Vert */
-  --color-warning: hsl(24.6 95% 53.1%);     /* #F97316 - Orange - alias */
-  --color-chart-1: hsl(142.1 70.6% 45.3%); /* #22C55E - Vert */
-  --color-chart-2: hsl(24.6 95% 53.1%);    /* #F97316 - Orange */
+  --color-ring: hsl(142.1 70.6% 45.3%);
+  --color-warning: hsl(24.6 95% 53.1%);
+  --color-chart-1: hsl(142.1 70.6% 45.3%);
+  --color-chart-2: hsl(24.6 95% 53.1%);
   --color-chart-3: hsl(271.5 81.3% 55.9%);
   --color-chart-4: hsl(199.2 88.9% 48.4%);
   --color-chart-5: hsl(24.6 95% 53.1%);
@@ -34,22 +35,23 @@
 @layer base {
   :root {
     --color-background: hsl(0 0% 100%);
-    --color-foreground: hsl(215.4 25% 26.7%);
-    --color-card: hsl(0 0% 100%);
-    --color-card-foreground: hsl(215.4 25% 26.7%);
-    --color-popover: hsl(0 0% 100%);
-    --color-popover-foreground: hsl(215.4 25% 26.7%);
+    --color-foreground: hsl(215.4 30% 18%);
+    --color-card: hsl(0 0% 98%);
+    --color-card-foreground: hsl(215.4 30% 18%);
+    --color-popover: hsl(0 0% 98%);
+    --color-popover-foreground: hsl(215.4 30% 18%);
     --color-primary: hsl(142.1 70.6% 45.3%);
     --color-primary-foreground: hsl(0 0% 100%);
+    --color-link: hsl(199.2 88.9% 48.4%);
     --color-secondary: hsl(210 40% 96.1%);
-    --color-secondary-foreground: hsl(215.4 25% 26.7%);
+    --color-secondary-foreground: hsl(215.4 30% 18%);
     --color-muted: hsl(210 40% 96.1%);
-    --color-muted-foreground: hsl(215.4 15% 46.9%);
+    --color-muted-foreground: hsl(215.4 15% 38%);
     --color-accent: hsl(210 40% 96.1%);
-    --color-accent-foreground: hsl(215.4 25% 26.7%);
+    --color-accent-foreground: hsl(215.4 30% 18%);
     --color-destructive: hsl(24.6 95% 53.1%);
     --color-destructive-foreground: hsl(0 0% 100%);
-    --color-border: hsl(210 40% 93%);
+    --color-border: hsl(210 30% 90%);
     --color-input: hsl(210 40% 91%);
     --color-ring: hsl(142.1 70.6% 45.3%);
     --color-warning: hsl(24.6 95% 53.1%);
@@ -107,21 +109,22 @@
 .dark {
   --color-background: hsl(222.2 84% 4.9%);
   --color-foreground: hsl(210 40% 98%);
-  --color-card: hsl(222.2 84% 4.9%);
+  --color-card: hsl(222.2 30% 10%);
   --color-card-foreground: hsl(210 40% 98%);
-  --color-popover: hsl(222.2 84% 4.9%);
+  --color-popover: hsl(222.2 30% 10%);
   --color-popover-foreground: hsl(210 40% 98%);
-  --color-primary: hsl(142.1 70.6% 55.3%); /* #22C55E plus lumineux */
+  --color-primary: hsl(142.1 70.6% 55.3%);
   --color-primary-foreground: hsl(144.9 80.4% 10%);
+  --color-link: hsl(199.2 70% 60%);
   --color-secondary: hsl(217.2 32.6% 17.5%);
   --color-secondary-foreground: hsl(210 40% 98%);
   --color-muted: hsl(217.2 32.6% 17.5%);
-  --color-muted-foreground: hsl(215 20.2% 65.1%);
+  --color-muted-foreground: hsl(215 18% 55%);
   --color-accent: hsl(217.2 32.6% 17.5%);
   --color-accent-foreground: hsl(210 40% 98%);
   --color-destructive: hsl(24.6 95% 60%);
   --color-destructive-foreground: hsl(0 0% 100%);
-  --color-border: hsl(217.2 20% 15%);
+  --color-border: hsl(217.2 15% 20%);
   --color-input: hsl(217.2 32.6% 17.5%);
   --color-ring: hsl(142.1 70.6% 55.3%);
   --color-warning: hsl(24.6 95% 60%);
