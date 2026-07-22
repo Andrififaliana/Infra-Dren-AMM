@@ -160,7 +160,7 @@ export default function EquipementsPage() {
                   )}
                 </div>
 
-                <div className="flex items-center justify-end pt-1 border-t border" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-end pt-1" onClick={(e) => e.stopPropagation()}>
                   <div className="flex gap-1">
                     <button
                       onClick={() => router.push(`/responsable/equipements/${item.id}`)}

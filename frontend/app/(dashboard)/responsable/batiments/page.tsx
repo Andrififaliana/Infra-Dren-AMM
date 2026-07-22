@@ -192,7 +192,7 @@ export default function BatimentsPage() {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between pt-1 border-t border">
+                <div className="flex items-center justify-between pt-1">
                   <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => router.push(`/responsable/batiments/${item.idBat}`)}

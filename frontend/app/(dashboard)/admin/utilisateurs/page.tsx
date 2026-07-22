@@ -138,8 +138,7 @@ export default function UtilisateursPage() {
         </div>
       </div>
 
-      {showConfirmBanner && (
-        <div className="mb-4 rounded-xl border border-primary/20 bg-primary/5 p-4 flex items-start gap-3">
+      {showConfirmBanner && (                <div className="mb-4 rounded-xl bg-primary/5 p-4 flex items-start gap-3 shadow-sm">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
             <MailCheck className="h-4 w-4 text-primary" />
           </div>
