@@ -123,7 +123,7 @@ export default function TableauDeBordPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-base">
-                      <Signal className="h-5 w-5 text-primary" />
+                      <Activity className="h-5 w-5 text-primary" />
                       Couverture réseau
                     </CardTitle>
                   </CardHeader>
