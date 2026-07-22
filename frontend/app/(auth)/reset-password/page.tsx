@@ -66,7 +66,7 @@ export default function ResetPasswordPage() {
 
   if (tokenError) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-green-50 via-background to-green-50/30 dark:from-background dark:via-background dark:to-primary/5 px-3 sm:px-4">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/5 dark:from-background dark:via-background dark:to-primary/5 px-3 sm:px-4">
         {mounted && (
           <button onClick={toggleTheme} className="fixed top-4 right-4 z-50 rounded-lg p-2.5 bg-background/80 backdrop-blur-sm border shadow-sm text-muted-foreground hover:text-foreground hover:bg-accent transition-colors" title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}>
             {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -111,7 +111,7 @@ export default function ResetPasswordPage() {
 
   if (isSuccess) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-green-50 via-background to-green-50/30 dark:from-background dark:via-background dark:to-primary/5 px-3 sm:px-4">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/5 dark:from-background dark:via-background dark:to-primary/5 px-3 sm:px-4">
         {mounted && (
           <button onClick={toggleTheme} className="fixed top-4 right-4 z-50 rounded-lg p-2.5 bg-background/80 backdrop-blur-sm border shadow-sm text-muted-foreground hover:text-foreground hover:bg-accent transition-colors" title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}>
             {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -148,7 +148,7 @@ export default function ResetPasswordPage() {
   const passwordLengthValid = newPassword.length >= 6;
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-green-50 via-background to-green-50/30 dark:from-background dark:via-background dark:to-primary/5 px-3 sm:px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/5 dark:from-background dark:via-background dark:to-primary/5 px-3 sm:px-4">
       <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
       <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
 

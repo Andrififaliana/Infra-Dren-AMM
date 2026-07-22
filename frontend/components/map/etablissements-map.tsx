@@ -112,7 +112,7 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
                 </div>
                 <button
                   onClick={() => onSchoolClick(school.id)}
-                  className="mt-2 w-full rounded bg-green-600 px-3 py-1 text-xs text-white hover:bg-green-700"
+                  className="mt-2 w-full rounded bg-primary px-3 py-1 text-xs text-primary-foreground hover:bg-primary/90"
                 >
                   Voir le détail
                 </button>

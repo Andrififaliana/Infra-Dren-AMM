@@ -158,7 +158,7 @@ export default function SallesPage() {
               onClick={() => router.push(`/responsable/salles/${item.idSalle}`)}
             >
               {/* Status color bar */}
-              <div className={`h-1.5 rounded-t-xl ${item.estOperationnel ? 'bg-green-500' : 'bg-red-400'}`} />
+              <div className={`h-1.5 rounded-t-xl ${item.estOperationnel ? 'bg-primary' : 'bg-destructive/50'}`} />
               <CardContent className="p-4 space-y-2.5">
                 <div className="flex items-start justify-between">
                   <div>

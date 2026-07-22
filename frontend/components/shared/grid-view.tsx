@@ -87,8 +87,8 @@ export function ViewToggle({ viewMode, onChange }: ViewToggleProps) {
         className={cn(
           'rounded-md px-2.5 py-1.5 text-xs font-medium transition-all duration-150',
           viewMode === 'list'
-            ? 'bg-green-600 text-white shadow-sm'
-            : 'text-slate-500 hover:text-slate-700',
+            ? 'bg-primary text-primary-foreground shadow-sm'
+            : 'text-muted-foreground hover:text-foreground',
         )}
         title="Vue liste"
       >
@@ -99,8 +99,8 @@ export function ViewToggle({ viewMode, onChange }: ViewToggleProps) {
         className={cn(
           'rounded-md px-2.5 py-1.5 text-xs font-medium transition-all duration-150',
           viewMode === 'grid'
-            ? 'bg-green-600 text-white shadow-sm'
-            : 'text-slate-500 hover:text-slate-700',
+            ? 'bg-primary text-primary-foreground shadow-sm'
+            : 'text-muted-foreground hover:text-foreground',
         )}
         title="Vue grille"
       >

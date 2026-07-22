@@ -106,7 +106,7 @@ export default function GestionEtablissementsPage() {
                   }}
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-green-100 to-green-50">
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
                   <School className="h-5 w-5 text-green-300/60" />
                 </div>
               )}
@@ -239,7 +239,7 @@ export default function GestionEtablissementsPage() {
                     onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-green-100 to-green-50">
+                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
                     <School className="h-20 w-20 text-green-300/60" />
                   </div>
                 )}
@@ -251,7 +251,7 @@ export default function GestionEtablissementsPage() {
                 >
                   <button
                     onClick={() => router.push(`/responsable/etablissements/${item.id}`)}
-                    className="rounded-lg bg-white/90 p-2 text-slate-600 shadow-sm backdrop-blur-sm hover:bg-green-100 hover:text-green-600 transition-colors"
+                    className="rounded-lg bg-white/90 p-2 text-slate-600 shadow-sm backdrop-blur-sm hover:bg-primary/10 hover:text-primary transition-colors"
                     title="Modifier"
                   >
                     <Pencil className="h-4 w-4" />
@@ -305,7 +305,7 @@ export default function GestionEtablissementsPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setBulkDeleteModalOpen(false)}>Annuler</Button>
-          <Button variant="danger" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
         </div>
       </Modal>
 
@@ -322,7 +322,7 @@ export default function GestionEtablissementsPage() {
           <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
             Annuler
           </Button>
-          <Button variant="danger" onClick={handleDelete} loading={isDeleting}>
+          <Button variant="destructive" onClick={handleDelete} loading={isDeleting}>
             Supprimer
           </Button>
         </div>

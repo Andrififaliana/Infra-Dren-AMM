@@ -74,7 +74,7 @@ export function ChatIaWidget() {
       {/* Header */}
       <div className="flex items-center justify-between bg-gradient-to-r from-primary/5 to-primary/10 px-5 py-3.5">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 shadow-sm">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-sm">
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div>
@@ -102,8 +102,8 @@ export function ChatIaWidget() {
       <div className="flex-1 overflow-y-auto px-4 sm:px-6">
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-center py-12">
-            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-green-100 to-emerald-100 shadow-inner">
-              <Sparkles className="h-8 w-8 text-green-600" />
+            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 shadow-inner">
+              <Sparkles className="h-8 w-8 text-primary" />
             </div>
             <h3 className="text-lg font-semibold text-foreground mb-2">
               Assistant IA InfraDren
@@ -164,7 +164,7 @@ export function ChatIaWidget() {
                 animate={{ opacity: 1 }}
                 className="flex gap-3 py-4"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 shadow-sm">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/60 to-primary shadow-sm">
                   <Bot className="h-4 w-4 text-white" />
                 </div>
                 <div className="flex items-center gap-2 rounded-2xl bg-muted/50 px-4 py-3 shadow-sm">

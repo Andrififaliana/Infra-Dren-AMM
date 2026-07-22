@@ -34,7 +34,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
     >
       {/* Assistant avatar */}
       {!isUser && (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 shadow-sm">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/60 to-primary shadow-sm">
           <Bot className="h-4 w-4 text-white" />
         </div>
       )}

@@ -120,7 +120,7 @@ export function GenericPhotoUpload({
       {/* Compteur */}
       {sortedPhotos.length > 0 && (
         <div className="flex items-center justify-between rounded-xl bg-green-50 px-4 py-2.5">
-          <div className="flex items-center gap-2 text-sm text-green-700">
+          <div className="flex items-center gap-2 text-sm text-primary">
             <ImagePlus className="h-4 w-4" />
             <span className="font-medium">{sortedPhotos.length} photo{sortedPhotos.length > 1 ? 's' : ''}</span>
             {mainPhoto && (

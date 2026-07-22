@@ -5,7 +5,7 @@ import { School } from 'lucide-react';
 
 export default function LoadingPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-background to-green-50/30 dark:from-background dark:via-background dark:to-primary/5">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary/5 via-background to-primary/5 dark:from-background dark:via-background dark:to-primary/5">
       <div className="text-center">
         <motion.div
           animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
