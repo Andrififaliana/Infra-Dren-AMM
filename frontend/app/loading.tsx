@@ -5,23 +5,23 @@ import { School } from 'lucide-react';
 
 export default function LoadingPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-50/30">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-background to-green-50/30 dark:from-background dark:via-background dark:to-primary/5">
       <div className="text-center">
         <motion.div
           animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-green-100"
+          className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10"
         >
-          <School className="h-10 w-10 text-green-600" />
+          <School className="h-10 w-10 text-primary" />
         </motion.div>
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: 200 }}
           transition={{ duration: 1.5, repeat: Infinity }}
-          className="mx-auto h-1.5 rounded-full bg-gradient-to-r from-green-400 to-green-600"
+          className="mx-auto h-1.5 rounded-full bg-gradient-to-r from-primary/40 to-primary"
           style={{ width: 200 }}
         />
-        <p className="mt-4 text-sm text-gray-500">Chargement...</p>
+        <p className="mt-4 text-sm text-muted-foreground">Chargement...</p>
       </div>
     </div>
   );
