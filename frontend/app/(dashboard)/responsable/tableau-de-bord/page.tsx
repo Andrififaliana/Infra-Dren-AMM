@@ -13,7 +13,15 @@ import {
   PieChart as RePieChart, Pie, Cell, Legend,
 } from 'recharts';
 
-const COLORS = ['#16a34a', '#22c55e', '#4ade80', '#86efac', '#15803d', '#166534', '#14532d'];
+const CHART_COLORS = [
+  'hsl(142.1 70.6% 45.3%)',
+  'hsl(24.6 95% 53.1%)',
+  'hsl(271.5 81.3% 55.9%)',
+  'hsl(199.2 88.9% 48.4%)',
+  'hsl(142.1 50% 65%)',
+  'hsl(24.6 70% 70%)',
+  'hsl(199.2 60% 70%)',
+];
 
 export default function TableauDeBordPage() {
   const { data: globales, isLoading } = useStatsGlobales();
@@ -100,7 +108,7 @@ export default function TableauDeBordPage() {
                             label={({ payload }: any) => `${payload.etat} (${payload.count})`}
                             labelLine={false}
                           >
-                            {repartition.map((_, idx) => <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />)}
+                            {repartition.map((_, idx) => <Cell key={`cell-${idx}`} fill={CHART_COLORS[idx % CHART_COLORS.length]} />)}
                           </Pie>
                           <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid hsl(var(--border))', fontSize: 12, background: 'hsl(var(--background))' }} />
                           <Legend verticalAlign="bottom" height={30} />
