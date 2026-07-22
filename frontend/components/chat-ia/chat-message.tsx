@@ -45,7 +45,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
           'max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed',
           isUser
             ? 'bg-primary text-primary-foreground shadow-sm'
-            : 'bg-background text-foreground shadow-sm border',
+            : 'bg-muted/30 text-foreground shadow-sm',
         )}
       >
         {/* Content */}
@@ -81,9 +81,9 @@ export function ActionPreviewCard({
   const disarmTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const actionColors = {
-    create: { bg: 'bg-blue-50 border-blue-200', badge: 'bg-blue-600', label: 'CRÉATION' },
-    update: { bg: 'bg-amber-50 border-amber-200', badge: 'bg-amber-600', label: 'MODIFICATION' },
-    delete: { bg: 'bg-red-50 border-red-200', badge: 'bg-red-600', label: 'SUPPRESSION' },
+    create: { bg: 'bg-blue-50', badge: 'bg-blue-600', label: 'CRÉATION' },
+    update: { bg: 'bg-amber-50', badge: 'bg-amber-600', label: 'MODIFICATION' },
+    delete: { bg: 'bg-red-50', badge: 'bg-red-600', label: 'SUPPRESSION' },
   };
 
   const colors = actionColors[action.actionType];
@@ -148,12 +148,12 @@ export function ActionPreviewCard({
       initial={{ opacity: 0, y: -8, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
-      className={cn('rounded-xl border-2 p-4 mt-2 relative overflow-hidden', colors.bg)}
+      className={cn('rounded-xl p-4 mt-2 relative overflow-hidden shadow-sm', colors.bg)}
     >
       {/* Pulsing ring when armed */}
       {isArmed && (
         <motion.div
-          className="absolute inset-0 rounded-xl border-2 border-red-500"
+          className="absolute inset-0 rounded-xl ring-2 ring-red-500"
           animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.02, 1] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         />

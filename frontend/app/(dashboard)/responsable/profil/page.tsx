@@ -57,7 +57,7 @@ export default function ProfilPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center gap-4 rounded-lg border bg-muted/30 p-4">
+          <div className="flex items-center gap-4 rounded-lg bg-muted/30 p-4 shadow-sm">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
               {user.nom.charAt(0).toUpperCase()}
             </div>
@@ -68,13 +68,13 @@ export default function ProfilPage() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-lg border bg-card p-4">
+            <div className="rounded-lg bg-card p-4 shadow-sm">
               <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <Mail className="h-3.5 w-3.5" /> Email
               </div>
               <p className="text-sm font-medium text-foreground">{user.email}</p>
             </div>
-            <div className="rounded-lg border bg-card p-4">
+            <div className="rounded-lg bg-card p-4 shadow-sm">
               <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <Shield className="h-3.5 w-3.5" /> Rôle
               </div>
@@ -84,7 +84,7 @@ export default function ProfilPage() {
                 </span>
               </p>
             </div>
-            <div className="rounded-lg border bg-card p-4">
+            <div className="rounded-lg bg-card p-4 shadow-sm">
               <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <KeyRound className="h-3.5 w-3.5" /> Compte créé le
               </div>
@@ -96,7 +96,7 @@ export default function ProfilPage() {
                 })}
               </p>
             </div>
-            <div className="rounded-lg border bg-card p-4">
+            <div className="rounded-lg bg-card p-4 shadow-sm">
               <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <Shield className="h-3.5 w-3.5" /> Statut
               </div>
