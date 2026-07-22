@@ -7,6 +7,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isAdmin: boolean;
   isResponsable: boolean;
+  isHydrated: boolean;
   setAuth: (user: User, token: string) => void;
   logout: () => void;
   hydrate: () => void;
@@ -18,6 +19,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   isAdmin: false,
   isResponsable: false,
+  isHydrated: false,
 
   setAuth: (user: User, token: string) => {
     localStorage.setItem('auth-token', token);
@@ -28,6 +30,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       isAuthenticated: true,
       isAdmin: user.role === 'ADMIN',
       isResponsable: user.role === 'RESPONSABLE_INFRASTRUCTURE',
+      isHydrated: true,
     });
   },
 
@@ -40,6 +43,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       isAuthenticated: false,
       isAdmin: false,
       isResponsable: false,
+      isHydrated: true,
     });
   },
 
@@ -56,11 +60,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           isAuthenticated: true,
           isAdmin: user.role === 'ADMIN',
           isResponsable: user.role === 'RESPONSABLE_INFRASTRUCTURE',
+          isHydrated: true,
         });
+        return;
       } catch {
         localStorage.removeItem('auth-token');
         localStorage.removeItem('auth-user');
       }
     }
+    set({ isHydrated: true });
   },
 }));

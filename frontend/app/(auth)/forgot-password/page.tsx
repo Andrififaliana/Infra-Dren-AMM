@@ -83,7 +83,7 @@ export default function ForgotPasswordPage() {
             animate={{ scale: 1 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <img src="/logo_infra.png" alt="InfraDren AMM" className="mx-auto h-12 sm:h-14 w-auto mb-3 sm:mb-4" />
+            <img src="/logo_infra.jpg" alt="InfraDren AMM" className="mx-auto h-12 sm:h-14 w-auto mb-3 sm:mb-4" />
           </motion.div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">InfraDren AMM</h1>
           <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-500">Réinitialisation du mot de passe</p>
