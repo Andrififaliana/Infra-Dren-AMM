@@ -129,8 +129,8 @@ export default function UtilisateursPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Utilisateurs</h1>
-          <p className="mt-1 text-sm text-gray-500">Gérer les accès à l&apos;application</p>
+          <h1 className="text-2xl font-bold text-foreground">Utilisateurs</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Gérer les accès à l&apos;application</p>
         </div>
         <div className="flex items-center gap-2">
           <ViewToggle viewMode={viewMode} onChange={setViewMode} />
@@ -139,20 +139,20 @@ export default function UtilisateursPage() {
       </div>
 
       {showConfirmBanner && (
-        <div className="mb-4 rounded-xl border border-green-200 bg-green-50 p-4 flex items-start gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-100">
-            <MailCheck className="h-4 w-4 text-green-600" />
+        <div className="mb-4 rounded-xl border border-primary/20 bg-primary/5 p-4 flex items-start gap-3">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
+            <MailCheck className="h-4 w-4 text-primary" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-green-800">Utilisateur créé avec succès</p>
-            <p className="text-xs text-green-700 mt-0.5">
+            <p className="text-sm font-medium text-primary">Utilisateur créé avec succès</p>
+            <p className="text-xs text-primary mt-0.5">
               Un email de confirmation a été envoyé à <strong>{createdEmail}</strong>.
               L&apos;utilisateur doit cliquer sur le lien pour activer son compte.
             </p>
           </div>
           <button
             onClick={() => setShowConfirmBanner(false)}
-            className="text-green-500 hover:text-green-700 transition-colors"
+            className="text-primary/70 hover:text-primary transition-colors"
           >
             ✕
           </button>
@@ -191,7 +191,7 @@ export default function UtilisateursPage() {
                     <h3 className="font-semibold text-slate-800 text-sm truncate">{item.nom}</h3>
                     <p className="text-xs text-slate-400 truncate">{item.email}</p>
                   </div>
-                  <div className={`h-2.5 w-2.5 rounded-full mt-1.5 ${item.actif ? 'bg-green-500' : 'bg-red-400'}`} />
+                  <div className={`h-2.5 w-2.5 rounded-full mt-1.5 ${item.actif ? 'bg-primary/50' : 'bg-red-400'}`} />
                 </div>
 
                 <div className="flex items-center gap-3 text-xs">
@@ -283,7 +283,7 @@ export default function UtilisateursPage() {
       />
 
       <Modal open={bulkDeleteModalOpen} onClose={() => setBulkDeleteModalOpen(false)} title="Confirmer la suppression groupée">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer <strong>{selectedIds.size}</strong> utilisateur{selectedIds.size > 1 ? 's' : ''} ?
         </p>
         <div className="mt-6 flex justify-end gap-3">
@@ -294,7 +294,7 @@ export default function UtilisateursPage() {
 
       {/* Delete Confirmation */}
       <Modal open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Confirmer la suppression">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Êtes-vous sûr de vouloir supprimer <strong>{selectedUser?.nom}</strong> ({selectedUser?.email}) ?
         </p>
         <div className="mt-6 flex justify-end gap-3">
