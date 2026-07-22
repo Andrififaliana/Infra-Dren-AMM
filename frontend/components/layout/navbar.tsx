@@ -38,7 +38,7 @@ export function Navbar({ onMenuToggle }: NavbarProps) {
     .slice(0, 2) || 'U';
 
   return (
-    <header className="sticky top-0 z-30 h-16 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-30 h-16 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <div className="flex h-full items-center justify-between px-4 lg:px-6">
         <div className="flex items-center gap-3">
           <button

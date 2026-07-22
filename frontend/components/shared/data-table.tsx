@@ -59,7 +59,7 @@ export function DataTable<T>({
 
   if (loading) {
     return (
-      <div className="rounded-xl border bg-card">
+      <div className="rounded-xl bg-card shadow-sm">
         <div className="p-8 text-center text-sm text-muted-foreground">Chargement...</div>
       </div>
     );
@@ -67,18 +67,18 @@ export function DataTable<T>({
 
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border bg-card">
+      <div className="rounded-xl bg-card shadow-sm">
         <div className="p-8 text-center text-sm text-muted-foreground">{emptyMessage}</div>
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+    <div className="overflow-hidden rounded-xl bg-card shadow-sm">
       <div className="overflow-x-auto">
         <table className="min-w-[650px] w-full">
           <thead>
-            <tr className="border-b bg-muted/50">
+            <tr className="bg-muted/30">
               {selectable && (
                 <th className="w-10 px-2 py-3">                    <Checkbox
                     checked={someSelected && !allSelected ? 'indeterminate' : allSelected}

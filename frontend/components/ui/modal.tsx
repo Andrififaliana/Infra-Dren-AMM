@@ -29,7 +29,7 @@ export function Modal({ open, onClose, title, children, className, size = 'lg' }
         <Dialog.Content
           className={cn(
             'fixed left-1/2 top-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2',
-            'max-h-[85vh] overflow-y-auto rounded-2xl border bg-background shadow-2xl',
+            'max-h-[85vh] overflow-y-auto rounded-2xl bg-background shadow-2xl',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
@@ -41,7 +41,7 @@ export function Modal({ open, onClose, title, children, className, size = 'lg' }
           )}
         >
           {title && (
-            <div className="flex items-center justify-between border-b px-6 py-4">
+            <div className="flex items-center justify-between border-b-0 px-6 py-4">
               <Dialog.Title className="text-lg font-semibold leading-none tracking-tight">
                 {title}
               </Dialog.Title>

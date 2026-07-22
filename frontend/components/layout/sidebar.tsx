@@ -55,7 +55,7 @@ export function Sidebar({ collapsed, onToggle, mobileOpen = false, onMobileClose
   const sidebarContent = (
     <>
       {/* Logo area */}
-      <div className="flex h-16 items-center justify-between px-4 border-b">
+      <div className="flex h-16 items-center justify-between px-4">
         {!collapsed && (
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-primary">InfraDren</span>
@@ -106,7 +106,7 @@ export function Sidebar({ collapsed, onToggle, mobileOpen = false, onMobileClose
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          'hidden lg:flex lg:flex-col lg:fixed lg:left-0 lg:top-0 lg:z-40 lg:h-screen lg:bg-card lg:border-r lg:transition-all lg:duration-300',
+          'hidden lg:flex lg:flex-col lg:fixed lg:left-0 lg:top-0 lg:z-40 lg:h-screen lg:bg-card shadow-sm lg:transition-all lg:duration-300',
           collapsed ? 'lg:w-16' : 'lg:w-64'
         )}
       >
@@ -131,9 +131,9 @@ export function Sidebar({ collapsed, onToggle, mobileOpen = false, onMobileClose
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="fixed left-0 top-0 z-50 flex h-screen w-72 flex-col bg-card border-r shadow-2xl lg:hidden"
+              className="fixed left-0 top-0 z-50 flex h-screen w-72 flex-col bg-card shadow-2xl lg:hidden"
             >
-              <div className="flex h-14 items-center justify-between px-4 border-b">
+              <div className="flex h-14 items-center justify-between px-4">
                 <Link href="/" className="flex items-center gap-2">
                   <span className="text-lg font-bold text-primary">InfraDren</span>
                 </Link>
