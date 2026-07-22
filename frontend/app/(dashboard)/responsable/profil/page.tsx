@@ -31,7 +31,7 @@ export default function ProfilPage() {
       <div>
         <Breadcrumb items={[{ label: 'Profil' }]} />
         <div className="py-16 text-center">
-          <p className="text-gray-500">Impossible de charger le profil.</p>
+          <p className="text-muted-foreground">Impossible de charger le profil.</p>
         </div>
       </div>
     );
@@ -42,8 +42,8 @@ export default function ProfilPage() {
       <Breadcrumb items={[{ label: 'Profil' }]} />
 
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Mon profil</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-foreground">Mon profil</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Informations personnelles et sécurité
         </p>
       </div>
@@ -52,43 +52,43 @@ export default function ProfilPage() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5 text-green-500" />
+            <User className="h-5 w-5 text-primary" />
             Informations personnelles
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-gray-50/50 p-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-xl font-bold text-green-700">
+          <div className="flex items-center gap-4 rounded-lg border bg-muted/30 p-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
               {user.nom.charAt(0).toUpperCase()}
             </div>
             <div>
-              <p className="font-semibold text-gray-900">{user.nom}</p>
-              <p className="text-sm text-gray-500">{user.email}</p>
+              <p className="font-semibold text-foreground">{user.nom}</p>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-lg border border-gray-100 p-4">
-              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+            <div className="rounded-lg border bg-card p-4">
+              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <Mail className="h-3.5 w-3.5" /> Email
               </div>
-              <p className="text-sm font-medium text-gray-900">{user.email}</p>
+              <p className="text-sm font-medium text-foreground">{user.email}</p>
             </div>
-            <div className="rounded-lg border border-gray-100 p-4">
-              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+            <div className="rounded-lg border bg-card p-4">
+              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <Shield className="h-3.5 w-3.5" /> Rôle
               </div>
-              <p className="text-sm font-medium text-gray-900">
-                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
+              <p className="text-sm font-medium text-foreground">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
                   {ROLE_LABELS[user.role] || user.role}
                 </span>
               </p>
             </div>
-            <div className="rounded-lg border border-gray-100 p-4">
-              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+            <div className="rounded-lg border bg-card p-4">
+              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <KeyRound className="h-3.5 w-3.5" /> Compte créé le
               </div>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm font-medium text-foreground">
                 {new Date(user.createdAt).toLocaleDateString('fr-FR', {
                   year: 'numeric',
                   month: 'long',
@@ -96,12 +96,12 @@ export default function ProfilPage() {
                 })}
               </p>
             </div>
-            <div className="rounded-lg border border-gray-100 p-4">
-              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+            <div className="rounded-lg border bg-card p-4">
+              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <Shield className="h-3.5 w-3.5" /> Statut
               </div>
-              <p className="text-sm font-medium text-green-700">
-                <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium">
+              <p className="text-sm font-medium text-primary">
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium">
                   ● {user.actif ? 'Actif' : 'Inactif'}
                 </span>
               </p>
@@ -114,12 +114,12 @@ export default function ProfilPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <KeyRound className="h-5 w-5 text-green-500" />
+            <KeyRound className="h-5 w-5 text-primary" />
             Sécurité
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="mb-4 text-sm text-gray-600">
+          <p className="mb-4 text-sm text-muted-foreground">
             Le changement de mot de passe est géré par Supabase Auth. 
             Vous recevrez un email pour réinitialiser votre mot de passe.
           </p>
