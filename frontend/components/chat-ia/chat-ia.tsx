@@ -112,7 +112,7 @@ export function ChatIaWidget() {
                   <button
                     key={i}
                     onClick={() => handleSuggestedClick(q)}
-                    className="rounded-lg border px-3 py-2.5 text-left text-xs text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                    className="rounded-lg border px-3 py-2.5 text-left text-xs text-muted-foreground hover:text-primary transition-colors"
                   >
                     {q}
                   </button>

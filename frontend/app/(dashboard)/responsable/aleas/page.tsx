@@ -145,7 +145,7 @@ export default function AleasPage() {
             const colorClass = item.typeAleat ? typeColors[item.typeAleat.toUpperCase()] || 'bg-muted/50 border-muted-foreground/20 text-foreground' : 'bg-muted/50 border-muted-foreground/20 text-foreground';
             return (
               <Card
-                className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5"
+                className="cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
                 onClick={() => router.push(`/responsable/aleas/${item.idAleat}`)}
               >
                 <CardContent className="p-4 space-y-2.5">

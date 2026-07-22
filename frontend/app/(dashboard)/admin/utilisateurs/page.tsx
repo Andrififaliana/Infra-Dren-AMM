@@ -180,7 +180,7 @@ export default function UtilisateursPage() {
           loading={isLoading}
           emptyMessage="Aucun utilisateur"
           renderCard={(item) => (
-            <Card className="transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5">
+            <Card className="transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-start gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">

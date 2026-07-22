@@ -136,7 +136,7 @@ export function GenericPhotoUpload({
           {sortedPhotos.map((photo, idx) => (
             <div
               key={photo.id}
-              className="group relative overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200/50 transition-all hover:ring-2 hover:ring-green-300"
+              className="group relative overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200/50 transition-all hover:ring-2 hover:ring-green-300/30"
             >
               <button type="button" onClick={() => openLightbox(idx)} className="block w-full">
                 <img
@@ -198,7 +198,7 @@ export function GenericPhotoUpload({
               atLimit ? 'border-gray-200 bg-gray-100 cursor-not-allowed' : 'cursor-pointer',
               dragOver && !atLimit
                 ? 'scale-[1.02] border-green-400 bg-green-50 shadow-lg'
-                : !atLimit && 'border-gray-200 bg-gray-50 hover:border-green-300 hover:bg-green-50/50',
+                : !atLimit && 'border-gray-200 bg-gray-50 hover:bg-green-50/50',
             )}
           >
             {uploading ? (

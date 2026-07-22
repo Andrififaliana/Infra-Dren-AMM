@@ -78,7 +78,7 @@ export default function AProposPage() {
                 précise les infrastructures scolaires au sein de la{' '}
                 <strong className="text-primary">DREN Amoron&apos;i Mania</strong>.
               </p>
-              <div className="mt-6 border-l-4 border-primary/20 bg-primary/5 pl-5 py-4 rounded-r-lg">
+              <div className="mt-6 bg-primary/5 pl-5 py-4 rounded-r-lg">
                 <p className="text-lg leading-relaxed text-muted-foreground">
                   L&apos;objectif est de fournir des données claires et détaillées sur
                   l&apos;état des bâtiments, des salles de classe et des ressources
@@ -187,7 +187,7 @@ export default function AProposPage() {
             <div className="flex flex-col justify-center gap-4 p-8 md:col-span-3">
               <a
                 href="mailto:miharimananirina@gmail.com"
-                className="group flex items-center gap-4 rounded-xl border bg-card p-4 transition-all hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm"
+                className="group flex items-center gap-4 rounded-xl border bg-card p-4 transition-all hover:bg-primary/5 hover:shadow-sm"
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
                   <Mail className="h-5 w-5" />
@@ -203,7 +203,7 @@ export default function AProposPage() {
 
               <a
                 href="tel:+261346403428"
-                className="group flex items-center gap-4 rounded-xl border bg-card p-4 transition-all hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm"
+                className="group flex items-center gap-4 rounded-xl border bg-card p-4 transition-all hover:bg-primary/5 hover:shadow-sm"
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
                   <Phone className="h-5 w-5" />

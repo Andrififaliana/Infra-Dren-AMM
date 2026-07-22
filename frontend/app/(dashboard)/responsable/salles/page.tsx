@@ -154,7 +154,7 @@ export default function SallesPage() {
           emptyMessage="Aucune salle"
           renderCard={(item) => (
             <Card
-              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5"
+              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
               onClick={() => router.push(`/responsable/salles/${item.idSalle}`)}
             >
               {/* Status color bar */}

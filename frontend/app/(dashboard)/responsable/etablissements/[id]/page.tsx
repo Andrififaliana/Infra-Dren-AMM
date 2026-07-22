@@ -260,7 +260,7 @@ export default function EditEtablissementPage() {
           variant="outline"
           size="sm"
           onClick={() => setExportModalOpen(true)}
-          className="gap-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50"
+          className="gap-2 text-primary hover:bg-primary/10"
         >
           <Download className="h-4 w-4" />
           Exporter en PDF
@@ -343,7 +343,7 @@ export default function EditEtablissementPage() {
               {etablissement.batiments.map((b) => (
                 <div
                   key={b.idBat}
-                  className="group cursor-pointer rounded-xl border bg-muted/50 p-4 transition-colors hover:border-primary/20 hover:bg-primary/5"
+                  className="group cursor-pointer rounded-xl border bg-muted/50 p-4 transition-colors hover:bg-primary/5"
                   onClick={() => router.push(`/responsable/batiments/${b.idBat}`)}
                 >
                   <div className="flex items-start justify-between">

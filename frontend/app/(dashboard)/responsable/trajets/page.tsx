@@ -131,7 +131,7 @@ export default function TrajetsPage() {
           emptyMessage="Aucun trajet"
           renderCard={(item) => (
             <Card
-              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5"
+              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
               onClick={() => router.push(`/responsable/trajets/${item.idTrajet}`)}
             >
               <CardContent className="p-4 space-y-2.5">
