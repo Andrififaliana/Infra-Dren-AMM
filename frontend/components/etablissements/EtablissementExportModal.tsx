@@ -119,7 +119,7 @@ function ExportPreview({ etablissement }: { etablissement: ExportEtablissement }
   const e = etablissement;
 
   return (
-    <div className="text-slate-800" style={{ fontFamily: 'system-ui, sans-serif', fontSize: '12px', lineHeight: '1.4' }}>
+    <div className="text-foreground" style={{ fontFamily: 'system-ui, sans-serif', fontSize: '12px', lineHeight: '1.4' }}>
       {/* Header neutre */}
       <div className="bg-slate-800 px-5 py-4 text-white">
         <h1 className="text-base font-bold tracking-tight">{e.nomEtab}</h1>
@@ -356,7 +356,7 @@ function Section({
 }) {
   return (
     <div className="border-b border-slate-100 px-4 py-2.5 last:border-b-0">
-      <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">{title}</h3>
+      <h3 className="text-xs font-bold text-foreground uppercase tracking-wider mb-1.5">{title}</h3>
       <div className="space-y-0.5">{children}</div>
     </div>
   );
@@ -373,7 +373,7 @@ function Row({
   return (
     <div className="flex items-start gap-2 text-xs py-0.5">
       <span className="text-slate-500 w-24 shrink-0">{label}</span>
-      <span className="text-slate-800 font-medium">{value}</span>
+      <span className="text-foreground font-medium">{value}</span>
     </div>
   );
 }
