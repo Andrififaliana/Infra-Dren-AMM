@@ -15,10 +15,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { Select } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
 import { EtablissementExportModal } from '@/components/etablissements/EtablissementExportModal';
+import { useEffect } from 'react';
 import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight, Download } from 'lucide-react';
 import type { Directeur, Designation, Structure } from '@/types/etablissement';
 
@@ -29,6 +31,16 @@ export default function EditEtablissementPage() {
 
   const { data: etablissement, isLoading } = useEtablissement(etablissementId);
   const { mutate: updateEtab, isPending, error } = useUpdateEtablissement(etablissementId);
+  const [couvTelephonique, setCouvTelephonique] = useState(false);
+  const [couvInternet, setCouvInternet] = useState(false);
+
+  // Sync checkbox state when data loads
+  useEffect(() => {
+    if (etablissement) {
+      setCouvTelephonique(etablissement.couvTelephonique);
+      setCouvInternet(etablissement.couvInternet);
+    }
+  }, [etablissement]);
 
   // Directeur state
   const [dirModalOpen, setDirModalOpen] = useState(false);
@@ -69,8 +81,8 @@ export default function EditEtablissementPage() {
       commune: form.get('commune') as string || undefined,
       fokontany: form.get('fokontany') as string || undefined,
       quartier: form.get('quartier') as string || undefined,
-      couvTelephonique: form.get('couvTelephonique') === 'on',
-      couvInternet: form.get('couvInternet') === 'on',
+      couvTelephonique,
+      couvInternet,
       nbEnseignantG: Number(form.get('nbEnseignantG')) || 0,
       nbEnseignantF: Number(form.get('nbEnseignantF')) || 0,
       nbSectionG: Number(form.get('nbSectionG')) || 0,
@@ -273,12 +285,12 @@ export default function EditEtablissementPage() {
               <Input id="quartier" name="quartier" label="Quartier" defaultValue={etablissement.quartier ?? ''} />
             </div>
             <div className="flex gap-6">
-              <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" name="couvTelephonique" defaultChecked={etablissement.couvTelephonique} className="rounded" />
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox checked={couvTelephonique} onCheckedChange={(c) => setCouvTelephonique(c === true)} />
                 Couverture téléphonique
               </label>
-              <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" name="couvInternet" defaultChecked={etablissement.couvInternet} className="rounded" />
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox checked={couvInternet} onCheckedChange={(c) => setCouvInternet(c === true)} />
                 Couverture Internet
               </label>
             </div>
@@ -553,16 +565,16 @@ export default function EditEtablissementPage() {
             <legend className="text-sm font-medium text-foreground px-1">Options</legend>
             <div className="grid grid-cols-3 gap-4">
               <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input type="checkbox" checked={desForm.estTitre}
-                  onChange={(e) => setDesForm({ ...desForm, estTitre: e.target.checked })} className="rounded" /> Titre foncier
+                <Checkbox checked={desForm.estTitre}
+                  onCheckedChange={(c) => setDesForm({ ...desForm, estTitre: c === true })} /> Titre foncier
               </label>
               <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input type="checkbox" checked={desForm.estEnceinteEtab}
-                  onChange={(e) => setDesForm({ ...desForm, estEnceinteEtab: e.target.checked })} className="rounded" /> Enceinte établissement
+                <Checkbox checked={desForm.estEnceinteEtab}
+                  onCheckedChange={(c) => setDesForm({ ...desForm, estEnceinteEtab: c === true })} /> Enceinte établissement
               </label>
               <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input type="checkbox" checked={desForm.estLitigieux}
-                  onChange={(e) => setDesForm({ ...desForm, estLitigieux: e.target.checked })} className="rounded" /> Litigieux
+                <Checkbox checked={desForm.estLitigieux}
+                  onCheckedChange={(c) => setDesForm({ ...desForm, estLitigieux: c === true })} /> Litigieux
               </label>
             </div>
           </fieldset>
@@ -606,8 +618,8 @@ export default function EditEtablissementPage() {
             />
           </div>
           <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input type="checkbox" checked={strForm.existenceStruc}
-              onChange={(e) => setStrForm({ ...strForm, existenceStruc: e.target.checked })} className="rounded" />
+            <Checkbox checked={strForm.existenceStruc}
+              onCheckedChange={(c) => setStrForm({ ...strForm, existenceStruc: c === true })} />
             Structure existante
           </label>
           <div className="flex justify-end gap-3 pt-2">

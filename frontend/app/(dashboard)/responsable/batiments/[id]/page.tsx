@@ -10,6 +10,7 @@ import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Modal } from '@/components/ui/modal';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -39,6 +40,7 @@ export default function EditBatimentPage() {
   const [editToil, setEditToil] = useState<Toilette | null>(null);
   const [delToilModalOpen, setDelToilModalOpen] = useState(false);
   const [delToilTarget, setDelToilTarget] = useState<Toilette | null>(null);
+  const [pointEau, setPointEau] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,6 +60,7 @@ export default function EditBatimentPage() {
 
   const openToilModal = (toilette?: Toilette) => {
     setEditToil(toilette ?? null);
+    setPointEau(toilette?.pointEau ?? false);
     setToilModalOpen(true);
   };
 
@@ -67,7 +70,7 @@ export default function EditBatimentPage() {
     const dto = {
       nbCompartiment: Number(form.get('nbCompartiment')) || 0,
       fonctionToilette: (form.get('fonctionToilette') as string) || undefined,
-      pointEau: form.get('pointEau') === 'on',
+      pointEau,
     };
 
     if (editToil) {
@@ -238,7 +241,7 @@ export default function EditBatimentPage() {
             />
           </div>
           <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input type="checkbox" name="pointEau" defaultChecked={editToil?.pointEau ?? false} className="rounded" />
+            <Checkbox checked={pointEau} onCheckedChange={(c) => setPointEau(c === true)} />
             Point d&apos;eau disponible
           </label>
           <div className="flex justify-end gap-3 pt-2">

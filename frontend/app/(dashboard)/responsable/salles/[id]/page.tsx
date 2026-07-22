@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Modal } from '@/components/ui/modal';
 import { Skeleton } from '@/components/ui/skeleton';
 import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
@@ -31,6 +32,8 @@ export default function EditSallePage() {
   const [editOuv, setEditOuv] = useState<Ouverture | null>(null);
   const [delOuvModalOpen, setDelOuvModalOpen] = useState(false);
   const [delOuvTarget, setDelOuvTarget] = useState<Ouverture | null>(null);
+  const [estOperationnel, setEstOperationnel] = useState(salle?.estOperationnel ?? false);
+  const [estElectrifiee, setEstElectrifiee] = useState(salle?.estElectrifiee ?? false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,8 +43,8 @@ export default function EditSallePage() {
       niveauSalle: Number(form.get('niveauSalle')),
       affectationSalle: (form.get('affectationSalle') as string) || undefined,
       etatSalle: (form.get('etatSalle') as string) || undefined,
-      estOperationnel: form.get('estOperationnel') === 'on',
-      estElectrifiee: form.get('estElectrifiee') === 'on',
+      estOperationnel,
+      estElectrifiee,
       nbEleveF: Number(form.get('nbEleveF')) || 0,
       nbEleveG: Number(form.get('nbEleveG')) || 0,
     };
@@ -101,8 +104,14 @@ export default function EditSallePage() {
               />
             </div>
             <div className="flex gap-6">
-              <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="estOperationnel" defaultChecked={salle.estOperationnel} className="rounded" /> Opérationnel</label>
-              <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="estElectrifiee" defaultChecked={salle.estElectrifiee} className="rounded" /> Électrifiée</label>
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox checked={estOperationnel} onCheckedChange={(c) => setEstOperationnel(c === true)} />
+                Opérationnel
+              </label>
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox checked={estElectrifiee} onCheckedChange={(c) => setEstElectrifiee(c === true)} />
+                Électrifiée
+              </label>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Input id="nbEleveF" name="nbEleveF" label="Élèves (F)" type="number" defaultValue={salle.nbEleveF} />

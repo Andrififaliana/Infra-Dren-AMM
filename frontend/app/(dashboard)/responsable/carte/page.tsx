@@ -9,11 +9,12 @@ import { useTrajets } from '@/hooks/use-trajets';
 import { SearchBar } from '@/components/shared/search-bar';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { Select } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import type { EtablissementListe } from '@/types/etablissement';
 
 const EtablissementsMap = dynamic(
   () => import('@/components/map/etablissements-map'),
-  { ssr: false, loading: () => <div className="flex h-[600px] items-center justify-center rounded-lg border bg-gray-50 text-sm text-gray-500">Chargement de la carte…</div> }
+  { ssr: false, loading: () => <div className="flex h-[600px] items-center justify-center rounded-lg border bg-muted/50 text-sm text-muted-foreground">Chargement de la carte…</div> }
 );
 
 export default function CartePage() {
@@ -69,8 +70,8 @@ export default function CartePage() {
 
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Carte interactive</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-foreground">Carte interactive</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             {filtered.length} établissement{filtered.length > 1 ? 's' : ''} affiché{filtered.length > 1 ? 's' : ''}
           </p>
         </div>
@@ -97,22 +98,12 @@ export default function CartePage() {
           className="w-52"
         />
         <div className="flex items-center gap-4 text-sm">
-          <label className="flex items-center gap-1.5">
-            <input
-              type="checkbox"
-              checked={showAleas}
-              onChange={(e) => setShowAleas(e.target.checked)}
-              className="rounded border-gray-300"
-            />
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <Checkbox checked={showAleas} onCheckedChange={(c) => setShowAleas(c === true)} />
             Aléas
           </label>
-          <label className="flex items-center gap-1.5">
-            <input
-              type="checkbox"
-              checked={showTrajets}
-              onChange={(e) => setShowTrajets(e.target.checked)}
-              className="rounded border-gray-300"
-            />
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <Checkbox checked={showTrajets} onCheckedChange={(c) => setShowTrajets(c === true)} />
             Trajets
           </label>
         </div>

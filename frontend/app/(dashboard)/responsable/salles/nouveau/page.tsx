@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { salleSchema } from '@/lib/validations';
 
 export default function NouvelleSallePage() {
@@ -16,6 +17,8 @@ export default function NouvelleSallePage() {
   const { mutate: createSalle, isPending } = useCreateSalle();
   const { data: batiments } = useBatiments();
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [estOperationnel, setEstOperationnel] = useState(false);
+  const [estElectrifiee, setEstElectrifiee] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,8 +30,8 @@ export default function NouvelleSallePage() {
       batimentId: Number(form.get('batimentId')),
       affectationSalle: (form.get('affectationSalle') as string) || undefined,
       etatSalle: (form.get('etatSalle') as string) || undefined,
-      estOperationnel: form.get('estOperationnel') === 'on',
-      estElectrifiee: form.get('estElectrifiee') === 'on',
+      estOperationnel,
+      estElectrifiee,
       longueurInt: Number(form.get('longueurInt')) || undefined,
       hauteurSP: Number(form.get('hauteurSP')) || undefined,
       nbEleveF: Number(form.get('nbEleveF')) || 0,
@@ -82,8 +85,14 @@ export default function NouvelleSallePage() {
               />
             </div>
             <div className="flex gap-6">
-              <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="estOperationnel" className="rounded" /> Opérationnel</label>
-              <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="estElectrifiee" className="rounded" /> Électrifiée</label>
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox checked={estOperationnel} onCheckedChange={(c) => setEstOperationnel(c === true)} />
+                Opérationnel
+              </label>
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox checked={estElectrifiee} onCheckedChange={(c) => setEstElectrifiee(c === true)} />
+                Électrifiée
+              </label>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Input id="longueurInt" name="longueurInt" label="Longueur (m)" type="number" step="0.1" />

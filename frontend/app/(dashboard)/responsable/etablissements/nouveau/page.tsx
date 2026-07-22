@@ -1,14 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useCreateEtablissement } from '@/hooks/use-etablissements';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function NouvelEtablissementPage() {
   const router = useRouter();
   const { mutate: createEtab, isPending, error } = useCreateEtablissement();
+  const [couvTelephonique, setCouvTelephonique] = useState(false);
+  const [couvInternet, setCouvInternet] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,8 +25,8 @@ export default function NouvelEtablissementPage() {
       commune: form.get('commune') as string || undefined,
       fokontany: form.get('fokontany') as string || undefined,
       quartier: form.get('quartier') as string || undefined,
-      couvTelephonique: form.get('couvTelephonique') === 'on',
-      couvInternet: form.get('couvInternet') === 'on',
+      couvTelephonique,
+      couvInternet,
       nbEnseignantG: Number(form.get('nbEnseignantG')) || 0,
       nbEnseignantF: Number(form.get('nbEnseignantF')) || 0,
       nbSectionG: Number(form.get('nbSectionG')) || 0,
@@ -57,12 +61,12 @@ export default function NouvelEtablissementPage() {
               <Input id="quartier" name="quartier" label="Quartier" />
             </div>
             <div className="flex gap-6">
-              <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" name="couvTelephonique" className="rounded" />
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox checked={couvTelephonique} onCheckedChange={(c) => setCouvTelephonique(c === true)} />
                 Couverture téléphonique
               </label>
-              <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" name="couvInternet" className="rounded" />
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox checked={couvInternet} onCheckedChange={(c) => setCouvInternet(c === true)} />
                 Couverture Internet
               </label>
             </div>
