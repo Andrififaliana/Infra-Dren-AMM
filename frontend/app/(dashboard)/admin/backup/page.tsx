@@ -1,9 +1,9 @@
 'use client';
 
-import { Save } from 'lucide-react';
+import { Save, Database, Download, Shield } from 'lucide-react';
 import apiClient from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 export default function BackupPage() {
   const handleExportAll = async () => {
@@ -23,23 +23,40 @@ export default function BackupPage() {
   };
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Sauvegarde</h1>
-        <p className="mt-1 text-sm text-gray-500">Exportez les données de l&apos;application</p>
+    <div className="mx-auto max-w-4xl">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-foreground">Sauvegarde</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Exportez les données de l&apos;application</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>Export complet</CardTitle>
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+                <Database className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <CardTitle>Export complet</CardTitle>
+                <CardDescription>Téléchargez toutes les données au format JSON</CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            <p className="mb-4 text-sm text-gray-600">
-              Téléchargez toutes les données de l&apos;application au format JSON.
-            </p>
-            <Button onClick={handleExportAll}>
-              <Save className="mr-2 h-4 w-4" /> Télécharger l&apos;export complet
+            <div className="rounded-xl border bg-muted/30 p-4 mb-4">
+              <div className="flex items-start gap-3">
+                <Shield className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-foreground">Données incluses</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Établissements, bâtiments, salles, équipements, trajets, aléas, utilisateurs et journaux d&apos;audit.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <Button onClick={handleExportAll} size="lg">
+              <Download className="mr-2 h-4 w-4" />
+              Télécharger l&apos;export complet
             </Button>
           </CardContent>
         </Card>

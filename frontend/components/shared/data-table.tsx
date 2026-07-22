@@ -3,6 +3,7 @@
 import { useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface Column<T> {
   key: string;
@@ -19,14 +20,9 @@ interface DataTableProps<T> {
   onRowClick?: (item: T) => void;
   loading?: boolean;
   emptyMessage?: string;
-  /** Active les checkboxes de sélection */
   selectable?: boolean;
-  /** Ensemble des IDs sélectionnés */
   selectedIds?: Set<string | number>;
-  /** Callback quand la sélection change */
   onSelectionChange?: (ids: Set<string | number>) => void;
-  /** Permet de customiser le fond d'une ligne selectionnée */
-  getRowId?: (item: T) => string | number;
 }
 
 export function DataTable<T>({
@@ -55,11 +51,7 @@ export function DataTable<T>({
   const toggleOne = useCallback(
     (id: string | number) => {
       const next = new Set(selectedIds);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
+      if (next.has(id)) { next.delete(id); } else { next.add(id); }
       onSelectionChange?.(next);
     },
     [selectedIds, onSelectionChange]
@@ -67,46 +59,40 @@ export function DataTable<T>({
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white">
-        <div className="p-6 sm:p-8 text-center text-sm text-slate-500">Chargement...</div>
+      <div className="rounded-xl border bg-card">
+        <div className="p-8 text-center text-sm text-muted-foreground">Chargement...</div>
       </div>
     );
   }
 
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white">
-        <div className="p-6 sm:p-8 text-center text-sm text-slate-500">{emptyMessage}</div>
+      <div className="rounded-xl border bg-card">
+        <div className="p-8 text-center text-sm text-muted-foreground">{emptyMessage}</div>
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-      <div className="overflow-x-auto [-webkit-overflow-scrolling:touch]">
-        <table className="min-w-[650px] w-full divide-y divide-slate-200">
-          <thead className="bg-slate-50">
-            <tr>
+    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+      <div className="overflow-x-auto">
+        <table className="min-w-[650px] w-full">
+          <thead>
+            <tr className="border-b bg-muted/50">
               {selectable && (
                 <th className="w-10 px-2 py-3">
-                  <label className="flex cursor-pointer items-center justify-center">
-                    <input
-                      type="checkbox"
-                      checked={allSelected}
-                      ref={(el) => {
-                        if (el) el.indeterminate = someSelected && !allSelected;
-                      }}
-                      onChange={toggleAll}
-                      className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-500/40"
-                    />
-                  </label>
+                  <Checkbox
+                    checked={allSelected}
+                    onCheckedChange={toggleAll}
+                    aria-label="Sélectionner tout"
+                  />
                 </th>
               )}
               {columns.map((col) => (
                 <th
                   key={col.key}
                   className={cn(
-                    'px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500',
+                    'px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground',
                     col.className
                   )}
                 >
@@ -115,40 +101,34 @@ export function DataTable<T>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200">
+          <tbody className="divide-y">
             {data.map((item) => {
-            const id = keyExtractor(item);
-            const isSelected = selectedIds.has(id);
-            return (
-              <tr
-                key={id}
-                onClick={() => onRowClick?.(item)}
-                className={cn(
-                  'transition-colors',
-                  (onRowClick || selectable) ? 'cursor-pointer' : '',
-                  isSelected ? 'bg-green-50/60' : 'hover:bg-slate-50'
-                )}
-              >
-                {selectable && (
-                  <td className="w-10 px-2 py-3">
-                    <label className="flex cursor-pointer items-center justify-center">
-                      <input
-                        type="checkbox"
+              const id = keyExtractor(item);
+              const isSelected = selectedIds.has(id);
+              return (
+                <tr
+                  key={id}
+                  onClick={() => onRowClick?.(item)}
+                  className={cn(
+                    'transition-colors',
+                    (onRowClick || selectable) ? 'cursor-pointer' : '',
+                    isSelected ? 'bg-primary/5' : 'hover:bg-muted/50'
+                  )}
+                >
+                  {selectable && (
+                    <td className="w-10 px-2 py-3">
+                      <Checkbox
                         checked={isSelected}
-                        onChange={() => toggleOne(id)}
+                        onCheckedChange={() => toggleOne(id)}
                         onClick={(e) => e.stopPropagation()}
-                        className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-500/40"
+                        aria-label="Sélectionner"
                       />
-                    </label>
-                  </td>
-                )}
+                    </td>
+                  )}
                   {columns.map((col) => {
                     const value = col.render ? col.render(item) : String((item as Record<string, unknown>)[col.key] ?? '');
                     return (
-                      <td
-                        key={col.key}
-                        className={cn('whitespace-nowrap px-4 py-3 text-sm text-slate-700', col.className)}
-                      >
+                      <td key={col.key} className={cn('whitespace-nowrap px-4 py-3 text-sm text-foreground', col.className)}>
                         {value}
                       </td>
                     );
@@ -166,7 +146,7 @@ export function DataTable<T>({
 // Helper to render boolean values
 export function BooleanBadge({ value, trueLabel = 'Oui', falseLabel = 'Non' }: { value: boolean; trueLabel?: string; falseLabel?: string }) {
   return (
-    <Badge variant={value ? 'success' : 'danger'}>
+    <Badge variant={value ? 'success' : 'destructive'}>
       {value ? trueLabel : falseLabel}
     </Badge>
   );
