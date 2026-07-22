@@ -169,7 +169,7 @@ export default function EditSallePage() {
           ) : (
             <div className="space-y-2">
               {salle.ouvertures.map((ouv) => (
-                <div key={ouv.idOuvert} className="group flex items-center justify-between rounded-lg border px-4 py-3 hover:border-primary/20 hover:bg-primary/5 transition-all">
+                <div key={ouv.idOuvert} className="group flex items-center justify-between rounded-lg bg-muted/30 px-4 py-3 transition-all hover:bg-primary/5">
                   <div className="flex items-center gap-4">
                     <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-medium text-primary">
                       {ouv.nbOuvert}

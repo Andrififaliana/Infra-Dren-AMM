@@ -130,7 +130,7 @@ export default function EditBatimentPage() {
               {batiment.salles.map((salle) => (
                 <div
                   key={salle.idSalle}
-                  className="group flex cursor-pointer items-center justify-between rounded-lg border border px-4 py-3 transition-all hover:border-primary/20 hover:bg-primary/5"
+                  className="group flex cursor-pointer items-center justify-between rounded-lg bg-muted/30 px-4 py-3 transition-all hover:bg-primary/5"
                   onClick={() => router.push(`/responsable/salles/${salle.idSalle}`)}
                 >
                   <div className="flex items-center gap-4">
@@ -189,7 +189,7 @@ export default function EditBatimentPage() {
           ) : (
             <div className="space-y-2">
               {batiment.toilettes.map((toil) => (
-                <div key={toil.idToilette} className="group flex items-center justify-between rounded-lg border border px-4 py-3 hover:border-primary/20 hover:bg-primary/5 transition-all">
+                <div key={toil.idToilette} className="group flex items-center justify-between rounded-lg bg-muted/30 px-4 py-3 transition-all hover:bg-primary/5">
                   <div className="flex items-center gap-4">
                     <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-medium text-primary">
                       {toil.nbCompartiment}
