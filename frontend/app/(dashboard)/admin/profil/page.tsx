@@ -72,7 +72,7 @@ export default function AdminProfilPage() {
           <Separator className="my-6" />
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border bg-card p-4">
+            <div className="rounded-xl bg-card p-4 shadow-sm">
               <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 <Shield className="h-3.5 w-3.5" /> Rôle
               </div>
@@ -82,18 +82,18 @@ export default function AdminProfilPage() {
                 </span>
               </p>
             </div>
-            <div className="rounded-xl border bg-card p-4">
+            <div className="rounded-xl bg-card p-4 shadow-sm">
               <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 <BadgeCheck className="h-3.5 w-3.5" /> Statut
               </div>
               <p className="text-sm font-medium text-foreground">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                   {user.actif ? 'Actif' : 'Inactif'}
                 </span>
               </p>
             </div>
-            <div className="rounded-xl border bg-card p-4 sm:col-span-2">
+            <div className="rounded-xl bg-card p-4 shadow-sm sm:col-span-2">
               <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 <CalendarDays className="h-3.5 w-3.5" /> Compte créé le
               </div>
