@@ -110,8 +110,8 @@ export default function SallesPage() {
 
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Salles</h1>
-          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des salles de classe ({filtered.length})</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Salles</h1>
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-muted-foreground">Gestion des salles de classe ({filtered.length})</p>
         </div>
         <div className="flex items-center gap-2">
           <ViewToggle viewMode={viewMode} onChange={setViewMode} />
@@ -124,7 +124,7 @@ export default function SallesPage() {
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
         <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher une salle..." className="w-full sm:flex-1" />
         <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-1">
-          <Filter className="h-4 w-4 text-gray-400 shrink-0" />
+          <Filter className="h-4 w-4 text-muted-foreground shrink-0" />
           <Select
             value={batimentFilter}
             onChange={(e) => { setBatimentFilter(e.target.value); setPage(1); }}
@@ -154,7 +154,7 @@ export default function SallesPage() {
           emptyMessage="Aucune salle"
           renderCard={(item) => (
             <Card
-              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-green-300 hover:-translate-y-0.5"
+              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5"
               onClick={() => router.push(`/responsable/salles/${item.idSalle}`)}
             >
               {/* Status color bar */}
@@ -162,8 +162,8 @@ export default function SallesPage() {
               <CardContent className="p-4 space-y-2.5">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-semibold text-slate-800 text-sm">{item.sigleSalle || `Salle #${item.idSalle}`}</h3>
-                    <p className="text-xs text-slate-400">
+                    <h3 className="font-semibold text-foreground text-sm">{item.sigleSalle || `Salle #${item.idSalle}`}</h3>
+                    <p className="text-xs text-muted-foreground">
                       {item.affectationSalle || 'Non affectée'} · Niveau {item.niveauSalle}
                     </p>
                   </div>
@@ -176,7 +176,7 @@ export default function SallesPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs text-slate-500">
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <DoorOpen className="h-3.5 w-3.5" />
                     {item.batiment?.sigleBat ?? `#${item.batimentId}`}
@@ -188,29 +188,29 @@ export default function SallesPage() {
                   )}
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-slate-400">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Users className="h-3 w-3" />
                     {item.nbEleveF + item.nbEleveG} élèves ({item.nbEleveF}F · {item.nbEleveG}G)
                   </span>
                   {item._count && (
-                    <span className="text-slate-400">
+                    <span className="text-muted-foreground">
                       {item._count.equipements} équip. · {item._count.ouvertures} ouv.
                     </span>
                   )}
                 </div>
 
-                <div className="flex items-center justify-end pt-1 border-t border-slate-100" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-end pt-1 border-t border" onClick={(e) => e.stopPropagation()}>
                   <div className="flex gap-1">
                     <button
                       onClick={() => router.push(`/responsable/salles/${item.idSalle}`)}
-                      className="rounded-lg p-1.5 text-slate-400 hover:bg-green-100 hover:text-green-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-green-100 hover:text-green-600 transition-colors"
                     >
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
                     <button
                       onClick={() => { setSelectedSalle(item); setDeleteModalOpen(true); }}
-                      className="rounded-lg p-1.5 text-slate-400 hover:bg-red-100 hover:text-red-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-red-100 hover:text-red-600 transition-colors"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -235,7 +235,7 @@ export default function SallesPage() {
       />
 
       <Modal open={bulkDeleteModalOpen} onClose={() => setBulkDeleteModalOpen(false)} title="Confirmer la suppression groupée">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer <strong>{selectedIds.size}</strong> salle{selectedIds.size > 1 ? 's' : ''} ?
         </p>
         <div className="mt-6 flex justify-end gap-3">
@@ -245,7 +245,7 @@ export default function SallesPage() {
       </Modal>
 
       <Modal open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Confirmer la suppression">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer la salle <strong>{selectedSalle?.sigleSalle || `#${selectedSalle?.idSalle}`}</strong> ?
         </p>
         <div className="mt-6 flex justify-end gap-3">

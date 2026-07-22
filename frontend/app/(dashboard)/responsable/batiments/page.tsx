@@ -113,8 +113,8 @@ export default function BatimentsPage() {
 
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Bâtiments</h1>
-          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des bâtiments ({filtered.length})</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Bâtiments</h1>
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-muted-foreground">Gestion des bâtiments ({filtered.length})</p>
         </div>
         <div className="flex items-center gap-2">
           <ViewToggle viewMode={viewMode} onChange={setViewMode} />
@@ -127,7 +127,7 @@ export default function BatimentsPage() {
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
         <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Rechercher un bâtiment..." className="w-full sm:flex-1" />
         <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-1">
-          <Filter className="h-4 w-4 text-gray-400 shrink-0" />
+          <Filter className="h-4 w-4 text-muted-foreground shrink-0" />
           <Select
             value={etablissementFilter}
             onChange={(e) => { setEtablissementFilter(e.target.value); setPage(1); }}
@@ -157,21 +157,21 @@ export default function BatimentsPage() {
           emptyMessage="Aucun bâtiment"
           renderCard={(item) => (
             <Card
-              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-green-300 hover:-translate-y-0.5"
+              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5"
               onClick={() => router.push(`/responsable/batiments/${item.idBat}`)}
             >
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-start gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-green-100 to-emerald-50">
-                    <Building2 className="h-5 w-5 text-green-600" />
+                    <Building2 className="h-5 w-5 text-primary" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-slate-800 text-sm truncate">{item.sigleBat || `Bâtiment #${item.idBat}`}</h3>
-                    <p className="text-xs text-slate-400">{(item as any).etablissement?.nomEtab ?? `Établissement #${item.etablissementId}`}</p>
+                    <h3 className="font-semibold text-foreground text-sm truncate">{item.sigleBat || `Bâtiment #${item.idBat}`}</h3>
+                    <p className="text-xs text-muted-foreground">{(item as any).etablissement?.nomEtab ?? `Établissement #${item.etablissementId}`}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs text-slate-500">
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Layers className="h-3.5 w-3.5" />
                     {item.nbNiveau} niveau{item.nbNiveau > 1 ? 'x' : ''}
@@ -185,24 +185,24 @@ export default function BatimentsPage() {
                 </div>
 
                 {item.dispositifAc && (
-                  <div className="rounded-lg bg-slate-50 px-3 py-2">
-                    <p className="text-[11px] text-slate-500">
-                      <span className="font-medium text-slate-600">Dispositif AC :</span> {item.dispositifAc}
+                  <div className="rounded-lg bg-muted/50 px-3 py-2">
+                    <p className="text-[11px] text-muted-foreground">
+                      <span className="font-medium text-foreground">Dispositif AC :</span> {item.dispositifAc}
                     </p>
                   </div>
                 )}
 
-                <div className="flex items-center justify-between pt-1 border-t border-slate-100">
+                <div className="flex items-center justify-between pt-1 border-t border">
                   <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => router.push(`/responsable/batiments/${item.idBat}`)}
-                      className="rounded-lg p-1.5 text-slate-400 hover:bg-green-100 hover:text-green-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
                     >
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
                     <button
                       onClick={() => { setSelectedBat(item); setDeleteModalOpen(true); }}
-                      className="rounded-lg p-1.5 text-slate-400 hover:bg-red-100 hover:text-red-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-red-100 hover:text-red-600 transition-colors"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -227,7 +227,7 @@ export default function BatimentsPage() {
       />
 
       <Modal open={bulkDeleteModalOpen} onClose={() => setBulkDeleteModalOpen(false)} title="Confirmer la suppression groupée">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer <strong>{selectedIds.size}</strong> bâtiment{selectedIds.size > 1 ? 's' : ''} ?
         </p>
         <div className="mt-6 flex justify-end gap-3">
@@ -237,7 +237,7 @@ export default function BatimentsPage() {
       </Modal>
 
       <Modal open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Confirmer la suppression">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer le bâtiment <strong>{selectedBat?.sigleBat || `#${selectedBat?.idBat}`}</strong> ?
         </p>
         <div className="mt-6 flex justify-end gap-3">

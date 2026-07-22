@@ -18,8 +18,8 @@ import type { Toilette } from '@/types/batiment';
 function getToiletteIcon(fonction?: string) {
   if (fonction === 'FILLES') return <Venus className="h-4 w-4 text-green-500" />;
   if (fonction === 'GARCONS') return <Mars className="h-4 w-4 text-green-600" />;
-  if (fonction === 'ENSEIGNANTS') return <GraduationCap className="h-4 w-4 text-green-700" />;
-  if (fonction === 'LATRINES') return <Bath className="h-4 w-4 text-gray-500" />;
+  if (fonction === 'ENSEIGNANTS') return <GraduationCap className="h-4 w-4 text-primary" />;
+  if (fonction === 'LATRINES') return <Bath className="h-4 w-4 text-muted-foreground" />;
   return null;
 }
 
@@ -84,7 +84,7 @@ export default function EditBatimentPage() {
   };
 
   if (isLoading) return <div className="mx-auto max-w-2xl"><Skeleton className="h-96" /></div>;
-  if (!batiment) return <div className="py-16 text-center"><p className="text-gray-500">Bâtiment non trouvé</p></div>;
+  if (!batiment) return <div className="py-16 text-center"><p className="text-muted-foreground">Bâtiment non trouvé</p></div>;
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -112,7 +112,7 @@ export default function EditBatimentPage() {
       <Card className="mt-6">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <DoorOpen className="h-5 w-5 text-gray-500" />
+            <DoorOpen className="h-5 w-5 text-muted-foreground" />
             Salles ({batiment.salles?.length ?? 0})
           </CardTitle>
           <Button size="sm" onClick={() => router.push('/responsable/salles/nouveau')}>
@@ -121,22 +121,22 @@ export default function EditBatimentPage() {
         </CardHeader>
         <CardContent>
           {(!batiment.salles || batiment.salles.length === 0) ? (
-            <p className="py-6 text-center text-sm text-gray-400">Aucune salle enregistrée</p>
+            <p className="py-6 text-center text-sm text-muted-foreground">Aucune salle enregistrée</p>
           ) : (
             <div className="space-y-2">
               {batiment.salles.map((salle) => (
                 <div
                   key={salle.idSalle}
-                  className="group flex cursor-pointer items-center justify-between rounded-lg border border-gray-100 px-4 py-3 transition-all hover:border-green-200 hover:bg-green-50/50"
+                  className="group flex cursor-pointer items-center justify-between rounded-lg border border px-4 py-3 transition-all hover:border-primary/20 hover:bg-primary/5"
                   onClick={() => router.push(`/responsable/salles/${salle.idSalle}`)}
                 >
                   <div className="flex items-center gap-4">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-sm font-medium text-green-700">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-medium text-primary">
                       {salle.niveauSalle}
                     </span>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{salle.sigleSalle || `Salle #${salle.idSalle}`}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm font-medium text-foreground">{salle.sigleSalle || `Salle #${salle.idSalle}`}</p>
+                      <p className="text-xs text-muted-foreground">
                         {salle.affectationSalle || 'Non spécifiée'}
                         {salle.estOperationnel ? ' · Opérationnelle' : ' · Non opérationnelle'}
                       </p>
@@ -173,7 +173,7 @@ export default function EditBatimentPage() {
       <Card className="mt-6">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Bath className="h-5 w-5 text-gray-500" />
+            <Bath className="h-5 w-5 text-muted-foreground" />
             Toilettes / Latrines
           </CardTitle>
           <Button size="sm" onClick={() => openToilModal()}>
@@ -182,17 +182,17 @@ export default function EditBatimentPage() {
         </CardHeader>
         <CardContent>
           {(!batiment.toilettes || batiment.toilettes.length === 0) ? (
-            <p className="py-6 text-center text-sm text-gray-400">Aucune toilette enregistrée</p>
+            <p className="py-6 text-center text-sm text-muted-foreground">Aucune toilette enregistrée</p>
           ) : (
             <div className="space-y-2">
               {batiment.toilettes.map((toil) => (
-                <div key={toil.idToilette} className="group flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 hover:border-green-200 hover:bg-green-50/50 transition-all">
+                <div key={toil.idToilette} className="group flex items-center justify-between rounded-lg border border px-4 py-3 hover:border-primary/20 hover:bg-primary/5 transition-all">
                   <div className="flex items-center gap-4">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-sm font-medium text-green-700">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-medium text-primary">
                       {toil.nbCompartiment}
                     </span>
                     <div>
-                      <p className="text-sm font-medium text-gray-900 flex items-center gap-1.5">
+                      <p className="text-sm font-medium text-foreground flex items-center gap-1.5">
                         {getToiletteIcon(toil.fonctionToilette)}
                         <span>{toil.fonctionToilette === 'FILLES' ? 'Filles' :
                          toil.fonctionToilette === 'GARCONS' ? 'Garçons' :
@@ -200,7 +200,7 @@ export default function EditBatimentPage() {
                          toil.fonctionToilette === 'LATRINES' ? 'Latrines' :
                          toil.fonctionToilette || 'Toilette'}</span>
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {toil.nbCompartiment} compartiment{toil.nbCompartiment > 1 ? 's' : ''}
                          ·                        {toil.pointEau ? <Droplets className="h-3.5 w-3.5 text-green-400 inline mr-1" /> : null}
                         {toil.pointEau ? "Point d'eau" : "Sans point d'eau"}
@@ -208,10 +208,10 @@ export default function EditBatimentPage() {
                     </div>
                   </div>
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => openToilModal(toil)} className="rounded-lg p-2 text-gray-400 hover:bg-green-100 hover:text-green-600 transition-colors">
+                    <button onClick={() => openToilModal(toil)} className="rounded-lg p-2 text-muted-foreground hover:bg-primary/10 hover:text-green-600 transition-colors">
                       <Pencil className="h-4 w-4" />
                     </button>
-                    <button onClick={() => { setDelToilTarget(toil); setDelToilModalOpen(true); }} className="rounded-lg p-2 text-gray-400 hover:bg-red-100 hover:text-red-600 transition-colors">
+                    <button onClick={() => { setDelToilTarget(toil); setDelToilModalOpen(true); }} className="rounded-lg p-2 text-muted-foreground hover:bg-red-100 hover:text-red-600 transition-colors">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
@@ -250,10 +250,10 @@ export default function EditBatimentPage() {
 
       {/* Modal confirmation suppression toilette */}
       <Modal open={delToilModalOpen} onClose={() => setDelToilModalOpen(false)} title="Supprimer cette toilette ?">
-        <p className="mb-6 text-sm text-gray-600">Cette action est irréversible.</p>
+        <p className="mb-6 text-sm text-muted-foreground">Cette action est irréversible.</p>
         <div className="flex justify-end gap-3">
           <Button variant="outline" onClick={() => setDelToilModalOpen(false)}>Annuler</Button>
-          <Button variant="danger" onClick={() => {
+          <Button variant="destructive" onClick={() => {
             if (delToilTarget) {
               deleteToilette(delToilTarget.idToilette, {
                 onSuccess: () => { toast.success('Toilette supprimée'); setDelToilModalOpen(false); setDelToilTarget(null); },

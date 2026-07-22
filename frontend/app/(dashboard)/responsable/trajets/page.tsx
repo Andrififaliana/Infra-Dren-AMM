@@ -97,8 +97,8 @@ export default function TrajetsPage() {
 
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Trajets</h1>
-          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gestion des trajets d&apos;accès ({filtered.length})</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Trajets</h1>
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-muted-foreground">Gestion des trajets d&apos;accès ({filtered.length})</p>
         </div>
         <div className="flex items-center gap-2">
           <ViewToggle viewMode={viewMode} onChange={setViewMode} />
@@ -131,7 +131,7 @@ export default function TrajetsPage() {
           emptyMessage="Aucun trajet"
           renderCard={(item) => (
             <Card
-              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-green-300 hover:-translate-y-0.5"
+              className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5"
               onClick={() => router.push(`/responsable/trajets/${item.idTrajet}`)}
             >
               <CardContent className="p-4 space-y-2.5">
@@ -140,9 +140,9 @@ export default function TrajetsPage() {
                     <Route className="h-5 w-5 text-amber-600" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-slate-800 text-sm truncate">{item.nomTrajet || `Trajet #${item.idTrajet}`}</h3>
+                    <h3 className="font-semibold text-foreground text-sm truncate">{item.nomTrajet || `Trajet #${item.idTrajet}`}</h3>
                     {item.moyens?.typeMoyen && (
-                      <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+                      <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
                         <Bus className="h-3 w-3" />
                         {item.moyens.typeMoyen}
                         {item.moyens.distanceMoyen && ` · ${item.moyens.distanceMoyen} km`}
@@ -152,7 +152,7 @@ export default function TrajetsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs text-slate-500">
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
                   {item.debutTrajet && (
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
@@ -167,17 +167,17 @@ export default function TrajetsPage() {
                   )}
                 </div>
 
-                <div className="flex items-center justify-end pt-1 border-t border-slate-100" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-end pt-1 border-t border" onClick={(e) => e.stopPropagation()}>
                   <div className="flex gap-1">
                     <button
                       onClick={() => router.push(`/responsable/trajets/${item.idTrajet}`)}
-                      className="rounded-lg p-1.5 text-slate-400 hover:bg-green-100 hover:text-green-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-green-100 hover:text-green-600 transition-colors"
                     >
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
                     <button
                       onClick={() => { setSelectedTrajet(item); setDeleteModalOpen(true); }}
-                      className="rounded-lg p-1.5 text-slate-400 hover:bg-red-100 hover:text-red-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-red-100 hover:text-red-600 transition-colors"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -202,7 +202,7 @@ export default function TrajetsPage() {
       />
 
       <Modal open={bulkDeleteModalOpen} onClose={() => setBulkDeleteModalOpen(false)} title="Confirmer la suppression groupée">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer <strong>{selectedIds.size}</strong> trajet{selectedIds.size > 1 ? 's' : ''} ?
         </p>
         <div className="mt-6 flex justify-end gap-3">
@@ -212,7 +212,7 @@ export default function TrajetsPage() {
       </Modal>
 
       <Modal open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Confirmer la suppression">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Supprimer le trajet <strong>{selectedTrajet?.nomTrajet || `#${selectedTrajet?.idTrajet}`}</strong> ?
         </p>
         <div className="mt-6 flex justify-end gap-3">
