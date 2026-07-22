@@ -204,13 +204,13 @@ export default function SallesPage() {
                   <div className="flex gap-1">
                     <button
                       onClick={() => router.push(`/responsable/salles/${item.idSalle}`)}
-                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-green-100 hover:text-green-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
                     >
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
                     <button
                       onClick={() => { setSelectedSalle(item); setDeleteModalOpen(true); }}
-                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-red-100 hover:text-red-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -240,7 +240,7 @@ export default function SallesPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setBulkDeleteModalOpen(false)}>Annuler</Button>
-          <Button variant="ghost" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
         </div>
       </Modal>
 
@@ -250,7 +250,7 @@ export default function SallesPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Annuler</Button>
-          <Button variant="ghost" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
         </div>
       </Modal>
     </div>

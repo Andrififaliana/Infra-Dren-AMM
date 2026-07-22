@@ -137,7 +137,7 @@ export default function TrajetsPage() {
               <CardContent className="p-4 space-y-2.5">
                 <div className="flex items-start gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-100 to-orange-50">
-                    <Route className="h-5 w-5 text-amber-600" />
+                    <Route className="h-5 w-5 text-primary" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-foreground text-sm truncate">{item.nomTrajet || `Trajet #${item.idTrajet}`}</h3>
@@ -171,13 +171,13 @@ export default function TrajetsPage() {
                   <div className="flex gap-1">
                     <button
                       onClick={() => router.push(`/responsable/trajets/${item.idTrajet}`)}
-                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-green-100 hover:text-green-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
                     >
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
                     <button
                       onClick={() => { setSelectedTrajet(item); setDeleteModalOpen(true); }}
-                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-red-100 hover:text-red-600 transition-colors"
+                      className="rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -207,7 +207,7 @@ export default function TrajetsPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setBulkDeleteModalOpen(false)}>Annuler</Button>
-          <Button variant="ghost" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
         </div>
       </Modal>
 
@@ -217,7 +217,7 @@ export default function TrajetsPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Annuler</Button>
-          <Button variant="ghost" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
         </div>
       </Modal>
     </div>

@@ -142,7 +142,7 @@ export default function AleasPage() {
               'GLISSEMENT': 'bg-red-50 border-red-200 text-red-700',
               'INCENDIE': 'bg-red-50 border-red-200 text-red-700',
             };
-            const colorClass = item.typeAleat ? typeColors[item.typeAleat.toUpperCase()] || 'bg-muted/50 border-slate-200 text-foreground' : 'bg-muted/50 border-slate-200 text-foreground';
+            const colorClass = item.typeAleat ? typeColors[item.typeAleat.toUpperCase()] || 'bg-muted/50 border-muted-foreground/20 text-foreground' : 'bg-muted/50 border-muted-foreground/20 text-foreground';
             return (
               <Card
                 className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5"
@@ -190,7 +190,7 @@ export default function AleasPage() {
                       </button>
                       <button
                         onClick={() => { setSelectedAlea(item); setDeleteModalOpen(true); }}
-                        className="rounded-lg p-1.5 text-muted-foreground hover:bg-red-100 hover:text-red-600 transition-colors"
+                        className="rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -221,7 +221,7 @@ export default function AleasPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setBulkDeleteModalOpen(false)}>Annuler</Button>
-          <Button variant="ghost" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleBulkDelete} loading={isDeleting}>Supprimer</Button>
         </div>
       </Modal>
 
@@ -231,7 +231,7 @@ export default function AleasPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Annuler</Button>
-          <Button variant="ghost" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleDelete} loading={isDeleting}>Supprimer</Button>
         </div>
       </Modal>
     </div>

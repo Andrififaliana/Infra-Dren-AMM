@@ -38,8 +38,8 @@ export default function LogsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Journal d&apos;audit</h1>
-        <p className="mt-1 text-sm text-gray-500">Trace de toutes les actions effectuées</p>
+        <h1 className="text-2xl font-bold text-foreground">Journal d&apos;audit</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Trace de toutes les actions effectuées</p>
       </div>
 
       <Card>
@@ -50,7 +50,7 @@ export default function LogsPage() {
           {isLoading ? (
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-100" />
+                <div key={i} className="h-12 animate-pulse rounded-lg bg-muted" />
               ))}
             </div>
           ) : logs && logs.length > 0 ? (
@@ -58,7 +58,7 @@ export default function LogsPage() {
               {logs.map((log) => (
                 <div
                   key={log.id}
-                  className="flex items-center justify-between rounded-lg border border-gray-100 p-3"
+                  className="flex items-center justify-between rounded-lg border p-3"
                 >
                   <div className="flex items-center gap-3">
                     <Badge variant={actionBadge(log.action)}>
@@ -68,7 +68,7 @@ export default function LogsPage() {
                       <p className="text-sm font-medium">
                         {log.entity} {log.details ? `- ${log.details}` : ''}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         par {log.user?.nom || 'Inconnu'} • {formatDateShort(log.createdAt)}
                       </p>
                     </div>
@@ -77,7 +77,7 @@ export default function LogsPage() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-gray-500">Aucune activité</p>
+            <p className="text-sm text-muted-foreground">Aucune activité</p>
           )}
         </CardContent>
       </Card>

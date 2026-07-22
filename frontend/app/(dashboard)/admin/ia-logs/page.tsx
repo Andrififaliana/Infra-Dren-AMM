@@ -65,10 +65,10 @@ export default function IALogsPage() {
 
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
-          <Brain className="h-6 w-6 text-green-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Monitoring IA</h1>
+          <Brain className="h-6 w-6 text-primary" />
+          <h1 className="text-2xl font-bold text-foreground">Monitoring IA</h1>
         </div>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Surveillance des requêtes envoyées à l&apos;API IA (temps de réponse, tokens, erreurs)
         </p>
       </div>
@@ -80,11 +80,11 @@ export default function IALogsPage() {
             <CardContent className="p-4 sm:p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Requêtes</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{stats ? formatNumber(stats.totalRequests) : '...'}</p>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Total Requêtes</p>
+                  <p className="text-2xl font-bold text-foreground mt-1">{stats ? formatNumber(stats.totalRequests) : '...'}</p>
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-100">
-                  <Activity className="h-5 w-5 text-green-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                  <Activity className="h-5 w-5 text-primary" />
                 </div>
               </div>
             </CardContent>
@@ -96,18 +96,18 @@ export default function IALogsPage() {
             <CardContent className="p-4 sm:p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Succès / Échecs</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Succès / Échecs</p>
+                  <p className="text-2xl font-bold text-foreground mt-1">
                     {stats ? (
                       <>
-                        <span className="text-green-600">{formatNumber(stats.totalSuccess)}</span>
-                        <span className="text-gray-400 mx-1">/</span>
-                        <span className="text-red-500">{formatNumber(stats.totalErrors)}</span>
+                        <span className="text-primary">{formatNumber(stats.totalSuccess)}</span>
+                        <span className="text-muted-foreground mx-1">/</span>
+                        <span className="text-destructive">{formatNumber(stats.totalErrors)}</span>
                       </>
                     ) : '...'}
                   </p>
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-warning/10">
                   <BarChart3 className="h-5 w-5 text-amber-600" />
                 </div>
               </div>
@@ -120,11 +120,11 @@ export default function IALogsPage() {
             <CardContent className="p-4 sm:p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Tokens Consommés</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{stats ? formatNumber(stats.totalTokens.total) : '...'}</p>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Tokens Consommés</p>
+                  <p className="text-2xl font-bold text-foreground mt-1">{stats ? formatNumber(stats.totalTokens.total) : '...'}</p>
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100">
-                  <Zap className="h-5 w-5 text-blue-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                  <Zap className="h-5 w-5 text-primary" />
                 </div>
               </div>
             </CardContent>
@@ -136,8 +136,8 @@ export default function IALogsPage() {
             <CardContent className="p-4 sm:p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Temps Moyen</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{stats ? `${stats.avgResponseTimeMs} ms` : '...'}</p>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Temps Moyen</p>
+                  <p className="text-2xl font-bold text-foreground mt-1">{stats ? `${stats.avgResponseTimeMs} ms` : '...'}</p>
                 </div>
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
                   <Clock className="h-5 w-5 text-purple-600" />
@@ -153,7 +153,7 @@ export default function IALogsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm">
-              <BarChart3 className="h-4 w-4 text-green-500" />
+              <BarChart3 className="h-4 w-4 text-primary" />
               Requêtes (dernières 24h)
             </CardTitle>
           </CardHeader>
@@ -201,7 +201,7 @@ export default function IALogsPage() {
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <CardTitle className="flex items-center gap-2 text-sm">
-              <Activity className="h-4 w-4 text-green-500" />
+              <Activity className="h-4 w-4 text-primary" />
               Historique des requêtes
             </CardTitle>
             <Select
@@ -221,13 +221,13 @@ export default function IALogsPage() {
           {isLoading ? (
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-100" />
+                <div key={i} className="h-12 animate-pulse rounded-lg bg-muted" />
               ))}
             </div>
           ) : logs.length > 0 ? (
             <div className="space-y-2">
               {/* En-tête du tableau (desktop) */}
-              <div className="hidden md:grid md:grid-cols-7 gap-4 px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wide">
+              <div className="hidden md:grid md:grid-cols-7 gap-4 px-3 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
                 <span>Date</span>
                 <span className="col-span-2">Utilisateur</span>
                 <span>Tokens</span>
@@ -238,43 +238,43 @@ export default function IALogsPage() {
               {logs.map((log) => (
                 <div
                   key={log.id}
-                  className="grid grid-cols-1 md:grid-cols-7 gap-2 md:gap-4 rounded-lg border border-gray-100 p-3 hover:bg-gray-50 transition-colors"
+                  className="grid grid-cols-1 md:grid-cols-7 gap-2 md:gap-4 rounded-lg border p-3 hover:bg-muted/50 transition-colors"
                 >
                   {/* Mobile: affichage compact */}
                   <div className="md:hidden flex items-center justify-between mb-1">
-                    <span className="text-xs text-gray-500">{formatDateShort(log.createdAt)}</span>
+                    <span className="text-xs text-muted-foreground">{formatDateShort(log.createdAt)}</span>
                     <Badge variant={log.success ? 'success' : 'destructive'}>
                       {log.success ? 'Succès' : 'Échec'}
                     </Badge>
                   </div>
-                  <div className="md:hidden text-xs text-gray-700">
+                  <div className="md:hidden text-xs text-foreground">
                     <strong>Utilisateur :</strong> {log.user?.nom || log.userEmail || 'N/A'}
                     {log.errorMessage && (
-                      <p className="text-red-500 mt-1">❌ {log.errorMessage}</p>
+                      <p className="text-destructive mt-1">❌ {log.errorMessage}</p>
                     )}
                   </div>
-                  <div className="md:hidden grid grid-cols-3 gap-2 text-xs text-gray-500 mt-1">
+                  <div className="md:hidden grid grid-cols-3 gap-2 text-xs text-muted-foreground mt-1">
                     <span>Tokens: {log.totalTokens ?? '-'}</span>
                     <span>{log.responseTimeMs} ms</span>
                     <span>Prompt: {log.promptLength}c</span>
                   </div>
 
                   {/* Desktop */}
-                  <span className="hidden md:block text-xs text-gray-500">{formatDateShort(log.createdAt)}</span>
-                  <span className="hidden md:block col-span-2 text-xs text-gray-700">
+                  <span className="hidden md:block text-xs text-muted-foreground">{formatDateShort(log.createdAt)}</span>
+                  <span className="hidden md:block col-span-2 text-xs text-foreground">
                     {log.user?.nom || log.userEmail || 'N/A'}
                     {log.errorMessage && (
-                      <span className="block text-red-500 text-[10px] mt-0.5 truncate" title={log.errorMessage}>
+                      <span className="block text-destructive text-[10px] mt-0.5 truncate" title={log.errorMessage}>
                         ❌ {log.errorMessage}
                       </span>
                     )}
                   </span>
-                  <span className="hidden md:block text-xs text-gray-600">
+                  <span className="hidden md:block text-xs text-muted-foreground">
                     <span className="font-mono">{log.totalTokens ?? '-'}</span>
-                    <span className="text-gray-400"> (P:{log.promptTokens ?? '-'}/C:{log.completionTokens ?? '-'})</span>
+                    <span className="text-muted-foreground"> (P:{log.promptTokens ?? '-'}/C:{log.completionTokens ?? '-'})</span>
                   </span>
-                  <span className="hidden md:block text-xs text-gray-600 font-mono">{log.responseTimeMs} ms</span>
-                  <span className="hidden md:block text-xs text-gray-600">
+                  <span className="hidden md:block text-xs text-muted-foreground font-mono">{log.responseTimeMs} ms</span>
+                  <span className="hidden md:block text-xs text-muted-foreground">
                     {log.promptLength}c → {log.responseLength}c
                   </span>
                   <span className="hidden md:block">
@@ -287,8 +287,8 @@ export default function IALogsPage() {
             </div>
           ) : (
             <div className="py-12 text-center">
-              <Brain className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-              <p className="text-sm text-gray-500">
+              <Brain className="mx-auto h-12 w-12 text-muted-foreground/40 mb-3" />
+              <p className="text-sm text-muted-foreground">
                 {filter !== 'all'
                   ? `Aucun log ${filter === 'success' ? 'réussi' : 'en échec'} trouvé`
                   : 'Aucune requête IA enregistrée pour le moment'}

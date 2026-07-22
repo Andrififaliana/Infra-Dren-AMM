@@ -18,7 +18,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
   if (isSystem) {
     return (
       <div className="flex justify-center py-2">
-        <div className="rounded-full bg-slate-100 px-4 py-1.5 text-xs text-slate-500">
+        <div className="rounded-full bg-muted px-4 py-1.5 text-xs text-muted-foreground">
           {message.content.replace(/[❌⛔💬]/g, '').trim()}
         </div>
       </div>
@@ -44,8 +44,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
         className={cn(
           'max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed',
           isUser
-            ? 'bg-green-600 text-white shadow-sm'
-            : 'bg-white text-slate-800 shadow-sm border border-slate-200',
+            ? 'bg-primary text-primary-foreground shadow-sm'
+            : 'bg-background text-foreground shadow-sm border',
         )}
       >
         {/* Content */}
@@ -54,7 +54,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
       {/* User avatar */}
       {isUser && (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-600 to-slate-800 shadow-sm">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted-foreground to-foreground shadow-sm">
           <User className="h-4 w-4 text-white" />
         </div>
       )}
@@ -162,14 +162,14 @@ export function ActionPreviewCard({
       {/* Header */}
       <div className="flex items-center gap-2 mb-2">
         <ShieldAlert className="h-5 w-5 text-red-500" />
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
           {colors.label} — {action.entity}
         </span>
       </div>
 
       {/* Details */}
-      <p className="text-sm text-slate-700 mb-1">{action.summary}</p>
-      <p className="text-xs text-red-600 font-medium mb-4">
+      <p className="text-sm text-foreground mb-1">{action.summary}</p>
+      <p className="text-xs text-destructive font-medium mb-4">
         <AlertTriangle className="inline-block h-3 w-3 mr-1 -mt-0.5" />
         {action.warning}
       </p>
@@ -211,7 +211,7 @@ export function ActionPreviewCard({
                 onClick={handleSecondClick}
                 disabled={isExecuting}
                 loading={isExecuting}
-                className="animate-pulse shadow-lg shadow-red-500/25"
+                className="animate-pulse shadow-lg shadow-destructive/25"
               >
                 {isExecuting ? (
                   <>
@@ -228,7 +228,7 @@ export function ActionPreviewCard({
               <button
                 onClick={handleCancel}
                 disabled={isExecuting}
-                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+                className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                 title="Annuler"
               >
                 <X className="h-4 w-4" />
