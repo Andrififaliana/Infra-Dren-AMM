@@ -1,6 +1,6 @@
 'use client';
 
-import { Save, Database, Download, Shield } from 'lucide-react';
+import { Database, Download, Shield } from 'lucide-react';
 import apiClient from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';

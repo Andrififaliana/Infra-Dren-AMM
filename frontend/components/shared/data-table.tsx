@@ -80,9 +80,8 @@ export function DataTable<T>({
           <thead>
             <tr className="border-b bg-muted/50">
               {selectable && (
-                <th className="w-10 px-2 py-3">
-                  <Checkbox
-                    checked={allSelected}
+                <th className="w-10 px-2 py-3">                    <Checkbox
+                    checked={someSelected && !allSelected ? 'indeterminate' : allSelected}
                     onCheckedChange={toggleAll}
                     aria-label="Sélectionner tout"
                   />
