@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
 import { motion, AnimatePresence } from 'motion/react';
-import { Separator } from '@/components/ui/separator';
 import {
   X, LayoutDashboard, School, Building2, DoorOpen, Package, Bus, Waves,
   Users, ClipboardList, Save, User, MapIcon, Bot, Activity,

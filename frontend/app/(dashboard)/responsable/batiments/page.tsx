@@ -13,7 +13,7 @@ import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { formatNumber } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Pencil, Trash2, Filter, Building2, MapPin, Layers } from 'lucide-react';
+import { Pencil, Trash2, Filter, Building2, Layers } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
 import { GridView, ViewToggle } from '@/components/shared/grid-view';
 import { Card, CardContent } from '@/components/ui/card';

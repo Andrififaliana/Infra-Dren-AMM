@@ -7,15 +7,14 @@ import { motion } from 'motion/react';
 import {
   Search, List, LayoutGrid, Map, Users, MapPin,
   CheckCircle, Wrench, AlertTriangle, Building2, School,
-  Image as ImageIcon, SearchX, SlidersHorizontal,
+  Image as ImageIcon,  SearchX,
 } from 'lucide-react';
 import { useEtablissements } from '@/hooks/use-etablissements';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
+
 import { EmptyState } from '@/components/shared/empty-state';
 import { Pagination } from '@/components/shared/pagination';
 import { EtablissementPhoto } from '@/components/etablissements/EtablissementPhoto';

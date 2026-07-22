@@ -22,7 +22,7 @@ export default function CartePage() {
   const [search, setSearch] = useState('');
   const [ciscoFilter, setCiscoFilter] = useState('');
   const [couvertureFilter, setCouvertureFilter] = useState('toutes');
-  const [etatFilter, setEtatFilter] = useState('tous');
+  const [etatFilter] = useState('tous');
   const [showAleas, setShowAleas] = useState(true);
   const [showTrajets, setShowTrajets] = useState(true);
 
@@ -57,11 +57,6 @@ export default function CartePage() {
     { value: 'telephonique', label: 'Couverture téléphonique' },
     { value: 'internet', label: 'Couverture Internet' },
     { value: 'aucune', label: 'Aucune couverture' },
-  ];
-
-  const etatOptions = [
-    { value: 'tous', label: 'Tous les états' },
-    { value: 'problemes', label: 'Établissements avec problèmes' },
   ];
 
   return (

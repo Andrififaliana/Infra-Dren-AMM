@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import {
-  BarChart3, Wifi, Signal, School,
+  Wifi, Signal, School,
   Building2, DoorOpen, TrendingUp,
 } from 'lucide-react';
 import {

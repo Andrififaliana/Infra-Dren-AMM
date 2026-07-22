@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { toast } from 'sonner';
-import { Pencil, Trash2, Wrench, Package, Tag } from 'lucide-react';
+import { Pencil, Trash2, Wrench } from 'lucide-react';
 import { SelectionBar } from '@/components/shared/selection-bar';
 import { GridView, ViewToggle } from '@/components/shared/grid-view';
 import { Card, CardContent } from '@/components/ui/card';

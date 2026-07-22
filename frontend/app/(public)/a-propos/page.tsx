@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import {
   Target, Heart, Mail, Phone, MapPin,
   GraduationCap, Building2, Users, Quote,
-  ChevronRight, ArrowUpRight,
+  ArrowUpRight,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';

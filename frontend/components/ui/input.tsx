@@ -1,6 +1,5 @@
 import { type InputHTMLAttributes, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Slot } from '@radix-ui/react-slot';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;

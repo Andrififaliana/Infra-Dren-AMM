@@ -1,5 +1,5 @@
 import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer';
-import type { ExportEtablissement, ExportBatiment, ExportSalle, ExportPhoto, ExportBatimentPhoto, ExportSallePhoto } from '@/types/etablissement-export';
+import type { ExportEtablissement, ExportBatiment, ExportPhoto, ExportBatimentPhoto, ExportSallePhoto } from '@/types/etablissement-export';
 
 const styles = StyleSheet.create({
   page: {

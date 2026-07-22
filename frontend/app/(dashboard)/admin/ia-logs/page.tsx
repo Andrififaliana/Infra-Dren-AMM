@@ -7,18 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { Pagination } from '@/components/shared/pagination';
-import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import { formatDateShort, formatNumber } from '@/lib/utils';
 import {
   Brain,
-  CheckCircle2,
-  XCircle,
   Clock,
   Zap,
   BarChart3,
   Activity,
-  AlertTriangle,
 } from 'lucide-react';
 import {
   BarChart,

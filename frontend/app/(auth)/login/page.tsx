@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Shield, Eye, EyeOff, ArrowLeft, Lock } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, Lock } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();

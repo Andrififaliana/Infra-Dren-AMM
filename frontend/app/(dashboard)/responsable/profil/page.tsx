@@ -1,11 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { toast } from 'sonner';
 import { User, Mail, Shield, KeyRound, Loader2 } from 'lucide-react';
 import { useProfile, useForgotPassword } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { Skeleton } from '@/components/ui/skeleton';

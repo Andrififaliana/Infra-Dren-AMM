@@ -22,7 +22,7 @@ import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
 import { EtablissementExportModal } from '@/components/etablissements/EtablissementExportModal';
 import { useEffect } from 'react';
 import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight, Download } from 'lucide-react';
-import type { Directeur, Designation, Structure } from '@/types/etablissement';
+import type { Designation, Structure } from '@/types/etablissement';
 
 export default function EditEtablissementPage() {
   const { id } = useParams<{ id: string }>();
