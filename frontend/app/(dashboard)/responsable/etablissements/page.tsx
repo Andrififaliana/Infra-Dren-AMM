@@ -136,7 +136,7 @@ export default function GestionEtablissementsPage() {
       render: (item: EtablissementListe) => {
         const count = item._count?.photos ?? 0;
         return count > 0 ? (
-          <span className="inline-flex items-center gap-1 text-xs text-gray-400">
+          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
             <ImageIcon className="h-3.5 w-3.5" />
             {count}
           </span>
@@ -172,7 +172,7 @@ export default function GestionEtablissementsPage() {
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-foreground">Établissements</h1>
-          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">Gérer les établissements scolaires</p>
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-muted-foreground">Gérer les établissements scolaires</p>
         </div>
         <div className="flex items-center gap-2">
           <ViewToggle viewMode={viewMode} onChange={setViewMode} />
@@ -185,7 +185,7 @@ export default function GestionEtablissementsPage() {
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
         <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} className="w-full sm:flex-1" />
         <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-1">
-          <Filter className="h-4 w-4 text-gray-400 shrink-0" />
+          <Filter className="h-4 w-4 text-muted-foreground shrink-0" />
           <Select
             value={ciscoFilter}
             onChange={(e) => { setCiscoFilter(e.target.value); setZapFilter(''); setPage(1); }}
@@ -251,14 +251,14 @@ export default function GestionEtablissementsPage() {
                 >
                   <button
                     onClick={() => router.push(`/responsable/etablissements/${item.id}`)}
-                    className="rounded-lg bg-white/90 p-2 text-slate-600 shadow-sm backdrop-blur-sm hover:bg-primary/10 hover:text-primary transition-colors"
+                    className="rounded-lg bg-background/90 p-2 text-muted-foreground shadow-sm backdrop-blur-sm hover:bg-primary/10 hover:text-primary transition-colors"
                     title="Modifier"
                   >
                     <Pencil className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => { setSelectedEtab(item); setDeleteModalOpen(true); }}
-                    className="rounded-lg bg-white/90 p-2 text-slate-600 shadow-sm backdrop-blur-sm hover:bg-red-100 hover:text-red-600 transition-colors"
+                    className="rounded-lg bg-background/90 p-2 text-muted-foreground shadow-sm backdrop-blur-sm hover:bg-destructive/10 hover:text-destructive transition-colors"
                     title="Supprimer"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -314,7 +314,7 @@ export default function GestionEtablissementsPage() {
         onClose={() => setDeleteModalOpen(false)}
         title="Confirmer la suppression"
       >
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Êtes-vous sûr de vouloir supprimer <strong>{selectedEtab?.nomEtab}</strong> ?
           Cette action est irréversible.
         </p>

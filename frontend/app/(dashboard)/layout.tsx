@@ -24,7 +24,7 @@ export default function ProtectedLayout({
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-sm text-gray-500">Chargement...</p>
+          <p className="text-sm text-muted-foreground">Chargement...</p>
         </div>
       </div>
     );

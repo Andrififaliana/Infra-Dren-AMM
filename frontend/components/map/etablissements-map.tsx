@@ -100,7 +100,7 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
             <Popup>
               <div className="min-w-[200px]">
                 <strong className="text-sm">{school.nomEtab}</strong>
-                <div className="mt-1 space-y-0.5 text-xs text-gray-600">
+                <div className="mt-1 space-y-0.5 text-xs text-muted-foreground">
                   <p>{school.cisco} — {school.zap}</p>
                   <p>{school.commune}{school.fokontany ? `, ${school.fokontany}` : ''}</p>
                   <p>
@@ -173,7 +173,7 @@ export default function EtablissementsMap({
 
   if (schoolsWithCoords.length === 0) {
     return (
-      <div className="flex h-[600px] items-center justify-center rounded-lg border bg-gray-50 text-sm text-gray-500">
+      <div className="flex h-[600px] items-center justify-center rounded-lg border bg-muted/30 text-sm text-muted-foreground">
         Aucun établissement avec des coordonnées GPS
       </div>
     );

@@ -205,17 +205,17 @@ export function GenericPhotoUpload({
               <Loader2 className="h-8 w-8 animate-spin text-green-500" />
             ) : atLimit ? (
               <>
-                <div className="mb-3 rounded-xl bg-gray-200 p-3"><ImagePlus className="h-6 w-6 text-gray-400" /></div>
-                <p className="text-sm font-medium text-gray-500">Limite atteinte — {MAX_PHOTOS} photos maximum</p>
-                <p className="mt-1 text-xs text-gray-400">Supprimez une photo pour en ajouter une nouvelle</p>
+                <div className="mb-3 rounded-xl bg-muted p-3"><ImagePlus className="h-6 w-6 text-muted-foreground/50" /></div>
+                <p className="text-sm font-medium text-muted-foreground">Limite atteinte — {MAX_PHOTOS} photos maximum</p>
+                <p className="mt-1 text-xs text-muted-foreground/60">Supprimez une photo pour en ajouter une nouvelle</p>
               </>
             ) : (
               <>
                 <div className={cn('mb-3 rounded-xl p-3 transition-all', dragOver ? 'bg-green-100' : 'bg-gray-100')}>
-                  <ImagePlus className={cn('h-6 w-6 transition-colors', dragOver ? 'text-green-500' : 'text-gray-400')} />
+                  <ImagePlus className={cn('h-6 w-6 transition-colors', dragOver ? 'text-primary' : 'text-muted-foreground/50')} />
                 </div>
-                <p className="text-sm font-medium text-gray-600">{dragOver ? 'Déposez vos fichiers ici' : 'Cliquez ou déposez des photos ici'}</p>
-                <p className="mt-1 text-xs text-gray-400">JPG, PNG, WebP ou GIF — max 10 Mo par fichier — {MAX_PHOTOS} max</p>
+                <p className="text-sm font-medium text-muted-foreground">{dragOver ? 'Déposez vos fichiers ici' : 'Cliquez ou déposez des photos ici'}</p>
+                <p className="mt-1 text-xs text-muted-foreground/60">JPG, PNG, WebP ou GIF — max 10 Mo par fichier — {MAX_PHOTOS} max</p>
               </>
             )}
             <input
@@ -233,7 +233,7 @@ export function GenericPhotoUpload({
 
       {/* État vide */}
       {sortedPhotos.length === 0 && !uploading && (
-        <p className="text-center text-sm text-gray-400">Aucune photo pour {entityName}</p>
+        <p className="text-center text-sm text-muted-foreground/60">Aucune photo pour {entityName}</p>
       )}
 
       {/* Lightbox */}
