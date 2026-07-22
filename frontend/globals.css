@@ -21,6 +21,20 @@
   --color-input: hsl(214.3 31.8% 91.4%);
   --color-ring: hsl(142.1 76.2% 36.3%);
   --radius: 0.75rem;
+
+  /* Animation keyframes */
+  --animate-in: animate-in 0.2s ease-out;
+  --animate-out: animate-out 0.2s ease-in;
+}
+
+@keyframes animate-in {
+  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes animate-out {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to { opacity: 0; transform: scale(0.95) translateY(-4px); }
 }
 
 @layer base {
@@ -31,6 +45,64 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+}
+
+/* Radix UI animation utilities */
+@utility animate-in {
+  animation: animate-in 0.2s ease-out;
+}
+@utility animate-out {
+  animation: animate-out 0.2s ease-in;
+}
+@utility fade-in-0 {
+  --tw-fade-from: 0;
+}
+@utility fade-out-0 {
+  --tw-fade-to: 0;
+}
+@utility zoom-in-95 {
+  --tw-zoom-from: 0.95;
+}
+@utility zoom-out-95 {
+  --tw-zoom-to: 0.95;
+}
+
+/* Slide animations for Radix */
+@utility slide-in-from-top-2 {
+  --tw-slide-from-y: -8px;
+}
+@utility slide-in-from-bottom-2 {
+  --tw-slide-from-y: 8px;
+}
+@utility slide-in-from-left-2 {
+  --tw-slide-from-x: -8px;
+}
+@utility slide-in-from-right-2 {
+  --tw-slide-from-x: 8px;
+}
+@utility slide-out-to-top-2 {
+  --tw-slide-to-y: -8px;
+}
+@utility slide-out-to-bottom-2 {
+  --tw-slide-to-y: 8px;
+}
+@utility slide-out-to-left-2 {
+  --tw-slide-to-x: -8px;
+}
+@utility slide-out-to-right-2 {
+  --tw-slide-to-x: 8px;
+}
+@utility slide-in-from-left-1\\/2 {
+  --tw-slide-from-x: -50%;
+}
+@utility slide-out-to-left-1\\/2 {
+  --tw-slide-to-x: -50%;
+}
+@utility slide-in-from-top-\\[48\\%\\] {
+  --tw-slide-from-y: -48%;
+}
+@utility slide-out-to-top-\\[48\\%\\] {
+  --tw-slide-to-y: -48%;
 }
 
 @utility container {

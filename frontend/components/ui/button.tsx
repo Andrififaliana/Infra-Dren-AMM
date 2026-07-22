@@ -2,6 +2,7 @@ import { type ButtonHTMLAttributes, forwardRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
+import { Slot } from '@radix-ui/react-slot';
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:scale-[0.97]',
@@ -37,12 +38,14 @@ export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   loading?: boolean;
+  asChild?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, loading, disabled, children, ...props }, ref) => {
+  ({ className, variant, size, loading, disabled, children, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button';
     return (
-      <button
+      <Comp
         ref={ref}
         disabled={disabled || loading}
         className={cn(buttonVariants({ variant, size, className }))}
@@ -50,7 +53,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {loading && <Loader2 className="h-4 w-4 animate-spin" />}
         {children}
-      </button>
+      </Comp>
     );
   }
 );
