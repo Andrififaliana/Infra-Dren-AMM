@@ -24,7 +24,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   return (
     <div className="min-h-screen bg-background">
       {/* Sticky Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5">
@@ -107,7 +107,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="absolute left-0 right-0 top-16 z-50 border-t bg-background md:hidden shadow-xl"
+                className="absolute left-0 right-0 top-16 z-50 bg-background md:hidden shadow-xl"
               >
                 <nav className="space-y-0.5 p-3">
                   {navLinks.map((link) => {
@@ -153,7 +153,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       <main>{children}</main>
 
       {/* Footer */}
-      <footer className="border-t bg-muted/30">
+      <footer className="bg-muted/50">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             <div>
