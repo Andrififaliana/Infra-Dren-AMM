@@ -445,8 +445,8 @@ export default function EditEtablissementPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="flex gap-1.5">
-                        {d.estTitre && <Badge variant="success">Titre</Badge>}
-                        {d.estEnceinteEtab && <Badge variant="info">Enceinte</Badge>}
+                        {d.estTitre && <Badge variant="default">Titre</Badge>}
+                        {d.estEnceinteEtab && <Badge variant="secondary">Enceinte</Badge>}
                         {d.estLitigieux && <Badge variant="destructive">Litigieux</Badge>}
                       </div>
                       <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">

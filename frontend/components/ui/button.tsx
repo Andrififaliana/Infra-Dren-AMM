@@ -15,8 +15,8 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        success: 'bg-emerald-600 text-white shadow-sm hover:bg-emerald-600/90',
-        warning: 'bg-amber-500 text-white shadow-sm hover:bg-amber-500/90',
+        success: 'bg-chart-1 text-white shadow-sm hover:bg-chart-1/90',
+        warning: 'bg-chart-2 text-white shadow-sm hover:bg-chart-2/90',
       },
       size: {
         default: 'h-10 px-4 py-2',

@@ -78,7 +78,7 @@ export default function AleasPage() {
     {
       key: 'effets',
       header: 'Impact',
-      render: (item: Alea) => <Badge variant="info">{item.effets?.length ?? 0} trajet(s)</Badge>,
+      render: (item: Alea) => <Badge variant="secondary">{item.effets?.length ?? 0} trajet(s)</Badge>,
     },
     {
       key: 'actions',

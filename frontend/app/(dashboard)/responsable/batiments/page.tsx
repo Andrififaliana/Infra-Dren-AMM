@@ -83,7 +83,7 @@ export default function BatimentsPage() {
     {
       key: 'salles',
       header: 'Salles',
-      render: (item: Batiment) => <Badge variant="info">{formatNumber((item as any).salles?.length ?? 0)}</Badge>,
+      render: (item: Batiment) => <Badge variant="secondary">{formatNumber((item as any).salles?.length ?? 0)}</Badge>,
     },
     {
       key: 'etablissement',
