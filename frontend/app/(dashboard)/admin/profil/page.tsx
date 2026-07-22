@@ -1,7 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { User, Mail, Shield, KeyRound, Loader2, CalendarDays, BadgeCheck } from 'lucide-react';
+import { Mail, Shield, KeyRound, Loader2, CalendarDays, BadgeCheck } from 'lucide-react';
 import { useProfile, useForgotPassword } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

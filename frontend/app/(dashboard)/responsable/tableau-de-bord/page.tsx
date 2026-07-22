@@ -6,9 +6,8 @@ import { StatCard } from '@/components/shared/stat-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CardSkeleton } from '@/components/shared/loading-skeleton';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
-import { Separator } from '@/components/ui/separator';
 import { formatNumber } from '@/lib/utils';
-import { School, Building2, DoorOpen, Package, Phone, Globe, TrendingUp, BarChart3, PieChart, Signal } from 'lucide-react';
+import { School, Building2, DoorOpen, Package, Phone, Globe, TrendingUp, BarChart3, PieChart } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart as RePieChart, Pie, Cell, Legend,
