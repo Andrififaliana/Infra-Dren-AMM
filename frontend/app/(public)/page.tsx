@@ -148,7 +148,7 @@ export default function HomePage() {
                 key={feature.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: idx * 0.1 }}
                 onClick={() => router.push(feature.href)}
-                className="group cursor-pointer rounded-2xl border bg-card p-6 shadow-sm transition-all duration-200 hover:border-primary/20 hover:shadow-md"
+                className="group cursor-pointer rounded-2xl bg-card p-6 shadow-sm transition-all duration-200 hover:shadow-md"
               >
                 <div className={`mb-4 inline-flex rounded-xl p-3 ${feature.color}`}><Icon className="h-6 w-6" /></div>
                 <h3 className="mb-2 font-semibold text-card-foreground">{feature.title}</h3>
@@ -163,7 +163,7 @@ export default function HomePage() {
       </section>
 
       {/* How it works */}
-      <section className="bg-muted/30 border-t">
+      <section className="bg-muted/30">
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
             <h2 className="text-3xl font-bold text-foreground">Comment ça fonctionne</h2>
@@ -183,7 +183,7 @@ export default function HomePage() {
       </section>
 
       {/* Map Section */}
-      <section className="border-t">
+      <section className="">
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="mb-12 text-center">
@@ -198,7 +198,7 @@ export default function HomePage() {
                 )}
               </p>
             </div>
-            <div className="h-[500px] rounded-2xl overflow-hidden border">
+            <div className="h-[500px] rounded-2xl overflow-hidden shadow-sm">
               <EtablissementsMap
                 schools={etablissements}
                 showAleas={false} showTrajets={false}
