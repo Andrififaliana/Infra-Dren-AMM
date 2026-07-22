@@ -169,8 +169,8 @@ export default function SallesPage() {
                   </div>
                   <div className="flex items-center gap-1">
                     {item.estElectrifiee && (
-                      <span className="rounded-full bg-amber-100 p-1" title="Électrifiée">
-                        <Lightbulb className="h-3 w-3 text-amber-600 fill-amber-600" />
+                      <span className="rounded-full bg-chart-2/20 p-1" title="Électrifiée">
+                        <Lightbulb className="h-3 w-3 text-chart-2" />
                       </span>
                     )}
                   </div>

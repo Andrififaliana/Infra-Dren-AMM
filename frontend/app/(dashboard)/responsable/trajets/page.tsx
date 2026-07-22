@@ -136,7 +136,7 @@ export default function TrajetsPage() {
             >
               <CardContent className="p-4 space-y-2.5">
                 <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-100 to-orange-50">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-chart-2/20 to-chart-2/5">
                     <Route className="h-5 w-5 text-primary" />
                   </div>
                   <div className="min-w-0 flex-1">

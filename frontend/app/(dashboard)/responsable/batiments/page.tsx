@@ -162,7 +162,7 @@ export default function BatimentsPage() {
             >
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-green-100 to-emerald-50">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
                     <Building2 className="h-5 w-5 text-primary" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -177,10 +177,10 @@ export default function BatimentsPage() {
                     {item.nbNiveau} niveau{item.nbNiveau > 1 ? 'x' : ''}
                   </span>
                   <span className="flex items-center gap-1">
-                    {(() => { const count = (item as any).salles?.length ?? 0; return <><span className="h-1.5 w-1.5 rounded-full bg-blue-400" />{count} salle{count > 1 ? 's' : ''}</>; })()}
+                    {(() => { const count = (item as any).salles?.length ?? 0; return <><span className="h-1.5 w-1.5 rounded-full bg-chart-4" />{count} salle{count > 1 ? 's' : ''}</>; })()}
                   </span>
                   <span className="flex items-center gap-1">
-                    {(() => { const count = (item as any).toilettes?.length ?? 0; return <><span className="h-1.5 w-1.5 rounded-full bg-amber-400" />{count} toilette{count > 1 ? 's' : ''}</>; })()}
+                    {(() => { const count = (item as any).toilettes?.length ?? 0; return <><span className="h-1.5 w-1.5 rounded-full bg-chart-2" />{count} toilette{count > 1 ? 's' : ''}</>; })()}
                   </span>
                 </div>
 

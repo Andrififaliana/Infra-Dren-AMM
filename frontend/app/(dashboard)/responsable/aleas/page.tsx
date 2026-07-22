@@ -136,11 +136,11 @@ export default function AleasPage() {
           emptyMessage="Aucun aléa"
           renderCard={(item) => {
             const typeColors: Record<string, string> = {
-              'INONDATION': 'bg-blue-50 border-blue-200 text-blue-700',
-              'CYCLONE': 'bg-amber-50 border-amber-200 text-amber-700',
-              'SECHERESSE': 'bg-orange-50 border-orange-200 text-orange-700',
-              'GLISSEMENT': 'bg-red-50 border-red-200 text-red-700',
-              'INCENDIE': 'bg-red-50 border-red-200 text-red-700',
+              'INONDATION': 'bg-chart-4/10 border-chart-4/30 text-chart-4',
+              'CYCLONE': 'bg-chart-2/10 border-chart-2/30 text-chart-2',
+              'SECHERESSE': 'bg-chart-2/10 border-chart-2/30 text-chart-2',
+              'GLISSEMENT': 'bg-destructive/10 border-destructive/30 text-destructive',
+              'INCENDIE': 'bg-destructive/10 border-destructive/30 text-destructive',
             };
             const colorClass = item.typeAleat ? typeColors[item.typeAleat.toUpperCase()] || 'bg-muted/50 border-muted-foreground/20 text-foreground' : 'bg-muted/50 border-muted-foreground/20 text-foreground';
             return (
