@@ -1,21 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  /* Primary */
-  --color-green-500: #22c55e;
+
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(215.4 25% 26.7%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(215.4 25% 26.7%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(215.4 25% 26.7%);
+  --color-primary: hsl(142.1 70.6% 45.3%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(210 40% 96.1%);
+  --color-secondary-foreground: hsl(215.4 25% 26.7%);
+  --color-muted: hsl(210 40% 96.1%);
+  --color-muted-foreground: hsl(215.4 15% 46.9%);
+  --color-accent: hsl(210 40% 96.1%);
+  --color-accent-foreground: hsl(215.4 25% 26.7%);
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(210 40% 98%);
+  --color-border: hsl(210 40% 93%);
+  --color-input: hsl(210 40% 91%);
+  --color-ring: hsl(142.1 70.6% 45.3%);
+  --color-warning: hsl(24.6 95% 53.1%);
+  --color-chart-1: hsl(142.1 70.6% 45.3%);
+  --color-chart-2: hsl(24.6 95% 53.1%);
+  --color-chart-3: hsl(271.5 81.3% 55.9%);
+  --color-chart-4: hsl(199.2 88.9% 48.4%);
+  --color-chart-5: hsl(0 84.2% 60.2%);
+  --radius: 0.75rem;
+
   --color-green-50: #f0fdf4;
   --color-green-100: #dcfce7;
   --color-green-200: #bbf7d0;
   --color-green-300: #86efac;
   --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
   --color-green-600: #16a34a;
   --color-green-700: #15803d;
   --color-green-800: #166534;
   --color-green-900: #14532d;
-  /* Slate backgrounds */
   --color-slate-50: #f8fafc;
   --color-slate-100: #f1f5f9;
   --color-slate-200: #e2e8f0;
@@ -23,16 +50,195 @@
   --color-slate-700: #334155;
   --color-slate-800: #1e293b;
   --color-slate-900: #0f172a;
-  /* Accent */
   --color-blue-500: #3b82f6;
 }
 
-body {
-  font-family: var(--font-sans);
+@layer base {
+  :root {
+    --color-background: hsl(0 0% 100%);
+    --color-foreground: hsl(215.4 25% 26.7%);
+    --color-card: hsl(0 0% 100%);
+    --color-card-foreground: hsl(215.4 25% 26.7%);
+    --color-popover: hsl(0 0% 100%);
+    --color-popover-foreground: hsl(215.4 25% 26.7%);
+    --color-primary: hsl(142.1 70.6% 45.3%);
+    --color-primary-foreground: hsl(0 0% 100%);
+    --color-secondary: hsl(210 40% 96.1%);
+    --color-secondary-foreground: hsl(215.4 25% 26.7%);
+    --color-muted: hsl(210 40% 96.1%);
+    --color-muted-foreground: hsl(215.4 15% 46.9%);
+    --color-accent: hsl(210 40% 96.1%);
+    --color-accent-foreground: hsl(215.4 25% 26.7%);
+    --color-destructive: hsl(0 84.2% 60.2%);
+    --color-destructive-foreground: hsl(210 40% 98%);
+    --color-border: hsl(210 40% 93%);
+    --color-input: hsl(210 40% 91%);
+    --color-ring: hsl(142.1 70.6% 45.3%);
+    --color-warning: hsl(24.6 95% 53.1%);
+    --color-chart-1: hsl(142.1 70.6% 45.3%);
+    --color-chart-2: hsl(24.6 95% 53.1%);
+    --color-chart-3: hsl(271.5 81.3% 55.9%);
+    --color-chart-4: hsl(199.2 88.9% 48.4%);
+    --color-chart-5: hsl(0 84.2% 60.2%);
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "zero";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: hsl(142.1 70.6% 45.3% / 0.2);
+    color: hsl(215.4 25% 26.7%);
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.dark {
+  --color-background: hsl(222.2 84% 4.9%);
+  --color-foreground: hsl(210 40% 98%);
+  --color-card: hsl(222.2 84% 4.9%);
+  --color-card-foreground: hsl(210 40% 98%);
+  --color-popover: hsl(222.2 84% 4.9%);
+  --color-popover-foreground: hsl(210 40% 98%);
+  --color-primary: hsl(142.1 70.6% 55.3%);
+  --color-primary-foreground: hsl(144.9 80.4% 10%);
+  --color-secondary: hsl(217.2 32.6% 17.5%);
+  --color-secondary-foreground: hsl(210 40% 98%);
+  --color-muted: hsl(217.2 32.6% 17.5%);
+  --color-muted-foreground: hsl(215 20.2% 65.1%);
+  --color-accent: hsl(217.2 32.6% 17.5%);
+  --color-accent-foreground: hsl(210 40% 98%);
+  --color-destructive: hsl(0 62.8% 30.6%);
+  --color-destructive-foreground: hsl(210 40% 98%);
+  --color-border: hsl(217.2 20% 15%);
+  --color-input: hsl(217.2 32.6% 17.5%);
+  --color-ring: hsl(142.1 70.6% 55.3%);
+  --color-warning: hsl(24.6 95% 60%);
+  --color-chart-1: hsl(142.1 70.6% 55.3%);
+  --color-chart-2: hsl(24.6 95% 60%);
+  --color-chart-3: hsl(271.5 81.3% 55.9%);
+  --color-chart-4: hsl(199.2 88.9% 48.4%);
+  --color-chart-5: hsl(0 84.2% 60.2%);
+}
+
+@keyframes in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(8px); }
+}
+
+.radix-state-open\:animate-in[data-state="open"],
+[data-state="open"] > .radix-state-open\:animate-in {
+  animation: in 0.2s ease-out;
+}
+
+.radix-state-closed\:animate-out[data-state="closed"],
+[data-state="closed"] > .radix-state-closed\:animate-out {
+  animation: out 0.15s ease-in;
+}
+
+.DialogOverlay[data-state="open"],
+[data-state="open"] > .DialogOverlay,
+[data-state="open"].DialogOverlay {
+  animation: in 0.2s ease-out;
+}
+
+.DialogOverlay[data-state="closed"],
+[data-state="closed"] > .DialogOverlay,
+[data-state="closed"].DialogOverlay {
+  animation: out 0.15s ease-in;
+}
+
+.DialogContent[data-state="open"],
+[data-state="open"] > .DialogContent,
+[data-state="open"].DialogContent {
+  animation: in 0.2s ease-out;
+}
+
+.DialogContent[data-state="closed"],
+[data-state="closed"] > .DialogContent,
+[data-state="closed"].DialogContent {
+  animation: out 0.15s ease-in;
+}
+
+.DropdownMenuContent[data-state="open"],
+[data-state="open"] > .DropdownMenuContent,
+[data-state="open"].DropdownMenuContent {
+  animation: slideUp 0.15s ease-out;
+}
+
+.DropdownMenuContent[data-state="closed"],
+[data-state="closed"] > .DropdownMenuContent,
+[data-state="closed"].DropdownMenuContent {
+  animation: slideDown 0.1s ease-in;
+}
+
+.PopoverContent[data-state="open"],
+[data-state="open"] > .PopoverContent,
+[data-state="open"].PopoverContent {
+  animation: slideUp 0.15s ease-out;
+}
+
+.PopoverContent[data-state="closed"],
+[data-state="closed"] > .PopoverContent,
+[data-state="closed"].PopoverContent {
+  animation: slideDown 0.1s ease-in;
+}
+
+.TooltipContent[data-state="delayed-open"] {
+  animation: slideUp 0.15s ease-out;
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
