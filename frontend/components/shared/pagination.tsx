@@ -14,7 +14,7 @@ export function Pagination({ page, totalPages, total, onPageChange }: Pagination
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t pt-4">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4">
       <p className="text-sm text-muted-foreground order-2 sm:order-1">
         Page {page} sur {totalPages}
         <span className="hidden sm:inline"> ({total} résultats)</span>

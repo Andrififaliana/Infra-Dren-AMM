@@ -22,11 +22,11 @@ export function SelectionBar({ selectedCount, onClear, onDelete, isDeleting, ent
           exit={{ y: 50, opacity: 0 }}
           className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
         >
-          <div className="flex items-center gap-3 rounded-2xl border bg-card px-4 py-3 shadow-lg">
+          <div className="flex items-center gap-3 rounded-2xl bg-card px-4 py-3 shadow-lg">
             <span className="text-sm font-medium text-foreground">
               {selectedCount} {entityName} sélectionné{selectedCount > 1 ? 's' : ''}
             </span>
-            <div className="flex items-center gap-2 pl-2 border-l">
+            <div className="flex items-center gap-2 pl-2">
               <Button variant="ghost" size="sm" onClick={onClear} className="gap-1">
                 <X className="h-4 w-4" />
                 Annuler

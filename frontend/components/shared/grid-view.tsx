@@ -35,7 +35,7 @@ export function GridView<T>({
         {Array.from({ length: skeletonCount }).map((_, i) => (
           <div
             key={i}
-            className="rounded-xl border border-slate-200 bg-white p-4 space-y-3"
+            className="rounded-xl bg-card p-4 space-y-3 shadow-sm"
           >
             <Skeleton className="h-5 w-2/3" />
             <Skeleton className="h-4 w-1/2" />
@@ -52,7 +52,7 @@ export function GridView<T>({
 
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
+      <div className="rounded-xl bg-card p-8 text-center text-sm text-muted-foreground shadow-sm">
         {emptyMessage}
       </div>
     );
@@ -81,7 +81,7 @@ interface ViewToggleProps {
 
 export function ViewToggle({ viewMode, onChange }: ViewToggleProps) {
   return (
-    <div className="flex items-center rounded-lg border border-slate-200 bg-white p-0.5 shadow-sm">
+    <div className="flex items-center rounded-lg bg-muted/30 p-0.5 shadow-sm">
       <button
         onClick={() => onChange('list')}
         className={cn(
