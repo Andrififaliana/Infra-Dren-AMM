@@ -1,8 +1,15 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { QueryProvider } from '@/providers/query-provider';
 import { AuthProvider } from '@/providers/auth-provider';
 import { ToastProvider } from '@/providers/toast-provider';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   title: 'InfraDren AMM - Gestion des Infrastructures Scolaires',
@@ -34,7 +41,7 @@ export default function RootLayout({
           `,
         }} />
       </head>
-      <body className="min-h-screen bg-background text-foreground antialiased">
+      <body className={`${inter.variable} min-h-screen bg-background text-foreground antialiased font-sans`}>
         <QueryProvider>
           <AuthProvider>
             {children}
