@@ -8,12 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Mail, CheckCircle2, ArrowLeft, ShieldAlert } from 'lucide-react';
+import { Mail, CheckCircle2, ArrowLeft, ShieldAlert, Moon, Sun } from 'lucide-react';
+import { useTheme } from '@/hooks/use-theme';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const { mutate: sendReset, isPending, error } = useForgotPassword();
+  const { theme, toggleTheme, mounted } = useTheme();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +29,17 @@ export default function ForgotPasswordPage() {
       <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-background to-green-50/30 dark:from-background dark:via-background dark:to-primary/5 p-4">
         <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
+
+        {/* Theme toggle */}
+        {mounted && (
+          <button
+            onClick={toggleTheme}
+            className="fixed top-4 right-4 z-50 rounded-lg p-2.5 bg-background/80 backdrop-blur-sm border shadow-sm text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+          >
+            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+        )}
 
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -72,6 +85,17 @@ export default function ForgotPasswordPage() {
     <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-background to-green-50/30 dark:from-background dark:via-background dark:to-primary/5 p-4">
       <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
       <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
+
+      {/* Theme toggle */}
+      {mounted && (
+        <button
+          onClick={toggleTheme}
+          className="fixed top-4 right-4 z-50 rounded-lg p-2.5 bg-background/80 backdrop-blur-sm border shadow-sm text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+        >
+          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

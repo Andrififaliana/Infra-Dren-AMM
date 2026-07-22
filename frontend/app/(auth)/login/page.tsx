@@ -10,12 +10,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Eye, EyeOff, ArrowLeft, Lock } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, Lock, Moon, Sun } from 'lucide-react';
+import { useTheme } from '@/hooks/use-theme';
 
 export default function LoginPage() {
   const router = useRouter();
   const { mutate: login, isPending, error } = useLogin();
   const { isAuthenticated } = useAuthStore();
+  const { theme, toggleTheme, mounted } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -49,6 +51,17 @@ export default function LoginPage() {
       {/* Background decorations */}
       <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
       <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
+
+      {/* Theme toggle */}
+      {mounted && (
+        <button
+          onClick={toggleTheme}
+          className="fixed top-4 right-4 z-50 rounded-lg p-2.5 bg-background/80 backdrop-blur-sm border shadow-sm text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+        >
+          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
