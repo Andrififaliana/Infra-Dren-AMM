@@ -74,8 +74,8 @@
 
   /* Selection styling */
   ::selection {
-    background-color: hsl(var(--color-primary) / 0.2);
-    color: hsl(var(--color-foreground));
+    background-color: hsl(142.1 70.6% 45.3% / 0.2);
+    color: hsl(215.4 25% 26.7%);
   }
 
   /* Focus visible style */
