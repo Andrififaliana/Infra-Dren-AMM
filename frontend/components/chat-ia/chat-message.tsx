@@ -81,9 +81,9 @@ export function ActionPreviewCard({
   const disarmTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const actionColors = {
-    create: { bg: 'bg-blue-50', badge: 'bg-blue-600', label: 'CRÉATION' },
+    create: { bg: 'bg-chart-4/10', badge: 'bg-chart-4', label: 'CRÉATION' },
     update: { bg: 'bg-chart-2/10', badge: 'bg-chart-2', label: 'MODIFICATION' },
-    delete: { bg: 'bg-red-50', badge: 'bg-red-600', label: 'SUPPRESSION' },
+    delete: { bg: 'bg-destructive/10', badge: 'bg-destructive', label: 'SUPPRESSION' },
   };
 
   const colors = actionColors[action.actionType];
@@ -150,18 +150,9 @@ export function ActionPreviewCard({
       transition={{ duration: 0.25, ease: 'easeOut' }}
       className={cn('rounded-xl p-4 mt-2 relative overflow-hidden shadow-sm', colors.bg)}
     >
-      {/* Pulsing ring when armed */}
-      {isArmed && (
-        <motion.div
-          className="absolute inset-0 rounded-xl ring-2 ring-red-500"
-          animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.02, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      )}
-
       {/* Header */}
       <div className="flex items-center gap-2 mb-2">
-        <ShieldAlert className="h-5 w-5 text-red-500" />
+        <ShieldAlert className="h-5 w-5 text-destructive" />
         <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
           {colors.label} — {action.entity}
         </span>
@@ -169,8 +160,7 @@ export function ActionPreviewCard({
 
       {/* Details */}
       <p className="text-sm text-foreground mb-1">{action.summary}</p>
-      <p className="text-xs text-destructive font-medium mb-4">
-        <AlertTriangle className="inline-block h-3 w-3 mr-1 -mt-0.5" />
+      <p className="text-xs text-muted-foreground mb-4">
         {action.warning}
       </p>
 

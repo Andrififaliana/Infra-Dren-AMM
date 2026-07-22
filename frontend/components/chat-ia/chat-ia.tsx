@@ -70,51 +70,39 @@ export function ChatIaWidget() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] flex-col rounded-2xl bg-background shadow-sm overflow-hidden">
+    <div className="flex h-[calc(100vh-8rem)] flex-col rounded-xl border bg-background overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-primary/5 to-primary/10 px-5 py-3.5">
+      <div className="flex items-center justify-between border-b px-5 py-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-sm">
-            <Bot className="h-5 w-5 text-white" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+            <Bot className="h-4 w-4 text-primary" />
           </div>
-          <div>
-            <h2 className="text-sm font-semibold text-foreground">Assistant IA InfraDren</h2>
-            <p className="text-xs text-muted-foreground">Analyse et gestion des données</p>
-          </div>
+          <h2 className="text-sm font-semibold text-foreground">Assistant IA</h2>
         </div>
-        <div className="flex items-center gap-2">
-          {messages.length > 0 && (
-            <button
-              onClick={() => {
-                clearConversation();
-                setShowSuggestions(true);
-              }}
-              className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-destructive transition-colors"
-              title="Nouvelle conversation"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
-          )}
-        </div>
+        {messages.length > 0 && (
+          <button
+            onClick={() => {
+              clearConversation();
+              setShowSuggestions(true);
+            }}
+            className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted transition-colors"
+            title="Nouvelle conversation"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6">
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-center py-12">
-            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 shadow-inner">
-              <Sparkles className="h-8 w-8 text-primary" />
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+              <Sparkles className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Assistant IA InfraDren
-            </h3>
-            <p className="max-w-md text-sm text-muted-foreground mb-8">
+            <p className="max-w-md text-sm text-muted-foreground mb-6">
               Posez des questions sur les infrastructures scolaires, 
-              demandez des analyses ou des modifications de données.
-              <br />
-              <span className="text-xs text-warning mt-1 block">
-                ⚠️ Toute modification nécessite une confirmation sévère.
-              </span>
+              demandez des analyses ou des modifications.
             </p>
 
             {/* Suggested questions */}
@@ -124,7 +112,7 @@ export function ChatIaWidget() {
                   <button
                     key={i}
                     onClick={() => handleSuggestedClick(q)}
-                    className="rounded-xl bg-muted/50 px-4 py-3 text-left text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200"
+                    className="rounded-lg border px-3 py-2.5 text-left text-xs text-muted-foreground hover:border-primary hover:text-primary transition-colors"
                   >
                     {q}
                   </button>
@@ -179,7 +167,7 @@ export function ChatIaWidget() {
       </div>
 
       {/* Input area */}
-      <div className="bg-background px-4 py-3 sm:px-6 shadow-sm">
+      <div className="border-t bg-background px-4 py-3 sm:px-6">
         <div className="flex items-center gap-2">
           <input
             ref={inputRef}
@@ -189,13 +177,13 @@ export function ChatIaWidget() {
             onKeyDown={handleKeyDown}
             placeholder="Posez votre question..."
             disabled={isLoading}
-            className="flex-1 rounded-xl border-2 border-input bg-muted/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-primary focus:bg-background disabled:opacity-50"
+            className="flex-1 rounded-lg border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-primary disabled:opacity-50"
           />
           <Button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
             size="sm"
-            className="h-10 w-10 rounded-xl p-0"
+            className="h-10 w-10 rounded-lg p-0"
           >
             <Send className="h-4 w-4" />
           </Button>
