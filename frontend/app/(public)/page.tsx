@@ -54,6 +54,33 @@ export default function HomePage() {
     <div>
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-background to-muted/20">
+        {/* Dark mode decorative background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Gradient orbs */}
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/20 to-primary/5 blur-3xl dark:from-primary/15 dark:to-primary/5"
+          />
+          <motion.div
+            animate={{ scale: [1.1, 1, 1.1], opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -bottom-40 -right-40 h-[450px] w-[450px] rounded-full bg-gradient-to-tl from-primary/15 to-transparent blur-3xl dark:from-primary/10"
+          />
+          <motion.div
+            animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.3, 0.15] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-primary/5 blur-3xl dark:bg-primary/8"
+          />
+          {/* Subtle grid pattern overlay - visible in both modes */}
+          <div
+            className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]"
+            style={{
+              backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+              backgroundSize: '40px 40px',
+            }}
+          />
+        </div>
         <div className="relative mx-auto max-w-5xl px-4 py-20 sm:py-32 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center">
             <Badge variant="outline" className="mb-6 px-4 py-1.5 text-sm font-medium">
