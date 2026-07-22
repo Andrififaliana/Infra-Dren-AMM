@@ -1,30 +1,35 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-interface LoadingSkeletonProps {
-  rows?: number;
-  columns?: number;
-}
-
-export function LoadingSkeleton({ rows = 5, columns = 4 }: LoadingSkeletonProps) {
+export function CardSkeleton() {
   return (
-    <div className="space-y-4">
-      {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex gap-4">
-          {Array.from({ length: columns }).map((_, j) => (
-            <Skeleton key={j} className="h-8 flex-1" />
-          ))}
+    <div className="rounded-2xl border bg-card p-6 shadow-sm">
+      <div className="flex items-start justify-between">
+        <div className="space-y-2 flex-1">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-8 w-16" />
         </div>
-      ))}
+        <Skeleton className="h-10 w-10 rounded-xl" />
+      </div>
     </div>
   );
 }
 
-export function CardSkeleton() {
+export function TableSkeleton({ rows = 5 }: { rows?: number }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-      <Skeleton className="mb-2 h-4 w-1/3" />
-      <Skeleton className="h-8 w-1/2" />
-      <Skeleton className="mt-2 h-3 w-2/3" />
+    <div className="rounded-xl border bg-card">
+      <div className="border-b p-4">
+        <Skeleton className="h-4 w-32" />
+      </div>
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="flex items-center gap-4 border-b p-4 last:border-0">
+          <Skeleton className="h-8 w-8 rounded-lg" />
+          <div className="flex-1 space-y-1">
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-3 w-1/2" />
+          </div>
+          <Skeleton className="h-6 w-16 rounded-full" />
+        </div>
+      ))}
     </div>
   );
 }
