@@ -48,17 +48,17 @@ export default function NouvelAleaPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input id="nomAleat" name="nomAleat" label="Nom de l'aléa *" placeholder="Ex: Inondation Ambohimanarina" required />
-            {errors.nomAleat && <p className="text-xs text-red-500">{errors.nomAleat}</p>}
+            {errors.nomAleat && <p className="text-xs text-destructive">{errors.nomAleat}</p>}
             <div className="grid grid-cols-2 gap-4">
               <Input id="typeAleat" name="typeAleat" label="Type d'aléa *" placeholder="Ex: INONDATION" required />
               <Input id="dateAleat" name="dateAleat" label="Date *" type="date" required />
             </div>
-            {errors.typeAleat && <p className="text-xs text-red-500">{errors.typeAleat}</p>}
-            {errors.dateAleat && <p className="text-xs text-red-500">{errors.dateAleat}</p>}
+            {errors.typeAleat && <p className="text-xs text-destructive">{errors.typeAleat}</p>}
+            {errors.dateAleat && <p className="text-xs text-destructive">{errors.dateAleat}</p>}
             <div>
-              <label htmlFor="explication" className="mb-1.5 block text-sm font-medium text-gray-700">Explication</label>
+              <label htmlFor="explication" className="mb-1.5 block text-sm font-medium text-foreground">Explication</label>
               <textarea id="explication" name="explication" rows={3}
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20"
                 placeholder="Description des impacts..."
               />
             </div>

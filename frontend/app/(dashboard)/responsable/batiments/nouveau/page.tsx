@@ -63,7 +63,7 @@ export default function NouveauBatimentPage() {
               id="etablissementId" name="etablissementId" label="Établissement *" required
               options={(etabs?.data ?? []).map((e) => ({ value: String(e.id), label: e.nomEtab }))}
             />
-            {errors.etablissementId && <p className="text-xs text-red-500">{errors.etablissementId}</p>}
+            {errors.etablissementId && <p className="text-xs text-destructive">{errors.etablissementId}</p>}
             <div className="grid grid-cols-2 gap-4">
               <Input id="srcFic" name="srcFic" label="Source de financement" />
               <Input id="agenceC" name="agenceC" label="Agence de construction" />

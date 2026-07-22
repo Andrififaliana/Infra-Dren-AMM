@@ -76,7 +76,7 @@ export default function NouvelEtablissementPage() {
             </div>
 
             {error && (
-              <p className="text-sm text-red-600">
+              <p className="text-sm text-destructive">
                 {error instanceof Error ? error.message : 'Erreur lors de la création'}
               </p>
             )}

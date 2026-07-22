@@ -52,7 +52,7 @@ export default function NouvelEquipementPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input id="nomEquip" name="nomEquip" label="Nom de l'équipement *" required />
-            {errors.nomEquip && <p className="text-xs text-red-500">{errors.nomEquip}</p>}
+            {errors.nomEquip && <p className="text-xs text-destructive">{errors.nomEquip}</p>}
             <div className="grid grid-cols-2 gap-4">
               <Select id="typeEquip" name="typeEquip" label="Type"
                 options={[{ value: '', label: 'Sélectionner' }, { value: 'MOBILIER', label: 'Mobilier' }, { value: 'MATERIEL_DIDACTIQUE', label: 'Didactique' }, { value: 'MATERIEL_SCIENTIFIQUE', label: 'Scientifique' }, { value: 'INFORMATIQUE', label: 'Informatique' }]}
@@ -65,7 +65,7 @@ export default function NouvelEquipementPage() {
             <Select id="salleId" name="salleId" label="Salle *" required
               options={(salles ?? []).map((s) => ({ value: String(s.idSalle), label: s.sigleSalle || `Salle #${s.idSalle}` }))}
             />
-            {errors.salleId && <p className="text-xs text-red-500">{errors.salleId}</p>}
+            {errors.salleId && <p className="text-xs text-destructive">{errors.salleId}</p>}
             <div className="flex justify-end gap-3">
               <Button variant="outline" type="button" onClick={() => router.back()}>Annuler</Button>
               <Button type="submit" loading={isPending}>Créer</Button>

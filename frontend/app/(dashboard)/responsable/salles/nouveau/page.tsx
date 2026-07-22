@@ -59,11 +59,11 @@ export default function NouvelleSallePage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input id="sigleSalle" name="sigleSalle" label="Sigle" placeholder="Ex: CLASSE-01" />
             <Input id="niveauSalle" name="niveauSalle" label="Niveau" type="number" min="0" required />
-            {errors.niveauSalle && <p className="text-xs text-red-500">{errors.niveauSalle}</p>}
+            {errors.niveauSalle && <p className="text-xs text-destructive">{errors.niveauSalle}</p>}
             <Select id="batimentId" name="batimentId" label="Bâtiment *" required
               options={(batiments ?? []).map((b) => ({ value: String(b.idBat), label: b.sigleBat || `#${b.idBat}` }))}
             />
-            {errors.batimentId && <p className="text-xs text-red-500">{errors.batimentId}</p>}
+            {errors.batimentId && <p className="text-xs text-destructive">{errors.batimentId}</p>}
             <div className="grid grid-cols-2 gap-4">
               <Select id="affectationSalle" name="affectationSalle" label="Affectation"
                 options={[
