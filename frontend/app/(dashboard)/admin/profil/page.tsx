@@ -1,10 +1,12 @@
 'use client';
 
 import { toast } from 'sonner';
-import { User, Mail, Shield, KeyRound, Loader2 } from 'lucide-react';
+import { User, Mail, Shield, KeyRound, Loader2, CalendarDays, BadgeCheck } from 'lucide-react';
 import { useProfile, useForgotPassword } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
 import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -19,105 +21,102 @@ export default function AdminProfilPage() {
 
   if (isLoading) {
     return (
-      <div>
+      <div className="mx-auto max-w-2xl">
         <Breadcrumb items={[{ label: 'Profil' }]} />
-        <Skeleton className="h-72" />
+        <Skeleton className="h-72 rounded-2xl" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div>
+      <div className="mx-auto max-w-2xl">
         <Breadcrumb items={[{ label: 'Profil' }]} />
         <div className="py-16 text-center">
-          <p className="text-gray-500">Impossible de charger le profil.</p>
+          <p className="text-muted-foreground">Impossible de charger le profil.</p>
         </div>
       </div>
     );
   }
+
+  const initials = user.nom.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
 
   return (
     <div className="mx-auto max-w-2xl">
       <Breadcrumb items={[{ label: 'Profil' }]} />
 
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Mon profil</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Informations personnelles et sécurité
-        </p>
+        <h1 className="text-2xl font-bold text-foreground">Mon profil</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Informations personnelles et sécurité</p>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5 text-green-500" />
-            Informations personnelles
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-gray-50/50 p-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-xl font-bold text-green-700">
-              {user.nom.charAt(0).toUpperCase()}
-            </div>
-            <div>
-              <p className="font-semibold text-gray-900">{user.nom}</p>
-              <p className="text-sm text-gray-500">{user.email}</p>
+      {/* Avatar + Identity Card */}
+      <Card className="mb-6 overflow-hidden">
+        <div className="h-24 bg-gradient-to-r from-primary/10 via-primary/5 to-background" />
+        <CardContent className="relative px-6 pb-6">
+          <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-12">
+            <Avatar className="h-24 w-24 border-4 border-background shadow-lg">
+              <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <div className="pb-1">
+              <h2 className="text-xl font-bold text-foreground">{user.nom}</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5">
+                <Mail className="h-3.5 w-3.5" />
+                {user.email}
+              </p>
             </div>
           </div>
 
+          <Separator className="my-6" />
+
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-lg border border-gray-100 p-4">
-              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-400">
-                <Mail className="h-3.5 w-3.5" /> Email
-              </div>
-              <p className="text-sm font-medium text-gray-900">{user.email}</p>
-            </div>
-            <div className="rounded-lg border border-gray-100 p-4">
-              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+            <div className="rounded-xl border bg-card p-4">
+              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 <Shield className="h-3.5 w-3.5" /> Rôle
               </div>
-              <p className="text-sm font-medium text-gray-900">
-                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
+              <p className="text-sm font-medium text-foreground">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
                   {ROLE_LABELS[user.role] || user.role}
                 </span>
               </p>
             </div>
-            <div className="rounded-lg border border-gray-100 p-4">
-              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-400">
-                <KeyRound className="h-3.5 w-3.5" /> Compte créé le
+            <div className="rounded-xl border bg-card p-4">
+              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <BadgeCheck className="h-3.5 w-3.5" /> Statut
               </div>
-              <p className="text-sm font-medium text-gray-900">
-                {new Date(user.createdAt).toLocaleDateString('fr-FR', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
+              <p className="text-sm font-medium text-foreground">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  {user.actif ? 'Actif' : 'Inactif'}
+                </span>
               </p>
             </div>
-            <div className="rounded-lg border border-gray-100 p-4">
-              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-400">
-                <Shield className="h-3.5 w-3.5" /> Statut
+            <div className="rounded-xl border bg-card p-4 sm:col-span-2">
+              <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <CalendarDays className="h-3.5 w-3.5" /> Compte créé le
               </div>
-              <p className="text-sm font-medium text-green-700">
-                <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium">
-                  ● {user.actif ? 'Actif' : 'Inactif'}
-                </span>
+              <p className="text-sm font-medium text-foreground">
+                {new Date(user.createdAt).toLocaleDateString('fr-FR', {
+                  year: 'numeric', month: 'long', day: 'numeric',
+                })}
               </p>
             </div>
           </div>
         </CardContent>
       </Card>
 
+      {/* Sécurité */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <KeyRound className="h-5 w-5 text-green-500" />
+            <KeyRound className="h-5 w-5 text-primary" />
             Sécurité
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="mb-4 text-sm text-gray-600">
+          <p className="mb-4 text-sm text-muted-foreground">
             Le changement de mot de passe est géré par Supabase Auth.
           </p>
           <Button
@@ -125,20 +124,12 @@ export default function AdminProfilPage() {
             disabled={isSending}
             onClick={() => {
               sendReset(user.email, {
-                onSuccess: () => {
-                  toast.success('Un email de réinitialisation vous a été envoyé.');
-                },
-                onError: () => {
-                  toast.error('Erreur lors de l\'envoi de l\'email.');
-                },
+                onSuccess: () => toast.success('Un email de réinitialisation vous a été envoyé.'),
+                onError: () => toast.error("Erreur lors de l'envoi de l'email."),
               });
             }}
           >
-            {isSending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <KeyRound className="mr-2 h-4 w-4" />
-            )}
+            {isSending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <KeyRound className="mr-2 h-4 w-4" />}
             {isSending ? 'Envoi en cours...' : 'Demander la réinitialisation du mot de passe'}
           </Button>
         </CardContent>
