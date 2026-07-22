@@ -113,7 +113,7 @@ export default function AProposPage() {
               <div className="flex-1">
                 <h2 className="text-2xl font-bold text-foreground">Remerciements</h2>
 
-                <div className="relative mt-6 rounded-xl bg-gradient-to-br from-primary/5 to-background border p-6">
+                <div className="relative mt-6 rounded-xl bg-gradient-to-br from-primary/5 to-background p-6 shadow-sm">
                   <Quote className="absolute -left-2 -top-2 h-8 w-8 text-primary/20" />
                   <p className="relative pl-4 text-lg leading-relaxed text-muted-foreground">
                     Nous tenons à exprimer notre profonde gratitude à la direction de la{' '}

@@ -126,7 +126,7 @@ export default function EtablissementsPage() {
         {/* View mode toggle */}
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">{meta ? `${formatNumber(meta.total)} établissements` : ''}</p>
-          <div className="flex items-center gap-1.5 rounded-xl border bg-background p-0.5 shadow-sm">
+          <div className="flex items-center gap-1.5 rounded-xl bg-muted/30 p-0.5 shadow-sm">
             <button onClick={() => setViewMode('list')}
               className={`rounded-lg p-2 transition-colors ${viewMode === 'list' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`} title="Vue liste">
               <List className="h-4 w-4" />
@@ -146,7 +146,7 @@ export default function EtablissementsPage() {
       {etablissements.length === 0 && viewMode !== 'map' ? (
         <EmptyState title="Aucun établissement trouvé" icon={<SearchX className="h-8 w-8" />} description={search ? 'Essayez de modifier votre recherche' : ''} />
       ) : viewMode === 'map' ? (
-        <div className="h-[600px] overflow-hidden rounded-2xl border">
+        <div className="h-[600px] overflow-hidden rounded-2xl shadow-sm">
           <EtablissementsMap schools={allEtablissements} showAleas={false} showTrajets={false}
             onSchoolClick={(id) => router.push(`/etablissements/${id}`)} />
         </div>
@@ -158,7 +158,7 @@ export default function EtablissementsPage() {
             const mainPhoto = etab.photos?.find((p) => p.estPrincipale) ?? etab.photos?.[0] ?? null;
             return (
               <motion.div key={etab.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.05 }}>
-                <Card className="cursor-pointer hover:border-primary/20 hover:shadow-md transition-all" onClick={() => router.push(`/etablissements/${etab.id}`)}>
+                <Card className="cursor-pointer hover:shadow-md transition-all" onClick={() => router.push(`/etablissements/${etab.id}`)}>
                   <div className="overflow-hidden rounded-t-2xl">
                     <EtablissementPhoto photo={mainPhoto} fixedHeight iconSize={16} className="w-full" />
                   </div>

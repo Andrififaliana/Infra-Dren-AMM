@@ -130,7 +130,7 @@ export default function StatistiquesPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b">
+                    <tr className="bg-muted/20">
                       <th className="px-4 py-3 text-left font-medium text-muted-foreground">District</th>
                       <th className="px-4 py-3 text-right font-medium text-muted-foreground">Établissements</th>
                       <th className="px-4 py-3 text-right font-medium text-muted-foreground">Bâtiments</th>
