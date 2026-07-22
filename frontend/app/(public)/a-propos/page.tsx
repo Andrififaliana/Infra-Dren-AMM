@@ -2,46 +2,37 @@
 
 import { motion } from 'motion/react';
 import {
-  Target,
-  Heart,
-  Mail,
-  Phone,
-  MapPin,
-  GraduationCap,
-  Building2,
-  Users,
-  Quote,
-  ChevronRight,
+  Target, Heart, Mail, Phone, MapPin,
+  GraduationCap, Building2, Users, Quote,
+  ChevronRight, ArrowUpRight,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 const stats = [
   {
     icon: GraduationCap,
     label: 'Établissements recensés',
     desc: 'Suivi complet des infrastructures',
-    color: 'from-green-50 to-green-100',
-    iconBg: 'bg-green-100 text-green-700',
+    iconBg: 'bg-primary/5 text-primary',
   },
   {
     icon: Building2,
     label: 'Infrastructures suivies',
     desc: 'Bâtiments, salles & équipements',
-    color: 'from-green-100 to-green-200',
-    iconBg: 'bg-green-200 text-green-800',
+    iconBg: 'bg-primary/10 text-primary/80',
   },
   {
     icon: MapPin,
     label: 'Région AMM',
     desc: "Amoron'i Mania, Madagascar",
-    color: 'from-green-200 to-green-50',
-    iconBg: 'bg-green-50 text-green-600',
+    iconBg: 'bg-primary/15 text-primary/70',
   },
 ];
 
 export default function AProposPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:py-16 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
       {/* ── Header ── */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -49,18 +40,14 @@ export default function AProposPage() {
         transition={{ duration: 0.5 }}
         className="relative text-center"
       >
-
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
           À propos de notre plateforme
         </h1>
-        <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-base sm:text-lg text-gray-500 leading-relaxed px-4">
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground leading-relaxed">
           Découvrez la mission, les remerciements et l&apos;équipe derrière
           la plateforme de suivi des infrastructures scolaires.
         </p>
-        <div className="mt-4 sm:mt-6 flex justify-center gap-2">
-          <span className="h-1 w-12 sm:w-16 rounded-full bg-green-500" />
-          <span className="h-1 w-3 sm:w-4 rounded-full bg-green-300" />
-        </div>
+        <Separator className="mx-auto mt-6 max-w-[100px]" />
       </motion.div>
 
       {/* ── Mission ── */}
@@ -69,30 +56,30 @@ export default function AProposPage() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="mt-12 sm:mt-20"
+        className="mt-20"
       >
-        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
+        <Card className="overflow-hidden border-0 shadow-md">
           <div className="grid md:grid-cols-5">
             {/* Left accent panel */}
-            <div className="relative flex items-center justify-center bg-green-600 p-8 sm:p-10 md:col-span-2">
+            <div className="relative flex items-center justify-center bg-primary p-10 md:col-span-2">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.12)_0%,transparent_60%)]" />
               <div className="relative text-center">
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm">
                   <Target className="h-10 w-10 text-white" />
                 </div>
                 <h2 className="mt-5 text-2xl font-bold text-white">Notre Mission</h2>
-                <p className="mt-1 text-sm text-green-200">Objectif & vision</p>
+                <p className="mt-1 text-sm text-primary-foreground/70">Objectif & vision</p>
               </div>
             </div>
             {/* Right content */}
-            <div className="flex flex-col justify-center p-6 sm:p-8 md:col-span-3 md:p-10">
-              <p className="text-sm sm:text-lg leading-relaxed text-gray-700">
+            <div className="flex flex-col justify-center p-8 md:col-span-3 md:p-10">
+              <p className="text-lg leading-relaxed text-muted-foreground">
                 Notre plateforme a été conçue dans le but de représenter de manière
                 précise les infrastructures scolaires au sein de la{' '}
-                <strong className="text-green-700">DREN Amoron&apos;i Mania</strong>.
+                <strong className="text-primary">DREN Amoron&apos;i Mania</strong>.
               </p>
-              <div className="mt-6 border-l-4 border-green-200 bg-green-50/50 pl-5 py-4 rounded-r-lg">
-                <p className="text-sm sm:text-lg leading-relaxed text-gray-700">
+              <div className="mt-6 border-l-4 border-primary/20 bg-primary/5 pl-5 py-4 rounded-r-lg">
+                <p className="text-lg leading-relaxed text-muted-foreground">
                   L&apos;objectif est de fournir des données claires et détaillées sur
                   l&apos;état des bâtiments, des salles de classe et des ressources
                   disponibles, afin de faciliter la prise de décision et d&apos;améliorer
@@ -101,7 +88,7 @@ export default function AProposPage() {
               </div>
             </div>
           </div>
-        </div>
+        </Card>
       </motion.div>
 
       {/* ── Remerciements ── */}
@@ -112,36 +99,27 @@ export default function AProposPage() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="mt-12"
       >
-        <div className="relative overflow-hidden rounded-2xl border border-green-100 bg-white shadow-sm">
-          {/* Decorative top accent */}
-          <div className="h-1.5 w-full bg-gradient-to-r from-green-400 via-green-500 to-green-600" />
+        <Card className="relative overflow-hidden">
+          <div className="h-1.5 w-full bg-gradient-to-r from-primary/40 via-primary to-primary/60" />
 
-          <div className="p-6 sm:p-8 md:p-10">
+          <div className="p-8 md:p-10">
             <div className="flex items-start gap-5">
-              {/* Icon */}
               <div className="hidden shrink-0 sm:flex">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-green-50">
-                  <Heart className="h-7 w-7 text-green-500" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/5">
+                  <Heart className="h-7 w-7 text-primary" />
                 </div>
               </div>
 
               <div className="flex-1">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-2xl font-bold text-gray-900">Remerciements</h2>
-                  <div className="hidden sm:flex items-center gap-1">
-                    <span className="h-0.5 w-8 rounded-full bg-green-300" />
-                    <span className="h-0.5 w-3 rounded-full bg-green-200" />
-                  </div>
-                </div>
+                <h2 className="text-2xl font-bold text-foreground">Remerciements</h2>
 
-                {/* Quote card */}
-                <div className="relative mt-6 rounded-xl bg-gradient-to-br from-green-50 to-white border border-green-100 p-6">
-                  <Quote className="absolute -left-2 -top-2 h-8 w-8 text-green-200" />
-                  <p className="relative pl-4 text-sm sm:text-lg leading-relaxed text-gray-700">
+                <div className="relative mt-6 rounded-xl bg-gradient-to-br from-primary/5 to-background border p-6">
+                  <Quote className="absolute -left-2 -top-2 h-8 w-8 text-primary/20" />
+                  <p className="relative pl-4 text-lg leading-relaxed text-muted-foreground">
                     Nous tenons à exprimer notre profonde gratitude à la direction de la{' '}
-                    <strong className="text-green-700">DREN Amoron&apos;i Mania</strong>,
+                    <strong className="text-primary">DREN Amoron&apos;i Mania</strong>,
                     et plus particulièrement à{' '}
-                    <strong className="text-green-700">
+                    <strong className="text-primary">
                       Monsieur MIHARIMANANIRINA AINA GERALD
                     </strong>
                     , pour leur soutien précieux et leur collaboration indispensable à
@@ -149,18 +127,17 @@ export default function AProposPage() {
                   </p>
                 </div>
 
-                {/* Signature line */}
-                <div className="mt-5 flex items-center gap-3 text-sm text-gray-400">
-                  <span className="inline-block h-px flex-1 bg-gray-200" />
-                  <span className="flex items-center gap-1 text-green-600">
+                <div className="mt-5 flex items-center gap-3 text-sm text-muted-foreground">
+                  <span className="inline-block h-px flex-1 bg-border" />
+                  <span className="flex items-center gap-1 text-primary">
                     <Users className="h-3.5 w-3.5" /> Direction DREN AMM
                   </span>
-                  <span className="inline-block h-px flex-1 bg-gray-200" />
+                  <span className="inline-block h-px flex-1 bg-border" />
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </Card>
       </motion.div>
 
       {/* ── Stats ── */}
@@ -169,21 +146,20 @@ export default function AProposPage() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="mt-8 sm:mt-12 grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-3"
+        className="mt-12 grid gap-5 grid-cols-1 sm:grid-cols-3"
       >
         {stats.map((item) => {
           const Icon = item.icon;
           return (
-            <div
-              key={item.label}
-              className={`rounded-2xl bg-gradient-to-br ${item.color} border border-gray-100/50 p-6 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md`}
-            >
-              <div className={`mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl ${item.iconBg}`}>
-                <Icon className="h-7 w-7" />
-              </div>
-              <h3 className="font-bold text-gray-900">{item.label}</h3>
-              <p className="mt-1 text-sm text-gray-500">{item.desc}</p>
-            </div>
+            <Card key={item.label} className="text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+              <CardContent className="p-6">
+                <div className={`mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl ${item.iconBg}`}>
+                  <Icon className="h-7 w-7" />
+                </div>
+                <h3 className="font-bold text-foreground">{item.label}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{item.desc}</p>
+              </CardContent>
+            </Card>
           );
         })}
       </motion.div>
@@ -196,63 +172,53 @@ export default function AProposPage() {
         transition={{ duration: 0.5, delay: 0.4 }}
         className="mt-12"
       >
-        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+        <Card className="overflow-hidden border-0 shadow-md">
           <div className="grid md:grid-cols-5">
-            {/* Left panel */}
-            <div className="relative flex items-center justify-center bg-gray-900 p-6 sm:p-8 md:col-span-2">
+            <div className="relative flex items-center justify-center bg-foreground p-8 md:col-span-2">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.06)_0%,transparent_60%)]" />
               <div className="relative text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-background/10 backdrop-blur-sm">
                   <Mail className="h-8 w-8 text-white" />
                 </div>
-                <h2 className="mt-4 text-xl font-bold text-white">
-                  Contact administrateur
-                </h2>
-                <p className="mt-1 text-sm text-gray-400">
-                  Pour toute question ou suggestion
-                </p>
+                <h2 className="mt-4 text-xl font-bold text-white">Contact administrateur</h2>
+                <p className="mt-1 text-sm text-muted-foreground/60">Pour toute question ou suggestion</p>
               </div>
             </div>
-            {/* Right content */}
-            <div className="flex flex-col justify-center gap-3 sm:gap-4 p-6 sm:p-8 md:col-span-3">
+            <div className="flex flex-col justify-center gap-4 p-8 md:col-span-3">
               <a
                 href="mailto:miharimananirina@gmail.com"
-                className="group flex items-center gap-4 rounded-xl border border-gray-100 bg-gray-50/80 p-4 transition-all hover:border-green-200 hover:bg-green-50 hover:shadow-sm"
+                className="group flex items-center gap-4 rounded-xl border bg-card p-4 transition-all hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600 transition-colors group-hover:bg-green-200">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
                   <Mail className="h-5 w-5" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
-                    Email
-                  </p>
-                  <p className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors">
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</p>
+                  <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
                     miharimananirina@gmail.com
                   </p>
                 </div>
-                <ChevronRight className="h-4 w-4 text-gray-300 transition-colors group-hover:text-green-500" />
+                <ArrowUpRight className="h-4 w-4 text-muted-foreground/40 transition-colors group-hover:text-primary" />
               </a>
 
               <a
                 href="tel:+261346403428"
-                className="group flex items-center gap-4 rounded-xl border border-gray-100 bg-gray-50/80 p-4 transition-all hover:border-green-200 hover:bg-green-50 hover:shadow-sm"
+                className="group flex items-center gap-4 rounded-xl border bg-card p-4 transition-all hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600 transition-colors group-hover:bg-green-200">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
                   <Phone className="h-5 w-5" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
-                    Téléphone
-                  </p>
-                  <p className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors">
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Téléphone</p>
+                  <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
                     034 64 034 28
                   </p>
                 </div>
-                <ChevronRight className="h-4 w-4 text-gray-300 transition-colors group-hover:text-green-500" />
+                <ArrowUpRight className="h-4 w-4 text-muted-foreground/40 transition-colors group-hover:text-primary" />
               </a>
             </div>
           </div>
-        </div>
+        </Card>
       </motion.div>
     </div>
   );
