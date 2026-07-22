@@ -103,8 +103,8 @@ export default function IALogsPage() {
                     ) : '...'}
                   </p>
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
-                  <BarChart3 className="h-5 w-5 text-amber-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-chart-2/10">
+                  <BarChart3 className="h-5 w-5 text-chart-2" />
                 </div>
               </div>
             </CardContent>
@@ -135,8 +135,8 @@ export default function IALogsPage() {
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Temps Moyen</p>
                   <p className="text-2xl font-bold text-foreground mt-1">{stats ? `${stats.avgResponseTimeMs} ms` : '...'}</p>
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
-                  <Clock className="h-5 w-5 text-purple-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-chart-3/10">
+                  <Clock className="h-5 w-5 text-chart-3" />
                 </div>
               </div>
             </CardContent>
@@ -149,7 +149,7 @@ export default function IALogsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm">
-              <BarChart3 className="h-4 w-4 text-primary" />
+              <BarChart3 className="h-4 w-4 text-chart-1" />
               Requêtes (dernières 24h)
             </CardTitle>
           </CardHeader>
@@ -161,8 +161,8 @@ export default function IALogsPage() {
                   <XAxis dataKey="hour" tick={{ fontSize: 10 }} />
                   <YAxis tick={{ fontSize: 10 }} />
                   <Tooltip contentStyle={{ borderRadius: 12, fontSize: 12 }} />
-                  <Bar dataKey="succes" name="Succès" fill="#22c55e" radius={[3, 3, 0, 0]} />
-                  <Bar dataKey="requetes" name="Total" fill="#e2e8f0" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="succes" name="Succès" fill="hsl(var(--chart-1))" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="requetes" name="Total" fill="hsl(var(--muted))" radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -172,7 +172,7 @@ export default function IALogsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm">
-              <Clock className="h-4 w-4 text-purple-500" />
+              <Clock className="h-4 w-4 text-chart-4" />
               Temps de réponse (ms, dernières 24h)
             </CardTitle>
           </CardHeader>
@@ -184,7 +184,7 @@ export default function IALogsPage() {
                   <XAxis dataKey="hour" tick={{ fontSize: 10 }} />
                   <YAxis tick={{ fontSize: 10 }} unit=" ms" />
                   <Tooltip contentStyle={{ borderRadius: 12, fontSize: 12 }} />
-                  <Line type="monotone" dataKey="temps" name="Temps (ms)" stroke="#8b5cf6" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="temps" name="Temps (ms)" stroke="hsl(var(--chart-3))" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
