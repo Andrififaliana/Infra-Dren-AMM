@@ -4,7 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { School, Home, BarChart3, Info, Shield, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { School, Home, BarChart3, Info, Shield, Menu, X, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 const navLinks = [
@@ -14,38 +16,26 @@ const navLinks = [
   { href: "/a-propos", label: "À propos", icon: Info },
 ];
 
-export default function PublicLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       {/* Sticky Header */}
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-sm">
-        <div className="mx-auto flex h-14 sm:h-16 max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5">
-            <img
-              src="/logo_infra.jpg"
-              alt="InfraDren AMM"
-              className="h-7 sm:h-9 w-auto"
-            />
-            <span className="text-base sm:text-lg font-bold text-slate-800">
-              InfraDren
-            </span>
-            <span className="hidden sm:inline text-sm text-slate-300">AMM</span>
+          <Link href="/" className="flex items-center gap-2.5">
+            <img src="/logo_infra.jpg" alt="InfraDren AMM" className="h-8 w-auto" />
+            <span className="text-lg font-bold text-foreground">InfraDren</span>
+            <span className="hidden sm:inline text-sm text-muted-foreground">AMM</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((link) => {
-              const isActive =
-                pathname === link.href ||
-                (link.href !== "/" && pathname.startsWith(link.href));
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               const Icon = link.icon;
               return (
                 <Link
@@ -54,8 +44,8 @@ export default function PublicLayout({
                   className={cn(
                     "relative flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors",
                     isActive
-                      ? "text-green-700 bg-green-50"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100",
+                      ? "text-primary bg-primary/5"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent",
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -63,7 +53,7 @@ export default function PublicLayout({
                   {isActive && (
                     <motion.div
                       layoutId="activeTab"
-                      className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-green-600"
+                      className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-primary"
                     />
                   )}
                 </Link>
@@ -72,33 +62,27 @@ export default function PublicLayout({
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-1.5 sm:gap-3">
-            <Link
-              href="/login"
-              className="hidden sm:inline-flex items-center gap-2 rounded-xl border-2 border-green-200 bg-white px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-green-700 hover:bg-green-50 hover:border-green-300 transition-all"
-            >
-              <Shield className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-              <span>Administration</span>
-            </Link>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" asChild className="hidden sm:inline-flex gap-2">
+              <Link href="/login">
+                <Shield className="h-4 w-4" />
+                Administration
+              </Link>
+            </Button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="rounded-xl p-1.5 sm:p-2 text-slate-600 hover:bg-slate-100 transition-colors md:hidden"
+              className="rounded-xl p-2 text-muted-foreground hover:bg-accent transition-colors md:hidden"
               aria-label="Menu mobile"
             >
-              {mobileMenuOpen ? (
-                <X className="h-5 w-5 sm:h-6 sm:w-6" />
-              ) : (
-                <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
-              )}
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu - Full screen drawer */}
+        {/* Mobile Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <>
-              {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -106,19 +90,16 @@ export default function PublicLayout({
                 className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
                 onClick={() => setMobileMenuOpen(false)}
               />
-              {/* Drawer */}
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="absolute left-0 right-0 top-14 z-50 border-t border-slate-200 bg-white md:hidden shadow-xl"
+                className="absolute left-0 right-0 top-16 z-50 border-t bg-background md:hidden shadow-xl"
               >
-                <nav className="space-y-0.5 px-3 py-3">
+                <nav className="space-y-0.5 p-3">
                   {navLinks.map((link) => {
-                    const isActive =
-                      pathname === link.href ||
-                      (link.href !== "/" && pathname.startsWith(link.href));
+                    const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
                     const Icon = link.icon;
                     return (
                       <Link
@@ -126,24 +107,27 @@ export default function PublicLayout({
                         href={link.href}
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
-                          "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all",
+                          "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-all",
                           isActive
-                            ? "bg-green-50 text-green-700"
-                            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+                            ? "bg-primary/5 text-primary"
+                            : "text-muted-foreground hover:bg-accent hover:text-foreground",
                         )}
                       >
-                        <Icon className="h-4.5 w-4.5" />
-                        {link.label}
+                        <span className="flex items-center gap-3">
+                          <Icon className="h-4 w-4" />
+                          {link.label}
+                        </span>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
                       </Link>
                     );
                   })}
-                  <div className="my-2 border-t border-slate-100" />
+                  <Separator className="my-2" />
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm active:scale-[0.98] transition-transform"
+                    className="flex items-center gap-3 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-sm active:scale-[0.98] transition-transform"
                   >
-                    <Shield className="h-4.5 w-4.5" />
+                    <Shield className="h-4 w-4" />
                     Administration
                   </Link>
                 </nav>
@@ -157,65 +141,39 @@ export default function PublicLayout({
       <main>{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-slate-100">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
-          <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <footer className="border-t bg-muted/30">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <img
-                  src="/logo_infra.jpg"
-                  alt="InfraDren AMM"
-                  className="h-8 w-auto"
-                />
-                <span className="font-bold text-slate-800">InfraDren</span>
+                <img src="/logo_infra.jpg" alt="InfraDren AMM" className="h-8 w-auto" />
+                <span className="font-bold text-foreground">InfraDren</span>
               </div>
-              <p className="text-sm text-slate-500">
-                Plateforme de gestion et de suivi des infrastructures scolaires
-                de la région AMM.
+              <p className="text-sm text-muted-foreground">
+                Plateforme de gestion et de suivi des infrastructures scolaires de la région AMM.
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-slate-800 mb-3">Liens</h4>
-              <ul className="space-y-2 text-sm text-slate-500">
-                <li>
-                  <Link
-                    href="/etablissements"
-                    className="hover:text-green-600 transition-colors"
-                  >
-                    Établissements
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/statistiques"
-                    className="hover:text-green-600 transition-colors"
-                  >
-                    Statistiques
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/login"
-                    className="hover:text-green-600 transition-colors"
-                  >
-                    Administration
-                  </Link>
-                </li>
+              <h4 className="font-semibold text-foreground mb-3">Liens</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link href="/etablissements" className="hover:text-primary transition-colors">Établissements</Link></li>
+                <li><Link href="/statistiques" className="hover:text-primary transition-colors">Statistiques</Link></li>
+                <li><Link href="/login" className="hover:text-primary transition-colors">Administration</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-slate-800 mb-3">Contact</h4>
-              <ul className="space-y-2 text-sm text-slate-500">
+              <h4 className="font-semibold text-foreground mb-3">Contact</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>DREN AMM</li>
                 <li>contact@dren-amm.mg</li>
                 <li>+261 34 12 345 67</li>
               </ul>
             </div>
-          </div>{" "}
-          <div className="mt-6 sm:mt-8 border-t border-slate-200 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-slate-400">
-            &copy; {new Date().getFullYear()} InfraDren AMM. Tous droits
-            réservés.
           </div>
+          <Separator className="my-8" />
+          <p className="text-center text-sm text-muted-foreground/60">
+            &copy; {new Date().getFullYear()} InfraDren AMM. Tous droits réservés.
+          </p>
         </div>
       </footer>
     </div>
