@@ -12,7 +12,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
-import { LogOut, User, Globe, Menu } from 'lucide-react';
+import { LogOut, User, Globe, Menu, Moon, Sun } from 'lucide-react';
+import { useTheme } from '@/hooks/use-theme';
 import Link from 'next/link';
 
 interface NavbarProps {
@@ -22,6 +23,7 @@ interface NavbarProps {
 export function Navbar({ onMenuToggle }: NavbarProps) {
   const { user, isAuthenticated, logout } = useAuthStore();
   const router = useRouter();
+  const { theme, toggleTheme, mounted } = useTheme();
 
   const handleLogout = () => {
     logout();
@@ -56,6 +58,16 @@ export function Navbar({ onMenuToggle }: NavbarProps) {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Theme toggle */}
+          {mounted && (
+            <button
+              onClick={toggleTheme}
+              className="rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+              title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+            >
+              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+          )}
           {isAuthenticated ? (
             <>
               <Link

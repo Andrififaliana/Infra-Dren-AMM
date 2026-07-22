@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { School, Home, BarChart3, Info, Shield, Menu, X, ChevronRight } from "lucide-react";
+import { School, Home, BarChart3, Info, Shield, Menu, X, ChevronRight, Moon, Sun } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useTheme } from '@/hooks/use-theme';
 
 const navLinks = [
   { href: "/", label: "Accueil", icon: Home },
@@ -18,6 +19,7 @@ const navLinks = [
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme, mounted } = useTheme();
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,6 +64,16 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
           {/* Right actions */}
           <div className="flex items-center gap-3">
+            {/* Theme toggle */}
+            {mounted && (
+              <button
+                onClick={toggleTheme}
+                className="rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+              >
+                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
+            )}
             <Link
               href="/login"
               className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-input bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-colors"
