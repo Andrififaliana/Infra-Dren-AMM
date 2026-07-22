@@ -31,7 +31,7 @@ const EtablissementsMap = dynamic(
   )}
 );
 
-const statusIcons = { success: CheckCircle, warning: Wrench, danger: AlertTriangle };
+const statusIcons = { success: CheckCircle, warning: Wrench, destructive: AlertTriangle };
 
 export default function EtablissementsPage() {
   const router = useRouter();

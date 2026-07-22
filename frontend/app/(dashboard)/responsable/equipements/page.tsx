@@ -150,7 +150,7 @@ export default function EquipementsPage() {
                 <div className="flex items-center gap-2 text-xs">
                   {item.etat ? (
                     <Badge
-                      variant={item.etat === 'BON' ? 'success' : item.etat === 'MOYEN' ? 'warning' : 'danger'}
+                      variant={item.etat === 'BON' ? 'success' : item.etat === 'MOYEN' ? 'warning' : 'destructive'}
                       className="text-[10px] px-1.5 py-0.5"
                     >
                       {item.etat}

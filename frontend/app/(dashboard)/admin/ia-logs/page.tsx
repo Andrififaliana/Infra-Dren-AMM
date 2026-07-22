@@ -243,7 +243,7 @@ export default function IALogsPage() {
                   {/* Mobile: affichage compact */}
                   <div className="md:hidden flex items-center justify-between mb-1">
                     <span className="text-xs text-gray-500">{formatDateShort(log.createdAt)}</span>
-                    <Badge variant={log.success ? 'success' : 'danger'}>
+                    <Badge variant={log.success ? 'success' : 'destructive'}>
                       {log.success ? 'Succès' : 'Échec'}
                     </Badge>
                   </div>
@@ -278,7 +278,7 @@ export default function IALogsPage() {
                     {log.promptLength}c → {log.responseLength}c
                   </span>
                   <span className="hidden md:block">
-                    <Badge variant={log.success ? 'success' : 'danger'}>
+                    <Badge variant={log.success ? 'success' : 'destructive'}>
                       {log.success ? 'OK' : 'ERR'}
                     </Badge>
                   </span>

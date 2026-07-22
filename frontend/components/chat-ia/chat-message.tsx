@@ -187,7 +187,7 @@ export function ActionPreviewCard({
             >
               <Button
                 size="sm"
-                variant={action.actionType === 'delete' ? 'danger' : 'primary'}
+                variant={action.actionType === 'delete' ? 'destructive' : 'default'}
                 onClick={handleFirstClick}
                 disabled={isExecuting}
                 className="relative"
@@ -207,7 +207,7 @@ export function ActionPreviewCard({
             >
               <Button
                 size="sm"
-                variant="danger"
+                variant="destructive"
                 onClick={handleSecondClick}
                 disabled={isExecuting}
                 loading={isExecuting}

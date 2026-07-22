@@ -35,5 +35,5 @@ export function getEtablissementStatus(item: { _count?: { batiments?: number }; 
   if (batiments >= 1) {
     return { label: 'À surveiller', variant: 'warning' as const };
   }
-  return { label: 'Critique', variant: 'danger' as const };
+  return { label: 'Critique', variant: 'destructive' as const };
 }

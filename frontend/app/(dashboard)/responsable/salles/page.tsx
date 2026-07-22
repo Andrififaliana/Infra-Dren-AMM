@@ -182,7 +182,7 @@ export default function SallesPage() {
                     {item.batiment?.sigleBat ?? `#${item.batimentId}`}
                   </span>
                   {item.etatSalle && (
-                    <Badge variant={item.etatSalle === 'BON' ? 'success' : item.etatSalle === 'MOYEN' ? 'warning' : 'danger'} className="text-[10px] px-1.5 py-0">
+                    <Badge variant={item.etatSalle === 'BON' ? 'success' : item.etatSalle === 'MOYEN' ? 'warning' : 'destructive'} className="text-[10px] px-1.5 py-0">
                       {item.etatSalle}
                     </Badge>
                   )}

@@ -21,20 +21,6 @@
   --color-input: hsl(214.3 31.8% 91.4%);
   --color-ring: hsl(142.1 76.2% 36.3%);
   --radius: 0.75rem;
-
-  /* Animation keyframes */
-  --animate-in: animate-in 0.2s ease-out;
-  --animate-out: animate-out 0.2s ease-in;
-}
-
-@keyframes animate-in {
-  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-@keyframes animate-out {
-  from { opacity: 1; transform: scale(1) translateY(0); }
-  to { opacity: 0; transform: scale(0.95) translateY(-4px); }
 }
 
 @layer base {
@@ -47,62 +33,92 @@
   }
 }
 
-/* Radix UI animation utilities */
-@utility animate-in {
-  animation: animate-in 0.2s ease-out;
-}
-@utility animate-out {
-  animation: animate-out 0.2s ease-in;
-}
-@utility fade-in-0 {
-  --tw-fade-from: 0;
-}
-@utility fade-out-0 {
-  --tw-fade-to: 0;
-}
-@utility zoom-in-95 {
-  --tw-zoom-from: 0.95;
-}
-@utility zoom-out-95 {
-  --tw-zoom-to: 0.95;
+/* Radix UI Dialog / Popover / Dropdown Menu animations */
+@keyframes in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* Slide animations for Radix */
-@utility slide-in-from-top-2 {
-  --tw-slide-from-y: -8px;
+@keyframes out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
 }
-@utility slide-in-from-bottom-2 {
-  --tw-slide-from-y: 8px;
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-@utility slide-in-from-left-2 {
-  --tw-slide-from-x: -8px;
+
+@keyframes slideDown {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(8px); }
 }
-@utility slide-in-from-right-2 {
-  --tw-slide-from-x: 8px;
+
+/* Utility classes for Radix state-based animations */
+.radix-state-open\:animate-in[data-state="open"],
+[data-state="open"] > .radix-state-open\:animate-in {
+  animation: in 0.2s ease-out;
 }
-@utility slide-out-to-top-2 {
-  --tw-slide-to-y: -8px;
+
+.radix-state-closed\:animate-out[data-state="closed"],
+[data-state="closed"] > .radix-state-closed\:animate-out {
+  animation: out 0.15s ease-in;
 }
-@utility slide-out-to-bottom-2 {
-  --tw-slide-to-y: 8px;
+
+/* Dialog overlay animation */
+.DialogOverlay[data-state="open"],
+[data-state="open"] > .DialogOverlay,
+[data-state="open"].DialogOverlay {
+  animation: in 0.2s ease-out;
 }
-@utility slide-out-to-left-2 {
-  --tw-slide-to-x: -8px;
+
+.DialogOverlay[data-state="closed"],
+[data-state="closed"] > .DialogOverlay,
+[data-state="closed"].DialogOverlay {
+  animation: out 0.15s ease-in;
 }
-@utility slide-out-to-right-2 {
-  --tw-slide-to-x: 8px;
+
+.DialogContent[data-state="open"],
+[data-state="open"] > .DialogContent,
+[data-state="open"].DialogContent {
+  animation: in 0.2s ease-out;
 }
-@utility slide-in-from-left-1\\/2 {
-  --tw-slide-from-x: -50%;
+
+.DialogContent[data-state="closed"],
+[data-state="closed"] > .DialogContent,
+[data-state="closed"].DialogContent {
+  animation: out 0.15s ease-in;
 }
-@utility slide-out-to-left-1\\/2 {
-  --tw-slide-to-x: -50%;
+
+/* Dropdown Menu animations */
+.DropdownMenuContent[data-state="open"],
+[data-state="open"] > .DropdownMenuContent,
+[data-state="open"].DropdownMenuContent {
+  animation: slideUp 0.15s ease-out;
 }
-@utility slide-in-from-top-\\[48\\%\\] {
-  --tw-slide-from-y: -48%;
+
+.DropdownMenuContent[data-state="closed"],
+[data-state="closed"] > .DropdownMenuContent,
+[data-state="closed"].DropdownMenuContent {
+  animation: slideDown 0.1s ease-in;
 }
-@utility slide-out-to-top-\\[48\\%\\] {
-  --tw-slide-to-y: -48%;
+
+/* Popover animations */
+.PopoverContent[data-state="open"],
+[data-state="open"] > .PopoverContent,
+[data-state="open"].PopoverContent {
+  animation: slideUp 0.15s ease-out;
+}
+
+.PopoverContent[data-state="closed"],
+[data-state="closed"] > .PopoverContent,
+[data-state="closed"].PopoverContent {
+  animation: slideDown 0.1s ease-in;
+}
+
+/* Tooltip animations */
+.TooltipContent[data-state="delayed-open"] {
+  animation: slideUp 0.15s ease-out;
 }
 
 @utility container {

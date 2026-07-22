@@ -27,10 +27,10 @@ export default function LogsPage() {
   });
 
   const actionBadge = (action: string) => {
-    const map: Record<string, 'success' | 'warning' | 'danger' | 'info'> = {
+    const map: Record<string, 'success' | 'warning' | 'destructive' | 'info'> = {
       CREATION: 'success',
       MODIFICATION: 'warning',
-      SUPPRESSION: 'danger',
+      SUPPRESSION: 'destructive',
     };
     return map[action] || 'default';
   };

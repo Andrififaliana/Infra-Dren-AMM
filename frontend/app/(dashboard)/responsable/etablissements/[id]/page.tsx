@@ -375,7 +375,7 @@ export default function EditEtablissementPage() {
                 <Pencil className="mr-1 h-4 w-4" /> {etablissement.directeur ? 'Modifier' : 'Ajouter'}
               </Button>
               {etablissement.directeur && (
-                <Button variant="danger" size="sm" onClick={() => setDirDelModalOpen(true)}>
+                <Button variant="destructive" size="sm" onClick={() => setDirDelModalOpen(true)}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               )}
@@ -435,11 +435,11 @@ export default function EditEtablissementPage() {
                       <div className="flex gap-1.5">
                         {d.estTitre && <Badge variant="success">Titre</Badge>}
                         {d.estEnceinteEtab && <Badge variant="info">Enceinte</Badge>}
-                        {d.estLitigieux && <Badge variant="danger">Litigieux</Badge>}
+                        {d.estLitigieux && <Badge variant="destructive">Litigieux</Badge>}
                       </div>
                       <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                         <Button variant="ghost" size="sm" onClick={() => openDesModal(d)}><Pencil className="h-3.5 w-3.5" /></Button>
-                        <Button variant="danger" size="sm" onClick={() => setDesDelTarget(d)}>
+                        <Button variant="destructive" size="sm" onClick={() => setDesDelTarget(d)}>
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
@@ -485,12 +485,12 @@ export default function EditEtablissementPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant={s.existenceStruc ? 'success' : 'danger'}>
+                      <Badge variant={s.existenceStruc ? 'success' : 'destructive'}>
                         {s.existenceStruc ? 'Existant' : 'Inexistant'}
                       </Badge>
                       <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                         <Button variant="ghost" size="sm" onClick={() => openStrModal(s)}><Pencil className="h-3.5 w-3.5" /></Button>
-                        <Button variant="danger" size="sm" onClick={() => setStrDelTarget(s)}>
+                        <Button variant="destructive" size="sm" onClick={() => setStrDelTarget(s)}>
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
@@ -627,7 +627,7 @@ export default function EditEtablissementPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setDirDelModalOpen(false)}>Annuler</Button>
-          <Button variant="danger" onClick={handleDeleteDirecteur} loading={dirDelLoading}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleDeleteDirecteur} loading={dirDelLoading}>Supprimer</Button>
         </div>
       </Modal>
 
@@ -638,7 +638,7 @@ export default function EditEtablissementPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setDesDelTarget(null)}>Annuler</Button>
-          <Button variant="danger" onClick={handleDeleteDesignation} loading={desDelLoading}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleDeleteDesignation} loading={desDelLoading}>Supprimer</Button>
         </div>
       </Modal>
 
@@ -649,7 +649,7 @@ export default function EditEtablissementPage() {
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setStrDelTarget(null)}>Annuler</Button>
-          <Button variant="danger" onClick={handleDeleteStructure} loading={strDelLoading}>Supprimer</Button>
+          <Button variant="destructive" onClick={handleDeleteStructure} loading={strDelLoading}>Supprimer</Button>
         </div>
       </Modal>
 
