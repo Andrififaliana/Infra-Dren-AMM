@@ -82,7 +82,7 @@ export function ActionPreviewCard({
 
   const actionColors = {
     create: { bg: 'bg-blue-50', badge: 'bg-blue-600', label: 'CRÉATION' },
-    update: { bg: 'bg-amber-50', badge: 'bg-amber-600', label: 'MODIFICATION' },
+    update: { bg: 'bg-chart-2/10', badge: 'bg-chart-2', label: 'MODIFICATION' },
     delete: { bg: 'bg-red-50', badge: 'bg-red-600', label: 'SUPPRESSION' },
   };
 

@@ -22,6 +22,7 @@
   --color-border: hsl(210 40% 93%);
   --color-input: hsl(210 40% 91%);
   --color-ring: hsl(142.1 70.6% 45.3%); /* #22C55E - Vert */
+  --color-warning: hsl(24.6 95% 53.1%);     /* #F97316 - Orange - alias */
   --color-chart-1: hsl(142.1 70.6% 45.3%); /* #22C55E - Vert */
   --color-chart-2: hsl(24.6 95% 53.1%);    /* #F97316 - Orange */
   --color-chart-3: hsl(271.5 81.3% 55.9%);
@@ -95,6 +96,7 @@
   --color-border: hsl(217.2 20% 15%);
   --color-input: hsl(217.2 32.6% 17.5%);
   --color-ring: hsl(142.1 70.6% 55.3%);
+  --color-warning: hsl(24.6 95% 60%);
   --color-chart-1: hsl(142.1 70.6% 55.3%);
   --color-chart-2: hsl(24.6 95% 60%);
   --color-chart-3: hsl(271.5 81.3% 55.9%);

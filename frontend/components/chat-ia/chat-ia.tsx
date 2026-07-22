@@ -112,7 +112,7 @@ export function ChatIaWidget() {
               Posez des questions sur les infrastructures scolaires, 
               demandez des analyses ou des modifications de données.
               <br />
-              <span className="text-xs text-amber-600 mt-1 block">
+              <span className="text-xs text-warning mt-1 block">
                 ⚠️ Toute modification nécessite une confirmation sévère.
               </span>
             </p>

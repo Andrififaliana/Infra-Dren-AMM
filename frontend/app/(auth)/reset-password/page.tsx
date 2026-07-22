@@ -222,7 +222,7 @@ export default function ResetPasswordPage() {
             )}
 
             {newPassword && !passwordLengthValid && (
-              <p className="text-xs text-amber-500 flex items-center gap-1">
+              <p className="text-xs text-warning flex items-center gap-1">
                 <AlertTriangle className="h-3 w-3" />
                 Le mot de passe doit contenir au moins 6 caractères
               </p>
