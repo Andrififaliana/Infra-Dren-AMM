@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { DoorOpen, Plus, Pencil, Trash2, ImageIcon } from 'lucide-react';
@@ -32,8 +32,16 @@ export default function EditSallePage() {
   const [editOuv, setEditOuv] = useState<Ouverture | null>(null);
   const [delOuvModalOpen, setDelOuvModalOpen] = useState(false);
   const [delOuvTarget, setDelOuvTarget] = useState<Ouverture | null>(null);
-  const [estOperationnel, setEstOperationnel] = useState(salle?.estOperationnel ?? false);
-  const [estElectrifiee, setEstElectrifiee] = useState(salle?.estElectrifiee ?? false);
+  const [estOperationnel, setEstOperationnel] = useState(false);
+  const [estElectrifiee, setEstElectrifiee] = useState(false);
+
+  // Sync checkbox state when data loads
+  useEffect(() => {
+    if (salle) {
+      setEstOperationnel(salle.estOperationnel);
+      setEstElectrifiee(salle.estElectrifiee);
+    }
+  }, [salle]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
