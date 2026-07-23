@@ -1,9 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Pagination } from '@/components/shared/pagination';
 import { formatDateShort } from '@/lib/utils';
 import type { ApiResponse } from '@/types/api';
 
@@ -24,15 +26,21 @@ interface LogsResponse {
 }
 
 export default function LogsPage() {
+  const [page, setPage] = useState(1);
+  const limit = 15;
+
   const { data: logsResponse, isLoading } = useQuery({
-    queryKey: ['logs'],
+    queryKey: ['logs', page],
     queryFn: async () => {
-      const { data } = await apiClient.get<ApiResponse<LogsResponse>>('/logs');
+      const { data } = await apiClient.get<ApiResponse<LogsResponse>>('/logs', {
+        params: { page, limit },
+      });
       return data.data;
     },
   });
 
   const logs = logsResponse?.data ?? [];
+  const meta = logsResponse?.meta;
 
   const actionBadge = (action: string) => {
     const map: Record<string, 'success' | 'warning' | 'destructive' | 'info'> = {
@@ -86,6 +94,17 @@ export default function LogsPage() {
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">Aucune activité</p>
+          )}
+
+          {meta && (
+            <div className="mt-4">
+              <Pagination
+                page={meta.page}
+                totalPages={meta.totalPages}
+                total={meta.total}
+                onPageChange={setPage}
+              />
+            </div>
           )}
         </CardContent>
       </Card>
