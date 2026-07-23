@@ -48,6 +48,18 @@ export interface Photo {
   createdAt: string;
 }
 
+export interface EtablissementAlea {
+  etablissementId: number;
+  aleaId: number;
+  alea: Alea;
+}
+
+export interface EtablissementTrajet {
+  etablissementId: number;
+  trajetId: number;
+  trajet: Trajet;
+}
+
 export interface Etablissement {
   id: number;
   nomEtab: string;
@@ -70,6 +82,8 @@ export interface Etablissement {
   structures?: Structure[];
   batiments?: BatimentSummary[];
   photos?: Photo[];
+  aleas?: EtablissementAlea[];
+  trajets?: EtablissementTrajet[];
   _count?: {
     batiments: number;
     designations: number;
