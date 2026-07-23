@@ -5,7 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Pagination } from '@/components/shared/pagination';
+import { Download } from 'lucide-react';
 import { formatDateShort } from '@/lib/utils';
 import type { ApiResponse } from '@/types/api';
 
@@ -28,6 +30,7 @@ interface LogsResponse {
 export default function LogsPage() {
   const [page, setPage] = useState(1);
   const [actionFilter, setActionFilter] = useState('');
+  const [isExporting, setIsExporting] = useState(false);
   const limit = 15;
 
   const { data: logsResponse, isLoading } = useQuery({
@@ -65,11 +68,57 @@ export default function LogsPage() {
     setPage(1);
   };
 
+  const exportLogsCSV = async () => {
+    setIsExporting(true);
+    try {
+      const { data } = await apiClient.get<ApiResponse<LogsResponse>>('/logs', {
+        params: { page: 1, limit: 10000, ...(actionFilter ? { action: actionFilter } : {}) },
+      });
+      const allLogs = data.data?.data ?? [];
+
+      const headers = ['ID', 'Action', 'Entité', 'ID Entité', 'Détails', 'Utilisateur', 'Date'];
+      const rows = allLogs.map((log: Log) => [
+        log.id,
+        log.action,
+        log.entity,
+        log.entityId ?? '',
+        log.details ?? '',
+        log.user?.nom ?? 'Inconnu',
+        new Date(log.createdAt).toLocaleString('fr-FR'),
+      ]);
+
+      const csvContent = [
+        headers.join(';'),
+        ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(';')),
+      ].join('\n');
+
+      const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `logs-audit-${actionFilter || 'tous'}-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      // Silently fail — CSV export error is non-critical
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground">Journal d&apos;audit</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Trace de toutes les actions effectuées</p>
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Journal d&apos;audit</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Trace de toutes les actions effectuées</p>
+        </div>
+        <Button variant="outline" size="sm" onClick={exportLogsCSV} loading={isExporting} className="gap-2 shrink-0">
+          <Download className="h-4 w-4" />
+          Exporter CSV
+        </Button>
       </div>
 
       <Card>
