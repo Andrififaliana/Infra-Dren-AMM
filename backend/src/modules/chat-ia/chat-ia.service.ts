@@ -340,13 +340,13 @@ Les entités disponibles et leurs champs :
   async getSchemaInfo(user: CurrentUserPayload): Promise<any> {
     return {
       entities: [
-        { name: 'Etablissement', description: 'Établissement scolaire' },
-        { name: 'Batiment', description: 'Bâtiment d\'un établissement' },
-        { name: 'Salle', description: 'Salle de classe' },
-        { name: 'Equipement', description: 'Équipement d\'une salle' },
-        { name: 'Trajet', description: 'Trajet scolaire' },
-        { name: 'Alea', description: 'Aléa / incident' },
-        { name: 'User', description: 'Utilisateur' },
+        { name: 'Etablissement', description: 'Établissement scolaire', requiredFields: ['nomEtab', 'dren', 'cisco', 'commune'] },
+        { name: 'Batiment', description: 'Bâtiment d\'un établissement', requiredFields: ['sigleBat', 'etablissementId'] },
+        { name: 'Salle', description: 'Salle de classe', requiredFields: ['affectationSalle', 'batimentId'] },
+        { name: 'Equipement', description: 'Équipement d\'une salle', requiredFields: ['nomEquip', 'salleId'] },
+        { name: 'Trajet', description: 'Trajet scolaire', requiredFields: ['nomTrajet', 'debutTrajet', 'finTrajet'] },
+        { name: 'Alea', description: 'Aléa / incident', requiredFields: ['typeAleat', 'nomAleat', 'dateAleat'] },
+        { name: 'User', description: 'Utilisateur', requiredFields: ['email', 'nom', 'role'] },
       ],
       stats: await this.getQuickStats(),
     };

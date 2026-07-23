@@ -31,8 +31,14 @@ export interface ExecuteActionResponse {
   data?: any;
 }
 
+export interface EntityInfo {
+  name: string;
+  description: string;
+  requiredFields: string[];
+}
+
 export interface SchemaInfo {
-  entities: Array<{ name: string; description: string }>;
+  entities: EntityInfo[];
   stats: {
     totalEtablissements: number;
     totalBatiments: number;
