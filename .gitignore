@@ -1,2 +1,6 @@
 # Documentation / notes
 doc.md
+node_modules/
+nul
+package-lock.json
+package.json
