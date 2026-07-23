@@ -1,3 +1,6 @@
+import type { Alea } from './alea';
+import type { Trajet } from './trajet';
+
 export interface Directeur {
   idDirecteur: number;
   nomDirecteur: string;

@@ -21,8 +21,9 @@ import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
 import { EtablissementExportModal } from '@/components/etablissements/EtablissementExportModal';
 import { useEffect } from 'react';
-import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight, Download } from 'lucide-react';
-import type { Designation, Structure } from '@/types/etablissement';
+import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight, Download, AlertTriangle, Route, Package } from 'lucide-react';
+import type { Designation, Structure, EtablissementAlea, EtablissementTrajet } from '@/types/etablissement';
+import type { EffetAleat } from '@/types/alea';
 
 export default function EditEtablissementPage() {
   const { id } = useParams<{ id: string }>();
@@ -519,6 +520,120 @@ export default function EditEtablissementPage() {
               </Button>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      {/* ─── Aléas liés ───────────────────────────── */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-destructive" /> Aléas ({etablissement.aleas?.length ?? 0})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {etablissement.aleas && etablissement.aleas.length > 0 ? (
+            <div className="space-y-3">
+              {etablissement.aleas.map((ea: EtablissementAlea) => (
+                <div key={ea.aleaId} className="rounded-xl border bg-muted/50 p-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-medium text-foreground">{ea.alea.nomAleat || 'Aléa'}</p>
+                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-muted-foreground">
+                        {ea.alea.typeAleat && <Badge variant="warning">{ea.alea.typeAleat}</Badge>}
+                        {ea.alea.dateAleat && <span>{new Date(ea.alea.dateAleat).toLocaleDateString('fr-FR')}</span>}
+                        {ea.alea.explication && <span>{ea.alea.explication}</span>}
+                      </div>
+                    </div>
+                  </div>
+                  {ea.alea.effets && ea.alea.effets.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                      {ea.alea.effets.map((eff: EffetAleat) => (
+                        <span key={eff.trajetId} className="rounded-md bg-muted px-2 py-0.5">
+                          {eff.nbElevesG + eff.nbElevesF} élèves · {eff.nbEnseignG + eff.nbEnseignF} enseignants
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Aucun aléa lié à cet établissement</p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* ─── Trajets liés ──────────────────────────── */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Route className="h-5 w-5 text-primary" /> Trajets ({etablissement.trajets?.length ?? 0})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {etablissement.trajets && etablissement.trajets.length > 0 ? (
+            <div className="space-y-3">
+              {etablissement.trajets.map((et: EtablissementTrajet) => (
+                <div key={et.trajetId} className="rounded-xl border bg-muted/50 p-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-medium text-foreground">{et.trajet.nomTrajet || `Trajet #${et.trajet.idTrajet}`}</p>
+                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-muted-foreground">
+                        {et.trajet.moyens?.typeMoyen && <Badge variant="info">{et.trajet.moyens.typeMoyen}</Badge>}
+                        {et.trajet.moyens?.dureeMoyen != null && <span>{et.trajet.moyens.dureeMoyen} min</span>}
+                        {et.trajet.moyens?.distanceMoyen != null && <span>{et.trajet.moyens.distanceMoyen} km</span>}
+                      </div>
+                    </div>
+                  </div>
+                  {et.trajet.periode && (
+                    <p className="mt-2 text-xs text-amber-600">
+                      Periode difficile: {new Date(et.trajet.periode.debutPeriode).toLocaleDateString('fr-FR')} - {new Date(et.trajet.periode.finPeriode).toLocaleDateString('fr-FR')}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Aucun trajet lié à cet établissement</p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* ─── Équipements ──────────────────────────── */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Package className="h-5 w-5 text-primary" /> Équipements
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {(() => {
+            const equipements = (etablissement.batiments ?? [])
+              .flatMap(b => (b as any).salles ?? [])
+              .flatMap((s: any) => s.equipements ?? []);
+            if (equipements.length === 0) {
+              return <p className="text-sm text-muted-foreground">Aucun équipement dans cet établissement</p>;
+            }
+            return (
+              <div className="space-y-2">
+                {equipements.map((eq: any) => (
+                  <div key={eq.id} className="flex items-center justify-between rounded-lg border px-4 py-3">
+                    <div>
+                      <p className="text-sm font-medium">{eq.nomEquip}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {eq.typeEquip && `${eq.typeEquip} · `}
+                        {eq.etat && `État: ${eq.etat} · `}
+                        Quantité: {eq.quantite}
+                      </p>
+                    </div>
+                    <Badge variant={eq.etat === 'BON' ? 'success' : eq.etat === 'MAUVAIS' ? 'destructive' : 'warning'}>
+                      {eq.etat || 'N/A'}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
         </CardContent>
       </Card>
 
