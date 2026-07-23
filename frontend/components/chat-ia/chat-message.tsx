@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
-import { Bot, User, AlertTriangle, ShieldAlert, Loader2, Check, X } from 'lucide-react';
+import { Bot, User, AlertTriangle, ShieldAlert, Loader2, Check, X, List, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { ChatMessage as ChatMessageType } from '@/types/chat-ia';
 
@@ -98,14 +98,12 @@ export function ActionPreviewCard({
     }
   }, []);
 
-  // Nettoyer le timer au démontage
   useEffect(() => {
     return () => {
       if (disarmTimerRef.current) clearTimeout(disarmTimerRef.current);
     };
   }, []);
 
-  // Désarmer si clic en dehors de la carte
   useEffect(() => {
     if (!isArmed) return;
     const handleClickOutside = (e: MouseEvent) => {
@@ -113,7 +111,6 @@ export function ActionPreviewCard({
         disarm();
       }
     };
-    // Petit délai pour éviter que le clic qui a armé ne déclenche le outside
     const timer = setTimeout(() => {
       document.addEventListener('click', handleClickOutside);
     }, 100);
@@ -126,7 +123,6 @@ export function ActionPreviewCard({
   const handleFirstClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsArmed(true);
-    // Auto-désarmer après 8 secondes
     disarmTimerRef.current = setTimeout(disarm, 8000);
   };
 
@@ -142,29 +138,60 @@ export function ActionPreviewCard({
     onCancel();
   };
 
+  const dataEntries = Object.entries(action.data);
+
   return (
     <motion.div
       ref={cardRef}
       initial={{ opacity: 0, y: -8, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
-      className={cn('rounded-xl p-4 mt-2 relative overflow-hidden shadow-sm', colors.bg)}
+      className={cn('rounded-xl p-4 mt-2 relative overflow-hidden border shadow-sm', colors.bg.replace('/10', '/20'))}
     >
       {/* Header */}
-      <div className="flex items-center gap-2 mb-2">
-        <ShieldAlert className="h-5 w-5 text-destructive" />
-        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          {colors.label} — {action.entity}
-        </span>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <ShieldAlert className="h-5 w-5 text-destructive" />
+          <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+            {colors.label} — {action.entity}
+          </span>
+        </div>
+        <button
+          onClick={handleCancel}
+          disabled={isExecuting}
+          className="rounded-lg p-1 text-muted-foreground hover:bg-background/50 transition-colors"
+          title="Annuler"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
 
-      {/* Details */}
-      <p className="text-sm text-foreground mb-1">{action.summary}</p>
-      <p className="text-xs text-muted-foreground mb-4">
+      {/* Summary */}
+      <p className="text-sm text-foreground mb-2">{action.summary}</p>
+
+      {/* Data fields */}
+      {dataEntries.length > 0 && (
+        <div className="mb-3 rounded-lg bg-background/50 p-3 space-y-1">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground mb-1.5">
+            <List className="h-3 w-3" />
+            Données de l&apos;action
+          </div>
+          {dataEntries.map(([key, value]) => (
+            <div key={key} className="flex items-start gap-2 text-xs">
+              <span className="font-mono text-muted-foreground shrink-0">{key}:</span>
+              <span className="text-foreground break-all">{String(value)}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Warning */}
+      <p className="text-xs text-destructive mb-4 flex items-start gap-1.5">
+        <AlertTriangle className="h-3 w-3 mt-0.5 shrink-0" />
         {action.warning}
       </p>
 
-      {/* Inline confirmation buttons */}
+      {/* Actions */}
       <div className="flex items-center gap-2">
         <AnimatePresence mode="wait">
           {!isArmed ? (
@@ -180,10 +207,9 @@ export function ActionPreviewCard({
                 variant={action.actionType === 'delete' ? 'destructive' : 'default'}
                 onClick={handleFirstClick}
                 disabled={isExecuting}
-                className="relative"
               >
                 <Check className="h-3.5 w-3.5 mr-1.5" />
-                Confirmer l'action
+                Confirmer
               </Button>
             </motion.div>
           ) : (
@@ -193,7 +219,6 @@ export function ActionPreviewCard({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="flex items-center gap-2"
             >
               <Button
                 size="sm"
@@ -201,7 +226,7 @@ export function ActionPreviewCard({
                 onClick={handleSecondClick}
                 disabled={isExecuting}
                 loading={isExecuting}
-                className="animate-pulse shadow-lg shadow-destructive/25"
+                className="animate-pulse"
               >
                 {isExecuting ? (
                   <>
@@ -215,17 +240,21 @@ export function ActionPreviewCard({
                   </>
                 )}
               </Button>
-              <button
-                onClick={handleCancel}
-                disabled={isExecuting}
-                className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                title="Annuler"
-              >
-                <X className="h-4 w-4" />
-              </button>
             </motion.div>
           )}
         </AnimatePresence>
+
+        {!isArmed && (
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={handleCancel}
+            disabled={isExecuting}
+          >
+            <X className="h-3.5 w-3.5 mr-1.5" />
+            Annuler
+          </Button>
+        )}
       </div>
     </motion.div>
   );
