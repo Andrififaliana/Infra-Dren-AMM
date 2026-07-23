@@ -25,7 +25,7 @@ export default function EquipementsPage() {
   const [selectedEquip, setSelectedEquip] = useState<Equipement | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const perPage = 10;
 
   const { data: equipements, isLoading } = useEquipements();
