@@ -186,9 +186,13 @@ export function ActionPreviewCard({
       )}
 
       {/* Warning */}
-      <p className="text-xs text-destructive mb-4 flex items-start gap-1.5">
+      <p className="text-xs text-destructive mb-2 flex items-start gap-1.5">
         <AlertTriangle className="h-3 w-3 mt-0.5 shrink-0" />
         {action.warning}
+      </p>
+      <p className="text-[10px] text-muted-foreground mb-3 flex items-center gap-1">
+        <ShieldAlert className="h-3 w-3" />
+        Double confirmation requise pour exécuter l'action
       </p>
 
       {/* Actions */}
