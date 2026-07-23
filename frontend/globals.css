@@ -4,20 +4,20 @@
 
 @theme {
   --color-background: hsl(0 0% 100%);
-  --color-foreground: hsl(215.4 30% 18%);
-  --color-card: hsl(0 0% 98%);
-  --color-card-foreground: hsl(215.4 30% 18%);
-  --color-popover: hsl(0 0% 98%);
-  --color-popover-foreground: hsl(215.4 30% 18%);
+  --color-foreground: hsl(215 25% 26.7%);
+  --color-card: hsl(210 40% 96.1%);
+  --color-card-foreground: hsl(215 25% 26.7%);
+  --color-popover: hsl(210 40% 96.1%);
+  --color-popover-foreground: hsl(215 25% 26.7%);
   --color-primary: hsl(142.1 70.6% 45.3%);
   --color-primary-foreground: hsl(0 0% 100%);
   --color-link: hsl(199.2 88.9% 48.4%);
   --color-secondary: hsl(210 40% 96.1%);
-  --color-secondary-foreground: hsl(215.4 30% 18%);
+  --color-secondary-foreground: hsl(215 25% 26.7%);
   --color-muted: hsl(210 40% 96.1%);
-  --color-muted-foreground: hsl(215.4 15% 38%);
+  --color-muted-foreground: hsl(215 20% 46%);
   --color-accent: hsl(210 40% 96.1%);
-  --color-accent-foreground: hsl(215.4 30% 18%);
+  --color-accent-foreground: hsl(215 25% 26.7%);
   --color-destructive: hsl(24.6 95% 53.1%);
   --color-destructive-foreground: hsl(0 0% 100%);
   --color-border: hsl(210 30% 90%);
@@ -35,20 +35,20 @@
 @layer base {
   :root {
     --color-background: hsl(0 0% 100%);
-    --color-foreground: hsl(215.4 30% 18%);
-    --color-card: hsl(0 0% 98%);
-    --color-card-foreground: hsl(215.4 30% 18%);
-    --color-popover: hsl(0 0% 98%);
-    --color-popover-foreground: hsl(215.4 30% 18%);
+    --color-foreground: hsl(215 25% 26.7%);
+    --color-card: hsl(210 40% 96.1%);
+    --color-card-foreground: hsl(215 25% 26.7%);
+    --color-popover: hsl(210 40% 96.1%);
+    --color-popover-foreground: hsl(215 25% 26.7%);
     --color-primary: hsl(142.1 70.6% 45.3%);
     --color-primary-foreground: hsl(0 0% 100%);
     --color-link: hsl(199.2 88.9% 48.4%);
     --color-secondary: hsl(210 40% 96.1%);
-    --color-secondary-foreground: hsl(215.4 30% 18%);
+    --color-secondary-foreground: hsl(215 25% 26.7%);
     --color-muted: hsl(210 40% 96.1%);
-    --color-muted-foreground: hsl(215.4 15% 38%);
+    --color-muted-foreground: hsl(215 20% 46%);
     --color-accent: hsl(210 40% 96.1%);
-    --color-accent-foreground: hsl(215.4 30% 18%);
+    --color-accent-foreground: hsl(215 25% 26.7%);
     --color-destructive: hsl(24.6 95% 53.1%);
     --color-destructive-foreground: hsl(0 0% 100%);
     --color-border: hsl(210 30% 90%);

@@ -119,12 +119,12 @@ export function GenericPhotoUpload({
     <div className="space-y-4">
       {/* Compteur */}
       {sortedPhotos.length > 0 && (
-        <div className="flex items-center justify-between rounded-xl bg-green-50 px-4 py-2.5">
+        <div className="flex items-center justify-between rounded-xl bg-primary/5 px-4 py-2.5">
           <div className="flex items-center gap-2 text-sm text-primary">
             <ImagePlus className="h-4 w-4" />
             <span className="font-medium">{sortedPhotos.length} photo{sortedPhotos.length > 1 ? 's' : ''}</span>
             {mainPhoto && (
-              <span className="ml-1 text-green-500/70">— {mainPhoto.originalName || 'Photo principale'}</span>
+              <span className="ml-1 text-primary/70">— {mainPhoto.originalName || 'Photo principale'}</span>
             )}
           </div>
         </div>
@@ -136,7 +136,7 @@ export function GenericPhotoUpload({
           {sortedPhotos.map((photo, idx) => (
             <div
               key={photo.id}
-              className="group relative overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200/50 transition-all hover:ring-2 hover:ring-green-300/30"
+              className="group relative overflow-hidden rounded-xl bg-muted ring-1 ring-border/50 transition-all hover:ring-2 hover:ring-primary/20"
             >
               <button type="button" onClick={() => openLightbox(idx)} className="block w-full">
                 <img
@@ -150,7 +150,7 @@ export function GenericPhotoUpload({
                 <ZoomIn className="h-7 w-7 text-white opacity-0 transition-opacity group-hover:opacity-100 drop-shadow-lg" />
               </div>
               {photo.estPrincipale && (
-                <div className="absolute left-2 top-2 rounded-full bg-green-500 p-1.5 shadow-lg">
+                <div className="absolute left-2 top-2 rounded-full bg-primary p-1.5 shadow-lg">
                   <Star className="h-3.5 w-3.5 text-white fill-white" />
                 </div>
               )}
@@ -160,7 +160,7 @@ export function GenericPhotoUpload({
                     type="button"
                     onClick={() => handleSetMain(photo.id)}
                     disabled={settingMain === photo.id}
-                    className="rounded-lg bg-white/20 p-1.5 text-white backdrop-blur-sm transition-colors hover:bg-green-500/80"
+                    className="rounded-lg bg-white/20 p-1.5 text-white backdrop-blur-sm transition-colors hover:bg-primary/80"
                     title="Définir comme principale"
                   >
                     {settingMain === photo.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <StarOff className="h-3.5 w-3.5" />}
@@ -195,23 +195,23 @@ export function GenericPhotoUpload({
             onClick={() => { if (!atLimit) document.getElementById(inputId)?.click(); }}
             className={cn(
               'flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-8 transition-all',
-              atLimit ? 'border-gray-200 bg-gray-100 cursor-not-allowed' : 'cursor-pointer',
+              atLimit ? 'border-border/50 bg-muted cursor-not-allowed' : 'cursor-pointer',
               dragOver && !atLimit
-                ? 'scale-[1.02] border-green-400 bg-green-50 shadow-lg'
-                : !atLimit && 'border-gray-200 bg-gray-50 hover:bg-green-50/50',
+                ? 'scale-[1.02] border-primary bg-primary/5 shadow-lg'
+                : !atLimit && 'border-border/50 bg-muted/30 hover:bg-primary/5',
             )}
           >
             {uploading ? (
-              <Loader2 className="h-8 w-8 animate-spin text-green-500" />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             ) : atLimit ? (
               <>
-                <div className="mb-3 rounded-xl bg-muted p-3"><ImagePlus className="h-6 w-6 text-muted-foreground/50" /></div>
+                <div className="mb-3 rounded-xl bg-muted/50 p-3"><ImagePlus className="h-6 w-6 text-muted-foreground/50" /></div>
                 <p className="text-sm font-medium text-muted-foreground">Limite atteinte — {MAX_PHOTOS} photos maximum</p>
                 <p className="mt-1 text-xs text-muted-foreground/60">Supprimez une photo pour en ajouter une nouvelle</p>
               </>
             ) : (
               <>
-                <div className={cn('mb-3 rounded-xl p-3 transition-all', dragOver ? 'bg-green-100' : 'bg-gray-100')}>
+                <div className={cn('mb-3 rounded-xl p-3 transition-all', dragOver ? 'bg-primary/10' : 'bg-muted')}>
                   <ImagePlus className={cn('h-6 w-6 transition-colors', dragOver ? 'text-primary' : 'text-muted-foreground/50')} />
                 </div>
                 <p className="text-sm font-medium text-muted-foreground">{dragOver ? 'Déposez vos fichiers ici' : 'Cliquez ou déposez des photos ici'}</p>
@@ -290,7 +290,7 @@ function PhotoLightbox({
         {currentIndex + 1} / {photos.length}
       </span>
       {current.estPrincipale && (
-        <span className="absolute top-4 left-1/2 -translate-x-1/2 rounded-full bg-green-500 px-3 py-1.5 text-sm text-white shadow-lg">
+        <span className="absolute top-4 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1.5 text-sm text-primary-foreground shadow-lg">
           <Star className="mr-1 inline-block h-3.5 w-3.5 fill-white" /> Photo principale
         </span>
       )}

@@ -29,13 +29,13 @@ export function EtablissementPhoto({
     return (
       <div
         className={cn(
-          'flex items-center justify-center bg-gradient-to-br from-green-100 to-green-50',
+          'flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5',
           fixedHeight && 'h-40',
           className,
         )}
       >
         <School
-          className="text-green-300/60"
+          className="text-primary/30"
           style={{ width: iconSize, height: iconSize }}
         />
       </div>
@@ -159,7 +159,7 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
         {/* Photo principale */}
         <button
           onClick={() => setLightboxOpen(true)}
-          className="group relative w-full overflow-hidden rounded-2xl bg-gray-100 text-left"
+          className="group relative w-full overflow-hidden rounded-2xl bg-muted text-left"
         >
           <EtablissementPhoto
             photo={selected}
@@ -181,7 +181,7 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
                 className={cn(
                   'relative h-16 w-20 flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all',
                   idx === selectedIndex
-                    ? 'border-green-500 ring-1 ring-green-500'
+                    ? 'border-primary ring-1 ring-primary'
                       : 'border-transparent opacity-70 hover:opacity-100',
                 )}
               >
