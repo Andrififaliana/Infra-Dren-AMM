@@ -32,7 +32,7 @@ export default function UtilisateursPage() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [formData, setFormData] = useState<UserFormData>({ email: '', nom: '', password: '', role: 'RESPONSABLE_INFRASTRUCTURE' });
   const [showConfirmBanner, setShowConfirmBanner] = useState(false);
   const [createdEmail, setCreatedEmail] = useState('');
