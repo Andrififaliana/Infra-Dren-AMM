@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, Trash2, Bot, Sparkles, Loader2, BookOpen, Database } from 'lucide-react';
+import { Send, Trash2, Bot, Sparkles, Loader2, BookOpen, Database, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { useChatIa } from '@/hooks/use-chat-ia';
 import { ChatMessage, ActionPreviewCard } from './chat-message';
 
@@ -29,6 +30,7 @@ export function ChatIaWidget() {
 
   const [input, setInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [showTips, setShowTips] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -81,6 +83,13 @@ export function ChatIaWidget() {
           <h2 className="text-sm font-semibold text-foreground">Assistant IA</h2>
         </div>
         <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowTips(!showTips)}
+            className={cn('rounded-lg p-1.5 text-muted-foreground hover:bg-muted transition-colors', showTips && 'bg-muted')}
+            title="Aide"
+          >
+            <HelpCircle className="h-4 w-4" />
+          </button>
           {messages.length > 0 && (
             <button
               onClick={() => {
@@ -95,6 +104,20 @@ export function ChatIaWidget() {
           )}
         </div>
       </div>
+
+      {/* Tips panel */}
+      {showTips && (
+        <div className="border-b bg-muted/30 px-5 py-3 text-xs text-muted-foreground space-y-1.5">
+          <p className="font-medium text-foreground flex items-center gap-1.5">
+            <BookOpen className="h-3 w-3" />
+            Comment utiliser l&apos;assistant
+          </p>
+          <p>• Posez des questions sur les données : <span className="text-foreground">&quot;Combien d&apos;établissements ?&quot;</span></p>
+          <p>• Demandez des modifications : <span className="text-foreground">&quot;Ajoute un établissement à Ambositra&quot;</span></p>
+          <p>• L&apos;assistant vous demandera les champs obligatoires avant chaque action</p>
+          <p>• Les actions destructives nécessitent une double confirmation</p>
+        </div>
+      )}
 
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6">
@@ -135,6 +158,9 @@ export function ChatIaWidget() {
                     <div key={e.name} className="rounded-lg border bg-background px-2.5 py-2 text-xs">
                       <span className="font-medium text-foreground">{e.name}</span>
                       <p className="text-muted-foreground truncate">{e.description}</p>
+                      <p className="text-[10px] text-muted-foreground/60 mt-0.5">
+                        Requis : {e.requiredFields.join(', ')}
+                      </p>
                     </div>
                   ))}
                 </div>
