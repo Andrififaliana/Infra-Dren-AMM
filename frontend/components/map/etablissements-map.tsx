@@ -8,6 +8,7 @@ import type { EtablissementListe } from '@/types/etablissement';
 import type { Alea } from '@/types/alea';
 import type { Trajet } from '@/types/trajet';
 import { MapLegend } from './map-legend';
+import { DREN_COORDS } from '@/lib/constants';
 
 const schoolIcon = L.divIcon({
   className: '',
@@ -25,6 +26,14 @@ const aleaIcon = L.divIcon({
   popupAnchor: [0, -32],
 });
 
+const drenIcon = L.divIcon({
+  className: '',
+  html: `<div style="background:#dc2626;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 8px rgba(220,38,38,.5);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg></div>`,
+  iconSize: [38, 38],
+  iconAnchor: [19, 38],
+  popupAnchor: [0, -42],
+});
+
 interface EtablissementWithCoords extends EtablissementListe {
   latitude: number;
   longitude: number;
@@ -33,8 +42,12 @@ interface EtablissementWithCoords extends EtablissementListe {
 function FitBounds({ schools }: { schools: EtablissementWithCoords[] }) {
   const map = useMap();
   useEffect(() => {
-    if (schools.length === 0) return;
-    const bounds = L.latLngBounds(schools.map(s => [s.latitude, s.longitude]));
+    const allPoints = [
+      ...schools.map(s => [s.latitude, s.longitude] as [number, number]),
+      [DREN_COORDS.lat, DREN_COORDS.lng] as [number, number],
+    ];
+    if (allPoints.length === 0) return;
+    const bounds = L.latLngBounds(allPoints);
     map.fitBounds(bounds, { padding: [40, 40] });
   }, [schools, map]);
   return null;
@@ -83,6 +96,7 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
 
   const legendItems = useMemo(() => {
     const items: Array<{ label: string; color: string; type: 'marker' | 'line'; dashed?: boolean }> = [
+      { label: 'DREN', color: '#dc2626', type: 'marker' },
       { label: 'Établissement', color: '#16a34a', type: 'marker' },
     ];
     if (hasAleas) items.push({ label: 'Aléa', color: '#8b5cf6', type: 'marker' });
@@ -130,7 +144,8 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
     if (!showTrajets || !trajets || schools.length === 0) return [];
     return trajets.map(t => {
       const parts = t.nomTrajet?.split('→').map(s => s.trim()) || [];
-      const points: [number, number][] = [];
+      // Toujours commencer par le siège de la DREN
+      const points: [number, number][] = [[DREN_COORDS.lat, DREN_COORDS.lng]];
       for (const part of parts) {
         const found = schools.find(s =>
           s.commune?.toLowerCase().includes(part.toLowerCase()) ||
@@ -138,8 +153,10 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
         );
         if (found) points.push([found.latitude, found.longitude]);
       }
+      // Ne garder que les trajets qui ont au moins un point de destination après DREN
+      if (points.length < 2) return null;
       return { trajet: t, points };
-    }).filter(t => t.points.length >= 2);
+    }).filter((t): t is NonNullable<typeof t> => t !== null);
   }, [showTrajets, trajets, schools]);
 
   return (
@@ -149,6 +166,29 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+
+      {/* Marqueur DREN - point de départ par défaut de tous les itinéraires */}
+      <Marker
+        position={[DREN_COORDS.lat, DREN_COORDS.lng]}
+        icon={drenIcon}
+      >
+        <Popup>
+          <div className="min-w-[180px]">
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-600">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+              </span>
+              <strong className="text-sm">DREN Amoron&apos;i Mania</strong>
+            </div>
+            <div className="mt-1.5 space-y-0.5 text-xs text-muted-foreground">
+              <p>F66W+767, Ambositra</p>
+              <p className="text-[11px] font-medium text-primary">
+                Point de départ de tous les itinéraires
+              </p>
+            </div>
+          </div>
+        </Popup>
+      </Marker>
 
       {schools.map(school => {
         const affected = showAleas && aleaEtabIds.size > 0;
@@ -183,7 +223,7 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
                 {hasTrajets && (
                   <div className="mt-2 pt-2 border-t border-border/50 space-y-1.5">
                     <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-                      Accès
+                      Accès <span className="text-[9px] font-normal lowercase text-red-500">depuis DREN</span>
                     </p>
                     {schoolTrajets.map((t) => (
                       <div key={t.idTrajet} className="flex items-center gap-2 text-xs">
@@ -238,7 +278,8 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
               <div className="flex items-center gap-2">
                 <TransportBadge type={trajet.moyens?.typeMoyen} />
                 <span className="text-muted-foreground">
-                  — {trajet.moyens?.distanceMoyen} km
+                  <span className="text-[10px] font-medium text-red-500">Depuis DREN</span>
+                  {' — '}{trajet.moyens?.distanceMoyen} km
                   {trajet.moyens?.dureeMoyen != null && ` · ${formatDuree(trajet.moyens.dureeMoyen)}`}
                 </span>
               </div>
@@ -279,9 +320,7 @@ export default function EtablissementsMap({
     (s): s is EtablissementWithCoords => typeof s.latitude === 'number' && typeof s.longitude === 'number'
   );
 
-  const center: [number, number] = schoolsWithCoords.length > 0
-    ? [schoolsWithCoords[0].latitude, schoolsWithCoords[0].longitude]
-    : [-20.3, 47.0];
+  const center: [number, number] = [DREN_COORDS.lat, DREN_COORDS.lng];
 
   if (schoolsWithCoords.length === 0) {
     return (
