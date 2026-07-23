@@ -9,10 +9,10 @@ import { useChatIa } from '@/hooks/use-chat-ia';
 import { ChatMessage, ActionPreviewCard } from './chat-message';
 
 const suggestedQuestions = [
+  'Comment utiliser cette application ?',
   'Combien d\'établissements sont enregistrés ?',
+  'Ajoute un établissement à Ambositra',
   'Quels sont les bâtiments les plus anciens ?',
-  'Ajoute un nouvel établissement scolaire',
-  'Donne moi les statistiques globales',
 ];
 
 export function ChatIaWidget() {
