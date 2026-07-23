@@ -73,9 +73,9 @@ export function ChatIaWidget() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] flex-col rounded-xl border bg-background overflow-hidden">
+    <div className="flex h-[calc(100vh-8rem)] flex-col rounded-xl bg-card shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between border-b px-5 py-3">
+      <div className="flex items-center justify-between px-5 py-3 bg-muted/30">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
             <Bot className="h-4 w-4 text-primary" />
@@ -107,7 +107,7 @@ export function ChatIaWidget() {
 
       {/* Tips panel */}
       {showTips && (
-        <div className="border-b bg-muted/30 px-5 py-3 text-xs text-muted-foreground space-y-1.5">
+        <div className="bg-muted/50 px-5 py-3 text-xs text-muted-foreground space-y-1.5">
           <p className="font-medium text-foreground flex items-center gap-1.5">
             <BookOpen className="h-3 w-3" />
             Comment utiliser l&apos;assistant
@@ -138,7 +138,7 @@ export function ChatIaWidget() {
                   <button
                     key={i}
                     onClick={() => handleSuggestedClick(q)}
-                    className="rounded-lg border px-3 py-2.5 text-left text-xs text-muted-foreground hover:text-primary transition-colors"
+                    className="rounded-lg bg-muted/30 px-3 py-2.5 text-left text-xs text-muted-foreground hover:bg-muted/50 hover:text-primary transition-colors"
                   >
                     {q}
                   </button>
@@ -155,7 +155,7 @@ export function ChatIaWidget() {
                 </div>
                 <div className="grid grid-cols-2 gap-1.5">
                   {schemaInfo.entities.map((e) => (
-                    <div key={e.name} className="rounded-lg border bg-background px-2.5 py-2 text-xs">
+                    <div key={e.name} className="rounded-lg bg-muted/30 px-2.5 py-2 text-xs">
                       <span className="font-medium text-foreground">{e.name}</span>
                       <p className="text-muted-foreground truncate">{e.description}</p>
                       {e.requiredFields && e.requiredFields.length > 0 && (
@@ -216,7 +216,7 @@ export function ChatIaWidget() {
       </div>
 
       {/* Input area */}
-      <div className="border-t bg-background px-4 py-3 sm:px-6">
+      <div className="border-t border-border/20 bg-background px-4 py-3 sm:px-6">
         <div className="flex items-center gap-2">
           <input
             ref={inputRef}

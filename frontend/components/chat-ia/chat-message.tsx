@@ -146,7 +146,7 @@ export function ActionPreviewCard({
       initial={{ opacity: 0, y: -8, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
-      className={cn('rounded-xl p-4 mt-2 relative overflow-hidden border shadow-sm', colors.bg.replace('/10', '/20'))}
+      className={cn('rounded-xl p-4 mt-2 relative overflow-hidden shadow-sm', colors.bg.replace('/10', '/20'))}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
