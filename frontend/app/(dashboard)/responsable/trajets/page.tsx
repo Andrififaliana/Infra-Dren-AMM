@@ -24,7 +24,7 @@ export default function TrajetsPage() {
   const [selectedTrajet, setSelectedTrajet] = useState<Trajet | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const perPage = 10;
 
   const { data: trajets, isLoading } = useTrajets();
