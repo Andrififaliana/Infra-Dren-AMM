@@ -5,6 +5,15 @@ export interface Equipement {
   etat?: string;
   quantite: number;
   salleId: number;
+  salle?: {
+    idSalle: number;
+    sigleSalle?: string;
+    batiment?: {
+      idBat: number;
+      sigleBat?: string;
+      etablissement?: { id: number; nomEtab: string };
+    };
+  };
   createdAt: string;
   updatedAt: string;
 }

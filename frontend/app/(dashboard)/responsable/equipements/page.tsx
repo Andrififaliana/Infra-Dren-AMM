@@ -158,6 +158,13 @@ export default function EquipementsPage() {
                   ) : (
                     <span className="text-muted-foreground">État non renseigné</span>
                   )}
+                  {item.salle ? (
+                    <span className="text-muted-foreground truncate" title={item.salle.batiment?.etablissement?.nomEtab}>
+                      {item.salle.batiment?.etablissement?.nomEtab ?? 'N/A'} · {item.salle.sigleSalle ?? `#${item.salle.idSalle}`}
+                    </span>
+                  ) : (
+                    <span className="text-chart-2 font-medium">Libre</span>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-end pt-1" onClick={(e) => e.stopPropagation()}>

@@ -21,7 +21,21 @@ export class EquipementsService {
     const where = salleId ? { salleId } : {};
     return this.prisma.equipement.findMany({
       where,
-      include: { salle: { select: { idSalle: true, sigleSalle: true } } },
+      include: {
+        salle: {
+          select: {
+            idSalle: true,
+            sigleSalle: true,
+            batiment: {
+              select: {
+                idBat: true,
+                sigleBat: true,
+                etablissement: { select: { id: true, nomEtab: true } },
+              },
+            },
+          },
+        },
+      },
       orderBy: { nomEquip: 'asc' },
     });
   }
@@ -29,7 +43,21 @@ export class EquipementsService {
   async findOne(id: number) {
     const equipement = await this.prisma.equipement.findUnique({
       where: { id },
-      include: { salle: { select: { idSalle: true, sigleSalle: true } } },
+      include: {
+        salle: {
+          select: {
+            idSalle: true,
+            sigleSalle: true,
+            batiment: {
+              select: {
+                idBat: true,
+                sigleBat: true,
+                etablissement: { select: { id: true, nomEtab: true } },
+              },
+            },
+          },
+        },
+      },
     });
     if (!equipement) throw new NotFoundException(`Équipement #${id} non trouvé`);
     return equipement;
