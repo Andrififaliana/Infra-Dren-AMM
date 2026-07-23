@@ -5,6 +5,7 @@ import apiClient from '@/lib/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatDateShort } from '@/lib/utils';
+import type { ApiResponse } from '@/types/api';
 
 interface Log {
   id: number;
@@ -17,14 +18,21 @@ interface Log {
   createdAt: string;
 }
 
+interface LogsResponse {
+  data: Log[];
+  meta: { total: number; page: number; limit: number; totalPages: number };
+}
+
 export default function LogsPage() {
-  const { data: logs, isLoading } = useQuery({
+  const { data: logsResponse, isLoading } = useQuery({
     queryKey: ['logs'],
     queryFn: async () => {
-      const { data } = await apiClient.get<Log[]>('/logs');
-      return data;
+      const { data } = await apiClient.get<ApiResponse<LogsResponse>>('/logs');
+      return data.data;
     },
   });
+
+  const logs = logsResponse?.data ?? [];
 
   const actionBadge = (action: string) => {
     const map: Record<string, 'success' | 'warning' | 'destructive' | 'info'> = {
