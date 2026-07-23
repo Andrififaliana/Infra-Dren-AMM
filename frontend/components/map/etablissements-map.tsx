@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import type { EtablissementListe } from '@/types/etablissement';
 import type { Alea } from '@/types/alea';
 import type { Trajet } from '@/types/trajet';
+import { MapLegend } from './map-legend';
 
 const schoolIcon = L.divIcon({
   className: '',
@@ -77,6 +78,17 @@ interface MapContentProps {
 }
 
 function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolClick }: MapContentProps) {
+  const hasAleas = showAleas && (aleas?.length ?? 0) > 0;
+  const hasTrajetsLines = showTrajets && (trajets?.length ?? 0) > 0;
+
+  const legendItems = useMemo(() => {
+    const items: Array<{ label: string; color: string; type: 'marker' | 'line'; dashed?: boolean }> = [
+      { label: 'Établissement', color: '#16a34a', type: 'marker' },
+    ];
+    if (hasAleas) items.push({ label: 'Aléa', color: '#8b5cf6', type: 'marker' });
+    if (hasTrajetsLines) items.push({ label: 'Trajet', color: '#3b82f6', type: 'line', dashed: true });
+    return items;
+  }, [hasAleas, hasTrajetsLines]);
   const aleaEtabIds = useMemo(() => {
     if (!aleas) return new Set<number>();
     const ids = new Set<number>();
@@ -221,17 +233,27 @@ function MapContent({ schools, showAleas, showTrajets, aleas, trajets, onSchoolC
           dashArray="10 6"
         >
           <Popup>
-            <div className="text-xs">
+            <div className="text-xs space-y-1.5">
               <strong>{trajet.nomTrajet}</strong>
-              <p>{trajet.moyens?.typeMoyen ?? 'Inconnu'} — {trajet.moyens?.distanceMoyen} km</p>
-              {trajet.moyens?.dureeMoyen != null && <p>Durée : {formatDuree(trajet.moyens.dureeMoyen)}</p>}
+              <div className="flex items-center gap-2">
+                <TransportBadge type={trajet.moyens?.typeMoyen} />
+                <span className="text-muted-foreground">
+                  — {trajet.moyens?.distanceMoyen} km
+                  {trajet.moyens?.dureeMoyen != null && ` · ${formatDuree(trajet.moyens.dureeMoyen)}`}
+                </span>
+              </div>
               {trajet.periode && (
-                <p>Période difficile: {new Date(trajet.periode.debutPeriode).toLocaleDateString()} - {new Date(trajet.periode.finPeriode).toLocaleDateString()}</p>
+                <p className="text-amber-600 text-[11px]">
+                  Periode difficile: {new Date(trajet.periode.debutPeriode).toLocaleDateString()} - {new Date(trajet.periode.finPeriode).toLocaleDateString()}
+                </p>
               )}
             </div>
           </Popup>
         </Polyline>
       ))}
+
+      {/* Légende */}
+      <MapLegend items={legendItems} />
     </>
   );
 }
