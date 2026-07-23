@@ -27,13 +27,14 @@ interface LogsResponse {
 
 export default function LogsPage() {
   const [page, setPage] = useState(1);
+  const [actionFilter, setActionFilter] = useState('');
   const limit = 15;
 
   const { data: logsResponse, isLoading } = useQuery({
-    queryKey: ['logs', page],
+    queryKey: ['logs', actionFilter, page],
     queryFn: async () => {
       const { data } = await apiClient.get<ApiResponse<LogsResponse>>('/logs', {
-        params: { page, limit },
+        params: { page, limit, ...(actionFilter ? { action: actionFilter } : {}) },
       });
       return data.data;
     },
@@ -51,6 +52,19 @@ export default function LogsPage() {
     return map[action] || 'default';
   };
 
+  const actions = [
+    { value: '', label: 'Toutes' },
+    { value: 'CREATE', label: 'Création' },
+    { value: 'UPDATE', label: 'Modification' },
+    { value: 'DELETE', label: 'Suppression' },
+    { value: 'LOGIN', label: 'Connexion' },
+  ];
+
+  const handleFilterChange = (value: string) => {
+    setActionFilter(value);
+    setPage(1);
+  };
+
   return (
     <div>
       <div className="mb-6">
@@ -60,7 +74,24 @@ export default function LogsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Activité récente</CardTitle>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <CardTitle>Journal d&apos;audit</CardTitle>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {actions.map((a) => (
+                <button
+                  key={a.value}
+                  onClick={() => handleFilterChange(a.value)}
+                  className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                    actionFilter === a.value
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
+                  }`}
+                >
+                  {a.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
