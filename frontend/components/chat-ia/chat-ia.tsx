@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, Trash2, Bot, Sparkles, Loader2 } from 'lucide-react';
+import { Send, Trash2, Bot, Sparkles, Loader2, BookOpen, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useChatIa } from '@/hooks/use-chat-ia';
 import { ChatMessage, ActionPreviewCard } from './chat-message';
@@ -24,6 +24,7 @@ export function ChatIaWidget() {
     cancelAction,
     clearConversation,
     fetchSchemaInfo,
+    schemaInfo,
   } = useChatIa();
 
   const [input, setInput] = useState('');
@@ -79,24 +80,26 @@ export function ChatIaWidget() {
           </div>
           <h2 className="text-sm font-semibold text-foreground">Assistant IA</h2>
         </div>
-        {messages.length > 0 && (
-          <button
-            onClick={() => {
-              clearConversation();
-              setShowSuggestions(true);
-            }}
-            className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted transition-colors"
-            title="Nouvelle conversation"
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
-        )}
+        <div className="flex items-center gap-1">
+          {messages.length > 0 && (
+            <button
+              onClick={() => {
+                clearConversation();
+                setShowSuggestions(true);
+              }}
+              className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted transition-colors"
+              title="Nouvelle conversation"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6">
         {messages.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center text-center py-12">
+          <div className="flex h-full flex-col items-center justify-center text-center overflow-y-auto py-8 px-4">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
               <Sparkles className="h-6 w-6 text-primary" />
             </div>
@@ -107,7 +110,7 @@ export function ChatIaWidget() {
 
             {/* Suggested questions */}
             {showSuggestions && (
-              <div className="grid w-full max-w-lg gap-2 sm:grid-cols-2">
+              <div className="grid w-full max-w-lg gap-2 sm:grid-cols-2 mb-6">
                 {suggestedQuestions.map((q, i) => (
                   <button
                     key={i}
@@ -117,6 +120,24 @@ export function ChatIaWidget() {
                     {q}
                   </button>
                 ))}
+              </div>
+            )}
+
+            {/* Entités disponibles */}
+            {schemaInfo && schemaInfo.entities.length > 0 && (
+              <div className="w-full max-w-lg text-left">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
+                  <Database className="h-3 w-3" />
+                  Entités disponibles
+                </div>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {schemaInfo.entities.map((e) => (
+                    <div key={e.name} className="rounded-lg border bg-background px-2.5 py-2 text-xs">
+                      <span className="font-medium text-foreground">{e.name}</span>
+                      <p className="text-muted-foreground truncate">{e.description}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
