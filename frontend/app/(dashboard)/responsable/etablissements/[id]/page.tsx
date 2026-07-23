@@ -21,9 +21,14 @@ import { Breadcrumb } from '@/components/shared/breadcrumb';
 import { GenericPhotoUpload } from '@/components/shared/generic-photo-upload';
 import { EtablissementExportModal } from '@/components/etablissements/EtablissementExportModal';
 import { useEffect } from 'react';
-import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight, Download, AlertTriangle, Route, Package } from 'lucide-react';
+import { Building2, User, Phone, Mail, FileText, MapPin, Pencil, Plus, Trash2, ChevronRight, Download, AlertTriangle, Route, Package, Link as LinkIcon, Unlink, X } from 'lucide-react';
 import type { Designation, Structure, EtablissementAlea, EtablissementTrajet } from '@/types/etablissement';
 import type { EffetAleat } from '@/types/alea';
+import type { Alea } from '@/types/alea';
+import type { Trajet } from '@/types/trajet';
+import { useAleas } from '@/hooks/use-aleas';
+import { useTrajets } from '@/hooks/use-trajets';
+import { useLinkAlea, useUnlinkAlea, useLinkTrajet, useUnlinkTrajet } from '@/hooks/use-link-etablissement';
 
 export default function EditEtablissementPage() {
   const { id } = useParams<{ id: string }>();
@@ -226,6 +231,26 @@ export default function EditEtablissementPage() {
   };
 
   const [exportModalOpen, setExportModalOpen] = useState(false);
+
+  // Aléas : lier / délier
+  const [linkAleaOpen, setLinkAleaOpen] = useState(false);
+  const [selectedAleaId, setSelectedAleaId] = useState<number | null>(null);
+  const { data: allAleas } = useAleas();
+  const { mutate: linkAlea, isPending: linkAleaLoading } = useLinkAlea(etablissementId);
+  const { mutate: unlinkAlea, isPending: unlinkAleaLoading } = useUnlinkAlea(etablissementId);
+
+  // Trajets : lier / délier
+  const [linkTrajetOpen, setLinkTrajetOpen] = useState(false);
+  const [selectedTrajetId, setSelectedTrajetId] = useState<number | null>(null);
+  const { data: allTrajets } = useTrajets();
+  const { mutate: linkTrajet, isPending: linkTrajetLoading } = useLinkTrajet(etablissementId);
+  const { mutate: unlinkTrajet, isPending: unlinkTrajetLoading } = useUnlinkTrajet(etablissementId);
+
+  const linkedAleaIds = new Set((etablissement?.aleas ?? []).map(ea => ea.aleaId));
+  const linkedTrajetIds = new Set((etablissement?.trajets ?? []).map(et => et.trajetId));
+
+  const availableAleas = (allAleas ?? []).filter(a => !linkedAleaIds.has(a.idAleat));
+  const availableTrajets = (allTrajets ?? []).filter(t => !linkedTrajetIds.has(t.idTrajet));
 
   // ─── Render ──────────────────────────────────────
 
@@ -526,24 +551,42 @@ export default function EditEtablissementPage() {
       {/* ─── Aléas liés ───────────────────────────── */}
       <Card className="mt-6">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-destructive" /> Aléas ({etablissement.aleas?.length ?? 0})
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" /> Aléas ({etablissement.aleas?.length ?? 0})
+            </CardTitle>
+            <Button variant="ghost" size="sm" onClick={() => setLinkAleaOpen(true)} disabled={availableAleas.length === 0}>
+              <LinkIcon className="mr-1 h-4 w-4" /> Lier
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           {etablissement.aleas && etablissement.aleas.length > 0 ? (
             <div className="space-y-3">
               {etablissement.aleas.map((ea: EtablissementAlea) => (
-                <div key={ea.aleaId} className="rounded-xl border bg-muted/50 p-4">
+                <div key={ea.aleaId} className="group rounded-xl border bg-muted/50 p-4">
                   <div className="flex items-start justify-between">
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="font-medium text-foreground">{ea.alea.nomAleat || 'Aléa'}</p>
                       <div className="mt-1 flex flex-wrap gap-3 text-sm text-muted-foreground">
                         {ea.alea.typeAleat && <Badge variant="warning">{ea.alea.typeAleat}</Badge>}
                         {ea.alea.dateAleat && <span>{new Date(ea.alea.dateAleat).toLocaleDateString('fr-FR')}</span>}
-                        {ea.alea.explication && <span>{ea.alea.explication}</span>}
+                        {ea.alea.explication && <span className="truncate">{ea.alea.explication}</span>}
                       </div>
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        if (confirm(`Retirer l'aléa "${ea.alea.nomAleat || ea.alea.idAleat}" ?`)) {
+                          unlinkAlea(ea.aleaId);
+                        }
+                      }}
+                      loading={unlinkAleaLoading}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                    >
+                      <Unlink className="h-4 w-4 text-destructive" />
+                    </Button>
                   </div>
                   {ea.alea.effets && ea.alea.effets.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
@@ -566,17 +609,22 @@ export default function EditEtablissementPage() {
       {/* ─── Trajets liés ──────────────────────────── */}
       <Card className="mt-6">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Route className="h-5 w-5 text-primary" /> Trajets ({etablissement.trajets?.length ?? 0})
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Route className="h-5 w-5 text-primary" /> Trajets ({etablissement.trajets?.length ?? 0})
+            </CardTitle>
+            <Button variant="ghost" size="sm" onClick={() => setLinkTrajetOpen(true)} disabled={availableTrajets.length === 0}>
+              <LinkIcon className="mr-1 h-4 w-4" /> Lier
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           {etablissement.trajets && etablissement.trajets.length > 0 ? (
             <div className="space-y-3">
               {etablissement.trajets.map((et: EtablissementTrajet) => (
-                <div key={et.trajetId} className="rounded-xl border bg-muted/50 p-4">
+                <div key={et.trajetId} className="group rounded-xl border bg-muted/50 p-4">
                   <div className="flex items-start justify-between">
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="font-medium text-foreground">{et.trajet.nomTrajet || `Trajet #${et.trajet.idTrajet}`}</p>
                       <div className="mt-1 flex flex-wrap gap-3 text-sm text-muted-foreground">
                         {et.trajet.moyens?.typeMoyen && <Badge variant="info">{et.trajet.moyens.typeMoyen}</Badge>}
@@ -584,6 +632,19 @@ export default function EditEtablissementPage() {
                         {et.trajet.moyens?.distanceMoyen != null && <span>{et.trajet.moyens.distanceMoyen} km</span>}
                       </div>
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        if (confirm(`Retirer le trajet "${et.trajet.nomTrajet || et.trajet.idTrajet}" ?`)) {
+                          unlinkTrajet(et.trajetId);
+                        }
+                      }}
+                      loading={unlinkTrajetLoading}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                    >
+                      <Unlink className="h-4 w-4 text-destructive" />
+                    </Button>
                   </div>
                   {et.trajet.periode && (
                     <p className="mt-2 text-xs text-amber-600">
@@ -598,6 +659,8 @@ export default function EditEtablissementPage() {
           )}
         </CardContent>
       </Card>
+
+
 
       {/* ─── Équipements ──────────────────────────── */}
       <Card className="mt-6">
@@ -776,6 +839,72 @@ export default function EditEtablissementPage() {
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => setStrDelTarget(null)}>Annuler</Button>
           <Button variant="destructive" onClick={handleDeleteStructure} loading={strDelLoading}>Supprimer</Button>
+        </div>
+      </Modal>
+
+      {/* Modal Lier un aléa */}
+      <Modal open={linkAleaOpen} onClose={() => setLinkAleaOpen(false)} title="Lier un aléa" size="xl">
+        <div className="space-y-2 p-6 max-h-80 overflow-y-auto">
+          {availableAleas.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Tous les aléas sont déjà liés à cet établissement.</p>
+          ) : (
+            availableAleas.map((a: Alea) => (
+              <button
+                key={a.idAleat}
+                type="button"
+                onClick={() => {
+                  linkAlea(a.idAleat, {
+                    onSuccess: () => {
+                      toast.success(`Aléa "${a.nomAleat || a.idAleat}" lié`);
+                      setLinkAleaOpen(false);
+                    },
+                    onError: () => toast.error("Erreur lors de la liaison"),
+                  });
+                }}
+                disabled={linkAleaLoading}
+                className="w-full rounded-xl border bg-muted/50 p-3 text-left transition-colors hover:bg-primary/5 disabled:opacity-50"
+              >
+                <p className="font-medium text-sm text-foreground">{a.nomAleat || `Aléa #${a.idAleat}`}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {a.typeAleat && `${a.typeAleat} · `}
+                  {a.dateAleat && new Date(a.dateAleat).toLocaleDateString('fr-FR')}
+                </p>
+              </button>
+            ))
+          )}
+        </div>
+      </Modal>
+
+      {/* Modal Lier un trajet */}
+      <Modal open={linkTrajetOpen} onClose={() => setLinkTrajetOpen(false)} title="Lier un trajet" size="xl">
+        <div className="space-y-2 p-6 max-h-80 overflow-y-auto">
+          {availableTrajets.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Tous les trajets sont déjà liés à cet établissement.</p>
+          ) : (
+            availableTrajets.map((t: Trajet) => (
+              <button
+                key={t.idTrajet}
+                type="button"
+                onClick={() => {
+                  linkTrajet(t.idTrajet, {
+                    onSuccess: () => {
+                      toast.success(`Trajet "${t.nomTrajet || t.idTrajet}" lié`);
+                      setLinkTrajetOpen(false);
+                    },
+                    onError: () => toast.error("Erreur lors de la liaison"),
+                  });
+                }}
+                disabled={linkTrajetLoading}
+                className="w-full rounded-xl border bg-muted/50 p-3 text-left transition-colors hover:bg-primary/5 disabled:opacity-50"
+              >
+                <p className="font-medium text-sm text-foreground">{t.nomTrajet || `Trajet #${t.idTrajet}`}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {t.moyens?.typeMoyen && `${t.moyens.typeMoyen} · `}
+                  {t.moyens?.dureeMoyen != null && `${t.moyens.dureeMoyen} min`}
+                </p>
+              </button>
+            ))
+          )}
         </div>
       </Modal>
 
