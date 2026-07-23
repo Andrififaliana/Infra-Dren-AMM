@@ -318,4 +318,70 @@ export class EtablissementsController {
   ) {
     return this.etablissementsService.deleteStructure(structureId, id);
   }
+
+  // ─── Aléas liés ──────────────────────────────────────
+
+  @Post(':id/aleas/:aleaId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Lier un aléa à un établissement" })
+  linkAlea(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('aleaId', ParseIntPipe) aleaId: number,
+  ) {
+    return this.etablissementsService.linkAlea(id, aleaId);
+  }
+
+  @Delete(':id/aleas/:aleaId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Retirer un aléa d'un établissement" })
+  unlinkAlea(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('aleaId', ParseIntPipe) aleaId: number,
+  ) {
+    return this.etablissementsService.unlinkAlea(id, aleaId);
+  }
+
+  @Get(':id/aleas')
+  @Public()
+  @ApiOperation({ summary: "Lister les aléas liés à un établissement" })
+  getLinkedAleas(@Param('id', ParseIntPipe) id: number) {
+    return this.etablissementsService.getLinkedAleas(id);
+  }
+
+  // ─── Trajets liés ────────────────────────────────────
+
+  @Post(':id/trajets/:trajetId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Lier un trajet à un établissement" })
+  linkTrajet(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('trajetId', ParseIntPipe) trajetId: number,
+  ) {
+    return this.etablissementsService.linkTrajet(id, trajetId);
+  }
+
+  @Delete(':id/trajets/:trajetId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.RESPONSABLE_INFRASTRUCTURE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Retirer un trajet d'un établissement" })
+  unlinkTrajet(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('trajetId', ParseIntPipe) trajetId: number,
+  ) {
+    return this.etablissementsService.unlinkTrajet(id, trajetId);
+  }
+
+  @Get(':id/trajets')
+  @Public()
+  @ApiOperation({ summary: "Lister les trajets liés à un établissement" })
+  getLinkedTrajets(@Param('id', ParseIntPipe) id: number) {
+    return this.etablissementsService.getLinkedTrajets(id);
+  }
 }

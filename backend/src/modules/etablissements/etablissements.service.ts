@@ -188,11 +188,18 @@ export class EtablissementsService {
           include: {
             salles: {
               include: {
-                _count: { select: { equipements: true, ouvertures: true } },
+                equipements: true,
+                ouvertures: true,
               },
             },
             toilettes: true,
           },
+        },
+        aleas: {
+          include: { alea: { include: { effets: { include: { trajet: true } } } } },
+        },
+        trajets: {
+          include: { trajet: { include: { moyens: true, periode: true } } },
         },
         _count: {
           select: {
@@ -611,6 +618,58 @@ export class EtablissementsService {
       `Photo ${estPrincipale ? 'définie comme principale' : 'retirée comme principale'}`,
     );
     return updated;
+  }
+
+  // ─── Aléas liés ─────────────────────────────────────
+
+  async linkAlea(etablissementId: number, aleaId: number) {
+    await this.findOne(etablissementId);
+    return this.prisma.etablissementAlea.upsert({
+      where: { etablissementId_aleaId: { etablissementId, aleaId } },
+      create: { etablissementId, aleaId },
+      update: {},
+    });
+  }
+
+  async unlinkAlea(etablissementId: number, aleaId: number) {
+    await this.findOne(etablissementId);
+    return this.prisma.etablissementAlea.delete({
+      where: { etablissementId_aleaId: { etablissementId, aleaId } },
+    });
+  }
+
+  async getLinkedAleas(etablissementId: number) {
+    await this.findOne(etablissementId);
+    return this.prisma.etablissementAlea.findMany({
+      where: { etablissementId },
+      include: { alea: { include: { effets: { include: { trajet: true } } } } },
+    });
+  }
+
+  // ─── Trajets liés ────────────────────────────────────
+
+  async linkTrajet(etablissementId: number, trajetId: number) {
+    await this.findOne(etablissementId);
+    return this.prisma.etablissementTrajet.upsert({
+      where: { etablissementId_trajetId: { etablissementId, trajetId } },
+      create: { etablissementId, trajetId },
+      update: {},
+    });
+  }
+
+  async unlinkTrajet(etablissementId: number, trajetId: number) {
+    await this.findOne(etablissementId);
+    return this.prisma.etablissementTrajet.delete({
+      where: { etablissementId_trajetId: { etablissementId, trajetId } },
+    });
+  }
+
+  async getLinkedTrajets(etablissementId: number) {
+    await this.findOne(etablissementId);
+    return this.prisma.etablissementTrajet.findMany({
+      where: { etablissementId },
+      include: { trajet: { include: { moyens: true, periode: true } } },
+    });
   }
 
   /** Supprimer une photo */
