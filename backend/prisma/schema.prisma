@@ -29,6 +29,8 @@ model Etablissement {
   structures   Structure[]
   batiments    Batiment[]
   photos       Photo[]
+  aleas        EtablissementAlea[]
+  trajets      EtablissementTrajet[]
 
   @@map("etablissement")
 }
@@ -176,7 +178,8 @@ model Trajet {
   periode   PeriodeDifficile? @relation(fields: [periodeId], references: [idPeriode]) // CORRIGÉ ici
   periodeId Int?              @map("periode_id")
 
-  effets EffetAleat[]
+  effets        EffetAleat[]
+  etablissements EtablissementTrajet[]
 
   @@map("trajet")
 }
@@ -209,7 +212,8 @@ model Alea {
   dateAleat   DateTime? @map("date_aleat")
   explication String?   @map("explication")
 
-  effets EffetAleat[]
+  effets        EffetAleat[]
+  etablissements EtablissementAlea[]
 
   @@map("alea")
 }
@@ -321,6 +325,26 @@ model SallePhoto {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("salle_photo")
+}
+
+model EtablissementAlea {
+  etablissement   Etablissement @relation(fields: [etablissementId], references: [id], onDelete: Cascade)
+  etablissementId Int           @map("etablissement_id")
+  alea            Alea          @relation(fields: [aleaId], references: [idAleat], onDelete: Cascade)
+  aleaId          Int           @map("alea_id")
+
+  @@id([etablissementId, aleaId])
+  @@map("etablissement_alea")
+}
+
+model EtablissementTrajet {
+  etablissement   Etablissement @relation(fields: [etablissementId], references: [id], onDelete: Cascade)
+  etablissementId Int           @map("etablissement_id")
+  trajet          Trajet        @relation(fields: [trajetId], references: [idTrajet], onDelete: Cascade)
+  trajetId        Int           @map("trajet_id")
+
+  @@id([etablissementId, trajetId])
+  @@map("etablissement_trajet")
 }
 
 model EffetAleat {
