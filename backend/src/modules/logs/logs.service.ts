@@ -6,22 +6,23 @@ export class LogsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(query: { page?: number; limit?: number; action?: string; entity?: string; userId?: string }) {
-    const { page = 1, limit = 50, action, entity, userId } = query;
-    const skip = (page - 1) * limit;
+    const pageNum = Math.max(1, parseInt(String(query.page ?? 1), 10));
+    const limitNum = Math.max(1, Math.min(100, parseInt(String(query.limit ?? 50), 10)));
+    const skip = (pageNum - 1) * limitNum;
     const where: any = {};
-    if (action) where.action = action;
-    if (entity) where.entity = entity;
-    if (userId) where.userId = parseInt(userId);
+    if (query.action) where.action = query.action;
+    if (query.entity) where.entity = query.entity;
+    if (query.userId) where.userId = parseInt(query.userId, 10);
 
     const [data, total] = await Promise.all([
       this.prisma.log.findMany({
-        where, skip, take: limit,
+        where, skip, take: limitNum,
         include: { user: { select: { id: true, nom: true, email: true } } },
         orderBy: { createdAt: 'desc' },
       }),
       this.prisma.log.count({ where }),
     ]);
-    return { data, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } };
+    return { data, meta: { total, page: pageNum, limit: limitNum, totalPages: Math.ceil(total / limitNum) } };
   }
 
   async findByEntity(entity: string, entityId: number) {
