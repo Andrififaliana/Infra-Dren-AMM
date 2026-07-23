@@ -28,7 +28,7 @@ export default function SallesPage() {
   const [selectedSalle, setSelectedSalle] = useState<Salle | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const perPage = 10;
 
   const { data: batiments } = useBatiments();
