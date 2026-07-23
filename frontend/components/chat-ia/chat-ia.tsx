@@ -158,9 +158,11 @@ export function ChatIaWidget() {
                     <div key={e.name} className="rounded-lg border bg-background px-2.5 py-2 text-xs">
                       <span className="font-medium text-foreground">{e.name}</span>
                       <p className="text-muted-foreground truncate">{e.description}</p>
-                      <p className="text-[10px] text-muted-foreground/60 mt-0.5">
-                        Requis : {e.requiredFields.join(', ')}
-                      </p>
+                      {e.requiredFields && e.requiredFields.length > 0 && (
+                        <p className="text-[10px] text-muted-foreground/60 mt-0.5">
+                          Requis : {e.requiredFields.join(', ')}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>

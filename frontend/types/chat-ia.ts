@@ -34,7 +34,7 @@ export interface ExecuteActionResponse {
 export interface EntityInfo {
   name: string;
   description: string;
-  requiredFields: string[];
+  requiredFields?: string[];
 }
 
 export interface SchemaInfo {
