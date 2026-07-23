@@ -38,10 +38,10 @@ export function useIaLogs(page: number = 1, limit: number = 50, success?: string
   return useQuery({
     queryKey: ['ia-logs', page, limit, success],
     queryFn: async () => {
-      const { data } = await apiClient.get<ApiResponse<PaginatedResponse<IaLogEntry>>>(
+      const { data } = await apiClient.get<PaginatedResponse<IaLogEntry>>(
         `/chat-ia/logs?${params.toString()}`,
       );
-      return data.data;
+      return data;
     },
     refetchInterval: 30000, // Rafraîchir toutes les 30 secondes
   });
